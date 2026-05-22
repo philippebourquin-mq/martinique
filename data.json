@@ -1,0 +1,80 @@
+{
+  "meta": {
+    "title": "Martinique",
+    "subtitle": "Quelques plans et tips pour ton voyage en Martinique"
+  },
+  "sections": [
+    {
+      "id": "generalites",
+      "title": "Généralités",
+      "items": [
+        { "text": "Tout le monde parle français, mais comprendre quelques mots de créole aide vraiment — pour la culture, les paroles des sons et… les insultes !", "url": "", "photo": "" },
+        { "text": "Le fléau des sargasses : ces algues brunes venues du large sont toxiques et sentent très fort. La côte atlantique est particulièrement touchée.", "url": "https://meteofrance.mq/fr/sargasses", "photo": "" },
+        { "text": "Vérifier sa couverture téléphonique — souvent incluse dans les forfaits, sinon une SIM disponible à l'aéroport.", "url": "", "photo": "" },
+        { "text": "L'histoire est omniprésente : l'esclavage, le rôle des « békés »… indispensable pour comprendre l'île.", "url": "", "photo": "" }
+      ]
+    },
+    {
+      "id": "mood",
+      "title": "Mood",
+      "items": [
+        { "text": "Se lever tôt (7h max), se coucher tôt — calé sur la vie locale, décalage horaire (2h) atténué.", "url": "", "photo": "" },
+        { "text": "Les gens sont ultra cool et aiment qu'on leur parle. Certaines discussions peuvent dériver vers la politique (souvent juste) ou le complotisme (souvent vertigineux).", "url": "", "photo": "" },
+        { "text": "Éviter les ghettos touristiques : Fort-de-France (sans grand intérêt le soir), Trois-Îlets / Pointe du Bout (le Disney de l'île), les Salines (superbe mais aux heures creuses).", "url": "", "photo": "" },
+        { "text": "La vie chère n'est pas une légende — éviter d'acheter sur place les produits importés : masque de snorkeling, crème solaire de marque, etc.", "url": "", "photo": "" }
+      ]
+    },
+    {
+      "id": "transports",
+      "title": "Transports",
+      "items": [
+        { "text": "La voiture est indispensable. Bus et « taxi co » (mini-bus) existent mais sont vraiment galère pour les coins reculés.", "url": "", "photo": "" },
+        { "text": "L'île est petite — on en fait le tour en 5h de voiture. Ne pas hésiter à partir à l'opposé pour la journée.", "url": "", "photo": "" },
+        { "text": "Se garer à l'arrache est la norme — petite voiture recommandée.", "url": "", "photo": "" },
+        { "text": "Routes sûres, mais prudence sur « la Trace » (nord) par temps de pluie.", "url": "", "photo": "" },
+        { "text": "Les locaux roulent très vite. Les ronds-points sont sans pitié — bien les prendre.", "url": "", "photo": "" },
+        { "text": "Attention aux radars : une seule grande route, facile d'y placer des contrôles (et de les repérer sur Waze).", "url": "", "photo": "" },
+        { "text": "Bouchons fréquents entre Schœlcher et Saint-Esprit aux heures de pointe.", "url": "", "photo": "" }
+      ]
+    },
+    {
+      "id": "manger",
+      "title": "Manger",
+      "items": [
+        { "text": "Le rapport qualité-prix au restaurant peut décevoir. Se préparer un repas pour la plage est souvent le meilleur plan.", "url": "", "photo": "" },
+        { "text": "Ne pas être pressé — le service antillais a son propre rythme.", "url": "", "photo": "" },
+        { "text": "Fruits et légumes : le vrai trésor de l'île. Acheter sur les marchés ou en bord de route — plus « peyi » que les supermarchés.", "url": "", "photo": "" },
+        { "text": "Les meilleures glaces de l'île : au Robert.", "url": "https://share.google/lf8EHgTlsH01BCBzg", "photo": "" },
+        { "text": "Très bons bokits à Sainte-Anne.", "url": "https://share.google/i0fOSeoLE6iH9EBPB", "photo": "" },
+        { "text": "La Terrasse au rond-point du Diamant.", "url": "https://maps.app.goo.gl/kY8sKMjxQefgL8iz7", "photo": "" },
+        { "text": "Le M à Sainte-Anne.", "url": "https://maps.app.goo.gl/7av7AvQXTnNL7Rbi6", "photo": "" },
+        { "text": "Le Petibonom sur la plage du Carbet.", "url": "https://maps.app.goo.gl/Hmau3YVa19dj4zmF9", "photo": "" },
+        { "text": "Incontournable absolu : le poulet boucané en bord de route. Et le snack Alizé (le « McDo local »), partout sur l'île.", "url": "", "photo": "" }
+      ]
+    },
+    {
+      "id": "activites",
+      "title": "Activités",
+      "items": [
+        { "text": "Snorkeling à Grande Anse ou Anse Dufour pour les tortues. Y aller au lever du soleil, repartir avant l'afflux touristique.", "url": "", "photo": "" },
+        { "text": "Plongée au canon aux Anses d'Arlet.", "url": "", "photo": "" },
+        { "text": "Sortie dauphins avec Markus — la demi-journée est canon ! +596 696 41 18 03", "url": "tel:+596696411803", "photo": "" },
+        { "text": "Randonnées : Morne Larcher, Montagne Pelée (si bonne météo), grand tour de la presqu'île de la Caravelle (Baie du Trésor).", "url": "", "photo": "" },
+        { "text": "Jardin de Balata — touristique mais immanquable. Éviter les horaires bondés.", "url": "", "photo": "" },
+        { "text": "Kayak dans la mangrove au canal Cocotte — prévoir un répulsif anti-moustiques.", "url": "", "photo": "" },
+        { "text": "Carnaval ou Tour des Yoles : fête permanente.", "url": "", "photo": "" },
+        { "text": "Jours de pluie : cinéma Madiana à Schœlcher — excellent complexe.", "url": "", "photo": "" }
+      ]
+    },
+    {
+      "id": "nature",
+      "title": "Nature",
+      "items": [
+        { "text": "Mer ou rivière (« rivié ») — les locaux préfèrent souvent la fraîcheur des rivières.", "url": "", "photo": "" },
+        { "text": "Cascades : pas spectaculaires, mais les balades pour y accéder sont sympas. Cascade Didier en particulier.", "url": "", "photo": "" },
+        { "text": "Les meilleures anses (eau à 28°) : Anse Couleuvre, Anse Figuier, Petite Anse, presqu'île de la Caravelle, plage du Diamant (attention aux courants).", "url": "", "photo": "" },
+        { "text": "Ne jamais s'abriter sous les mancelliniers (arbres marqués rouge — pluie acide), ni sous des cocotiers secs, ni près des sorties d'eau sale.", "url": "", "photo": "" }
+      ]
+    }
+  ]
+}
