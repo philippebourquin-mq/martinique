@@ -12,26 +12,34 @@
         {
           "text": "Tout le monde parle français, mais comprendre quelques mots de créole aide vraiment — pour la culture, les paroles des sons et… les insultes !",
           "url": "",
+          "title": "Créole",
           "photo": "",
-          "layout": "default"
+          "layout": "default",
+          "objectPosition": "center"
         },
         {
           "text": "Le fléau des sargasses : ces algues brunes venues du large sont toxiques et sentent très fort. La côte atlantique est particulièrement touchée.",
           "url": "https://meteofrance.mq/fr/sargasses",
+          "title": "Sargasses",
           "photo": "https://images.unsplash.com/photo-1617813815451-190de34be122?w=800&q=80",
-          "layout": "default"
+          "layout": "default",
+          "objectPosition": "center"
         },
         {
           "text": "Vérifier sa couverture téléphonique — souvent incluse dans les forfaits, sinon une SIM disponible à l'aéroport.",
           "url": "",
+          "title": "Téléphonie",
           "photo": "",
-          "layout": "default"
+          "layout": "default",
+          "objectPosition": "center"
         },
         {
           "text": "L'histoire est omniprésente : l'esclavage, le rôle des « békés »… indispensable pour comprendre l'île.",
           "url": "",
+          "title": "Histoire",
           "photo": "",
-          "layout": "default"
+          "layout": "highlight",
+          "objectPosition": "center"
         }
       ]
     },
@@ -42,26 +50,34 @@
         {
           "text": "Se lever tôt (7h max), se coucher tôt — calé sur la vie locale, décalage horaire (2h) atténué.",
           "url": "",
+          "title": "",
           "photo": "",
-          "layout": "default"
+          "layout": "default",
+          "objectPosition": "center"
         },
         {
           "text": "Les gens sont ultra cool et aiment qu'on leur parle. Certaines discussions peuvent dériver vers la politique (souvent juste) ou le complotisme (souvent vertigineux).",
           "url": "",
+          "title": "",
           "photo": "",
-          "layout": "default"
+          "layout": "default",
+          "objectPosition": "center"
         },
         {
           "text": "Éviter les ghettos touristiques : Fort-de-France (sans grand intérêt le soir), Trois-Îlets / Pointe du Bout (le Disney de l'île), les Salines (superbe mais aux heures creuses).",
           "url": "",
+          "title": "",
           "photo": "",
-          "layout": "default"
+          "layout": "default",
+          "objectPosition": "center"
         },
         {
           "text": "La vie chère n'est pas une légende — éviter d'acheter sur place les produits importés : masque de snorkeling, crème solaire de marque, etc.",
           "url": "",
+          "title": "",
           "photo": "",
-          "layout": "default"
+          "layout": "default",
+          "objectPosition": "center"
         }
       ]
     },
@@ -72,44 +88,58 @@
         {
           "text": "La voiture est indispensable. Bus et « taxi co » (mini-bus) existent mais sont vraiment galère pour les coins reculés.",
           "url": "",
+          "title": "",
           "photo": "",
-          "layout": "default"
+          "layout": "default",
+          "objectPosition": "center"
         },
         {
           "text": "L'île est petite — on en fait le tour en 5h de voiture. Ne pas hésiter à partir à l'opposé pour la journée.",
           "url": "",
+          "title": "",
           "photo": "",
-          "layout": "default"
+          "layout": "default",
+          "objectPosition": "center"
         },
         {
           "text": "Se garer à l'arrache est la norme — petite voiture recommandée.",
           "url": "",
+          "title": "",
           "photo": "",
-          "layout": "default"
+          "layout": "default",
+          "objectPosition": "center"
         },
         {
           "text": "Routes sûres, mais prudence sur « la Trace » (nord) par temps de pluie.",
           "url": "",
+          "title": "",
           "photo": "",
-          "layout": "default"
+          "layout": "default",
+          "objectPosition": "center"
         },
         {
           "text": "Les locaux roulent très vite. Les ronds-points sont sans pitié — bien les prendre.",
           "url": "",
+          "title": "",
           "photo": "",
-          "layout": "default"
+          "layout": "default",
+          "objectPosition": "center"
         },
         {
           "text": "Attention aux radars : une seule grande route, facile d'y placer des contrôles (et de les repérer sur Waze).",
           "url": "",
+          "title": "",
           "photo": "",
-          "layout": "default"
+          "layout": "default",
+          "objectPosition": "center"
         },
         {
           "text": "Bouchons fréquents entre Schœlcher et Saint-Esprit aux heures de pointe.",
           "url": "",
+          "title": "",
           "photo": "",
-          "layout": "default"
+          "layout": "default",
+          "objectPosition": "center"
         }
       ]
     },
@@ -120,56 +150,74 @@
         {
           "text": "Le rapport qualité-prix au restaurant peut décevoir. Se préparer un repas pour la plage est souvent le meilleur plan.",
           "url": "",
+          "title": "",
           "photo": "",
-          "layout": "default"
+          "layout": "default",
+          "objectPosition": "center"
         },
         {
           "text": "Ne pas être pressé — le service antillais a son propre rythme.",
           "url": "",
+          "title": "",
           "photo": "",
-          "layout": "default"
+          "layout": "default",
+          "objectPosition": "center"
         },
         {
           "text": "Fruits et légumes : le vrai trésor de l'île. Acheter sur les marchés ou en bord de route — plus « peyi » que les supermarchés.",
           "url": "",
+          "title": "",
           "photo": "https://images.pexels.com/photos/4615995/pexels-photo-4615995.jpeg?auto=compress&cs=tinysrgb&w=800",
-          "layout": "default"
+          "layout": "default",
+          "objectPosition": "center"
         },
         {
           "text": "Les meilleures glaces de l'île : au Robert.",
           "url": "https://share.google/lf8EHgTlsH01BCBzg",
+          "title": "",
           "photo": "",
-          "layout": "default"
+          "layout": "default",
+          "objectPosition": "center"
         },
         {
           "text": "Très bons bokits à Sainte-Anne.",
           "url": "https://share.google/i0fOSeoLE6iH9EBPB",
+          "title": "",
           "photo": "",
-          "layout": "default"
+          "layout": "default",
+          "objectPosition": "center"
         },
         {
           "text": "La Terrasse au rond-point du Diamant.",
           "url": "https://maps.app.goo.gl/kY8sKMjxQefgL8iz7",
+          "title": "",
           "photo": "",
-          "layout": "default"
+          "layout": "default",
+          "objectPosition": "center"
         },
         {
           "text": "Le M à Sainte-Anne.",
           "url": "https://maps.app.goo.gl/7av7AvQXTnNL7Rbi6",
+          "title": "",
           "photo": "",
-          "layout": "default"
+          "layout": "default",
+          "objectPosition": "center"
         },
         {
           "text": "Le Petibonom sur la plage du Carbet.",
           "url": "https://maps.app.goo.gl/Hmau3YVa19dj4zmF9",
+          "title": "",
           "photo": "",
-          "layout": "default"
+          "layout": "default",
+          "objectPosition": "center"
         },
         {
           "text": "Incontournable absolu : le poulet boucané en bord de route. Et le snack Alizé (le « McDo local »), partout sur l'île.",
           "url": "",
+          "title": "",
           "photo": "https://images.unsplash.com/photo-1759568558640-3c9239a6153e?w=800&q=80",
-          "layout": "default"
+          "layout": "default",
+          "objectPosition": "center"
         }
       ]
     },
@@ -180,50 +228,66 @@
         {
           "text": "Snorkeling à Grande Anse ou Anse Dufour pour les tortues. Y aller au lever du soleil, repartir avant l'afflux touristique.",
           "url": "",
+          "title": "",
           "photo": "https://images.pexels.com/photos/668867/pexels-photo-668867.jpeg?auto=compress&cs=tinysrgb&w=800",
-          "layout": "highlight"
+          "layout": "highlight",
+          "objectPosition": "center"
         },
         {
           "text": "Plongée au canon aux Anses d'Arlet.",
           "url": "",
+          "title": "",
           "photo": "",
-          "layout": "default"
+          "layout": "default",
+          "objectPosition": "center"
         },
         {
           "text": "Sortie dauphins avec Markus — la demi-journée est canon ! +596 696 41 18 03",
           "url": "tel:+596696411803",
+          "title": "",
           "photo": "https://images.pexels.com/photos/12661194/pexels-photo-12661194.jpeg?auto=compress&cs=tinysrgb&w=800",
-          "layout": "highlight"
+          "layout": "highlight",
+          "objectPosition": "center"
         },
         {
           "text": "Randonnées : Morne Larcher, Montagne Pelée (si bonne météo), grand tour de la presqu'île de la Caravelle (Baie du Trésor).",
           "url": "",
+          "title": "",
           "photo": "https://images.pexels.com/photos/2166643/pexels-photo-2166643.jpeg?auto=compress&cs=tinysrgb&w=800",
-          "layout": "default"
+          "layout": "default",
+          "objectPosition": "center"
         },
         {
           "text": "Jardin de Balata — touristique mais immanquable. Éviter les horaires bondés.",
           "url": "",
+          "title": "",
           "photo": "https://images.unsplash.com/photo-1586094332115-680788e0182f?w=800&q=80",
-          "layout": "default"
+          "layout": "default",
+          "objectPosition": "center"
         },
         {
           "text": "Kayak dans la mangrove au canal Cocotte — prévoir un répulsif anti-moustiques.",
           "url": "",
+          "title": "",
           "photo": "https://images.unsplash.com/photo-1646440912030-d58d2394b1cd?w=800&q=80",
-          "layout": "default"
+          "layout": "default",
+          "objectPosition": "center"
         },
         {
           "text": "Carnaval ou Tour des Yoles : fête permanente.",
           "url": "",
+          "title": "",
           "photo": "",
-          "layout": "default"
+          "layout": "default",
+          "objectPosition": "center"
         },
         {
           "text": "Jours de pluie : cinéma Madiana à Schœlcher — excellent complexe.",
           "url": "",
+          "title": "",
           "photo": "",
-          "layout": "default"
+          "layout": "default",
+          "objectPosition": "center"
         }
       ]
     },
@@ -234,26 +298,34 @@
         {
           "text": "Mer ou rivière (« rivié ») — les locaux préfèrent souvent la fraîcheur des rivières.",
           "url": "",
+          "title": "",
           "photo": "",
-          "layout": "default"
+          "layout": "default",
+          "objectPosition": "center"
         },
         {
           "text": "Cascades : pas spectaculaires, mais les balades pour y accéder sont sympas. Cascade Didier en particulier.",
           "url": "",
+          "title": "",
           "photo": "",
-          "layout": "default"
+          "layout": "default",
+          "objectPosition": "center"
         },
         {
           "text": "Les meilleures anses (eau à 28°) : Anse Couleuvre, Anse Figuier, Petite Anse, presqu'île de la Caravelle, plage du Diamant (attention aux courants).",
           "url": "",
+          "title": "",
           "photo": "https://images.unsplash.com/photo-1634822776751-30aaac98bdd2?w=800&q=80",
-          "layout": "highlight"
+          "layout": "highlight",
+          "objectPosition": "center"
         },
         {
           "text": "Ne jamais s'abriter sous les mancelliniers (arbres marqués rouge — pluie acide), ni sous des cocotiers secs, ni près des sorties d'eau sale.",
           "url": "",
+          "title": "",
           "photo": "",
-          "layout": "default"
+          "layout": "default",
+          "objectPosition": "center"
         }
       ]
     }
