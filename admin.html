@@ -133,8 +133,22 @@
         <div>
           <label class="text-[10px] font-semibold uppercase tracking-[0.15em] text-gray-400 block mb-1.5">Image de couverture</label>
           <div class="space-y-2">
-            <div id="cover-preview-wrap" class="hidden rounded-2xl overflow-hidden border border-gray-100">
+            <div id="cover-preview-wrap" class="hidden rounded-2xl overflow-hidden border border-gray-100 relative">
               <img id="cover-preview-img" src="" alt="" class="w-full h-40 object-cover" />
+            </div>
+            <!-- Focal point couverture -->
+            <div id="cover-pos-row" class="hidden flex items-center gap-2">
+              <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider shrink-0">Focus</span>
+              <div id="cover-pos-grid" class="grid grid-cols-3 gap-px rounded-xl overflow-hidden bg-gray-200" style="width:66px;height:50px">
+                ${[['top left','↖'],['top center','↑'],['top right','↗'],
+                   ['center left','←'],['center','·'],['center right','→'],
+                   ['bottom left','↙'],['bottom center','↓'],['bottom right','↘']
+                  ].map(([pos,icon]) =>
+                  `<button type="button" data-cover-pos="${pos}"
+                    class="flex items-center justify-center text-[10px] bg-gray-100 hover:bg-white text-gray-400 hover:text-gray-800 transition-colors" title="${pos}">
+                    ${icon}
+                  </button>`).join('')}
+              </div>
             </div>
             <div class="flex gap-2 flex-wrap">
               <input id="meta-cover-url" type="url" placeholder="https://… ou laisser vide"
@@ -639,20 +653,43 @@
     }
 
     /* ── Cover image helpers ─────────────────────────────────────── */
+    window._coverObjectPosition = 'center';
+
+    function setCoverPosActive(pos) {
+      window._coverObjectPosition = pos;
+      document.querySelectorAll('[data-cover-pos]').forEach(btn => {
+        const active = btn.dataset.coverPos === pos;
+        btn.style.background = active ? '#fff' : '';
+        btn.style.color      = active ? '#111' : '';
+        btn.style.fontWeight = active ? '700'  : '';
+      });
+      const img = document.getElementById('cover-preview-img');
+      if (img) img.style.objectPosition = pos;
+    }
+
     function updateCoverPreview() {
       const url  = document.getElementById('meta-cover-url').value.trim();
       const wrap = document.getElementById('cover-preview-wrap');
       const img  = document.getElementById('cover-preview-img');
       const clear = document.getElementById('meta-cover-clear');
+      const posRow = document.getElementById('cover-pos-row');
       if (url) {
         img.src = url;
+        img.style.objectPosition = window._coverObjectPosition || 'center';
         wrap.classList.remove('hidden');
         clear.classList.remove('hidden');
+        posRow?.classList.remove('hidden');
       } else {
         wrap.classList.add('hidden');
         clear.classList.add('hidden');
+        posRow?.classList.add('hidden');
       }
     }
+
+    /* Wire cover focal point buttons */
+    document.querySelectorAll('[data-cover-pos]').forEach(btn => {
+      btn.addEventListener('click', () => setCoverPosActive(btn.dataset.coverPos));
+    });
 
     document.getElementById('meta-cover-file').addEventListener('change', async e => {
       const file = e.target.files[0];
@@ -681,9 +718,10 @@
     function collectData() {
       return {
         meta: {
-          title:      document.getElementById('meta-title').value.trim(),
-          subtitle:   document.getElementById('meta-subtitle').value.trim(),
-          coverImage: document.getElementById('meta-cover-url').value.trim(),
+          title:               document.getElementById('meta-title').value.trim(),
+          subtitle:            document.getElementById('meta-subtitle').value.trim(),
+          coverImage:          document.getElementById('meta-cover-url').value.trim(),
+          coverObjectPosition: window._coverObjectPosition || 'center',
         },
         sections: Array.from(document.querySelectorAll('[data-section-id]')).map(card => ({
           id:    card.dataset.sectionId,
@@ -707,6 +745,7 @@
       document.getElementById('meta-title').value    = data.meta.title    || '';
       document.getElementById('meta-subtitle').value = data.meta.subtitle || '';
       document.getElementById('meta-cover-url').value = data.meta.coverImage || '';
+      setCoverPosActive(data.meta.coverObjectPosition || 'center');
       updateCoverPreview();
       const container = document.getElementById('sections-container');
       container.innerHTML = '';

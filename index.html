@@ -6,15 +6,15 @@
   <title>Guide Martinique</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; }
     ::selection { background: #d6c5b0; }
     html { scroll-behavior: smooth; }
-    body { background: #e8e4df; font-family: 'DM Sans', system-ui, sans-serif; }
+    body { background: #e8e4df; font-family: 'Poppins', system-ui, sans-serif; }
 
-    .font-display { font-family: 'Cormorant Garamond', Georgia, serif; }
+    .font-display { font-family: 'Poppins', system-ui, sans-serif; }
 
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(22px); }
@@ -43,7 +43,7 @@
     <div class="max-w-6xl mx-auto px-5 sm:px-8 py-5 flex items-center gap-8">
       <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false"
         id="header-brand"
-        class="font-display text-[13px] tracking-[0.25em] font-light text-white shrink-0 transition-colors duration-300 hover:opacity-60">
+        class="text-[11px] tracking-[0.3em] font-semibold uppercase text-white shrink-0 transition-colors duration-300 hover:opacity-60">
         Martinique
       </a>
       <nav id="nav-links" class="hidden md:flex gap-6 flex-1 overflow-x-auto"></nav>
@@ -59,11 +59,11 @@
     <div class="relative z-10 max-w-6xl mx-auto px-5 sm:px-8 pb-20 md:pb-32 w-full">
       <p class="text-[9px] tracking-[0.6em] uppercase text-white/40 mb-7 fade-up">Guide de voyage</p>
       <h1 id="hero-title"
-        class="font-display text-[clamp(56px,10vw,112px)] font-light text-white tracking-tight leading-[0.92] mb-7 fade-up-2">
+        class="text-[clamp(52px,9vw,104px)] font-light text-white tracking-[-0.02em] leading-[0.92] mb-7 fade-up-2">
         Martinique
       </h1>
       <p id="hero-subtitle" class="text-white/55 text-[15px] max-w-xs leading-relaxed fade-up-3"
-        style="font-family:'DM Sans',sans-serif;font-weight:300"></p>
+        style="font-weight:300"></p>
     </div>
     <div class="absolute bottom-8 left-1/2 -translate-x-1/2 opacity-25 pointer-events-none">
       <div class="w-px h-12 bg-white"></div>
@@ -234,9 +234,9 @@
               style="object-position:${esc(pos)}" loading="lazy" />
             <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/5"></div>
             <div class="absolute inset-x-0 bottom-0 p-6 md:p-10">
-              ${title ? `<h3 class="font-display text-white font-light leading-tight mb-3"
-                style="font-size:clamp(22px,3vw,38px)">${esc(title)}</h3>` : ''}
-              <p class="text-white/65 text-[13px] md:text-[14px] leading-relaxed max-w-xl mb-4">${esc(item.text)}</p>
+              ${title ? `<h3 class="text-white font-semibold leading-tight mb-3"
+                style="font-size:clamp(20px,2.8vw,34px)">${esc(title)}</h3>` : ''}
+              <p class="text-white/65 text-[13px] md:text-[14px] leading-relaxed max-w-xl mb-4 font-light">${esc(item.text)}</p>
               ${mkLink(item, true)}
             </div>
           </article>`;
@@ -252,22 +252,25 @@
               style="object-position:${esc(pos)}" loading="lazy" />
             <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
             <div class="absolute inset-x-0 bottom-0 p-5">
-              ${title ? `<h3 class="font-display text-white font-light text-[22px] leading-tight mb-1.5">${esc(title)}</h3>` : ''}
-              <p class="text-white/70 text-[12.5px] leading-relaxed mb-2.5">${esc(item.text)}</p>
+              ${title ? `<h3 class="text-white font-semibold text-[18px] leading-tight mb-1.5">${esc(title)}</h3>` : ''}
+              <p class="text-white/70 text-[12.5px] leading-relaxed mb-2.5 font-light">${esc(item.text)}</p>
               ${mkLink(item, true)}
             </div>
           </article>`;
       }
 
-      /* TEXTE À PLAT — pleine largeur, sans cadre */
+      /* CITATION — texte pleine largeur, style pull-quote magazine */
       if (layout === 'highlight') {
         return `
-          <article class="col-span-full py-8 px-1 border-b border-stone-300/40 last:border-0">
-            ${title ? `<h3 class="font-display text-stone-900 font-light leading-tight mb-3"
-              style="font-size:clamp(24px,3vw,40px)">${esc(title)}</h3>` : ''}
-            <div class="flex items-end justify-between gap-8">
-              <p class="text-[15px] text-stone-500 leading-relaxed max-w-2xl">${esc(item.text)}</p>
-              ${mkLink(item, false)}
+          <article class="col-span-full py-10 md:py-14">
+            <div class="flex gap-6 md:gap-10 items-start">
+              <div class="shrink-0 w-1 self-stretch rounded-full" style="background:linear-gradient(180deg,#a8967a 0%,rgba(168,150,122,.15) 100%)"></div>
+              <div class="flex-1 min-w-0">
+                ${title ? `<h3 class="font-bold text-stone-900 leading-tight mb-3"
+                  style="font-size:clamp(22px,3vw,38px);letter-spacing:-0.02em">${esc(title)}</h3>` : ''}
+                <p class="text-[15px] md:text-[16px] text-stone-500 leading-relaxed font-light max-w-2xl">${esc(item.text)}</p>
+                ${mkLink(item, false) ? `<div class="mt-4">${mkLink(item, false)}</div>` : ''}
+              </div>
             </div>
           </article>`;
       }
@@ -275,8 +278,8 @@
       /* CARTE TEXTE — fond blanc, grille */
       return `
         <article class="bg-white rounded-2xl p-5 md:p-6 flex flex-col gap-3 card" style="min-height:140px">
-          ${title ? `<h3 class="font-display text-stone-900 font-medium leading-snug" style="font-size:18px">${esc(title)}</h3>` : ''}
-          <p class="text-[13.5px] text-stone-500 leading-relaxed flex-1">${esc(item.text)}</p>
+          ${title ? `<h3 class="text-stone-900 font-semibold leading-snug" style="font-size:16px">${esc(title)}</h3>` : ''}
+          <p class="text-[13px] text-stone-500 leading-relaxed flex-1 font-light">${esc(item.text)}</p>
           ${mkLink(item, false)}
         </article>`;
     }
@@ -289,6 +292,7 @@
       document.getElementById('hero-title').textContent    = d.meta.title;
       document.getElementById('hero-subtitle').textContent = d.meta.subtitle;
       const ci = document.getElementById('cover-img');
+      ci.style.objectPosition = d.meta.coverObjectPosition || 'center';
       if (d.meta.coverImage) {
         if (ci.getAttribute('src') !== d.meta.coverImage) {
           ci.style.opacity = '0';
@@ -301,8 +305,8 @@
 
       /* Nav */
       document.getElementById('nav-links').innerHTML = d.sections.map(s =>
-        `<a href="#${s.id}" style="color:${_scrolled?'#78716c':'rgba(255,255,255,.45)'}"
-          class="font-display text-[11px] tracking-[0.18em] uppercase transition-colors whitespace-nowrap"
+        `<a href="#${s.id}" style="color:${_scrolled?'#78716c':'rgba(255,255,255,.45)'};font-weight:500"
+          class="text-[10px] tracking-[0.2em] uppercase transition-colors whitespace-nowrap"
           onmouseover="this.style.color='${_scrolled?'#1c1917':'#fff'}'"
           onmouseout="this.style.color='${_scrolled?'#78716c':'rgba(255,255,255,.45)'}'">
           ${esc(s.title)}
@@ -319,7 +323,7 @@
                 ${String(i+1).padStart(2,'0')}
               </span>
               <div class="w-px h-3.5 bg-stone-400/40"></div>
-              <h2 class="font-display text-[17px] font-medium text-stone-800 tracking-wide">${esc(s.title)}</h2>
+              <h2 class="text-[14px] font-semibold text-stone-800 tracking-[0.06em] uppercase">${esc(s.title)}</h2>
             </div>
             <div class="w-[22px] h-[22px] shrink-0 text-stone-600">${illus(s.id)}</div>
           </div>
