@@ -23,7 +23,7 @@
   </header>
 
   <!-- Hero -->
-  <div class="pt-44 pb-20 text-center px-6">
+  <div class="pt-44 pb-16 text-center px-6">
     <p class="text-[9px] tracking-[0.55em] uppercase text-stone-400 mb-9">Guide de voyage</p>
     <h1 id="hero-title" class="text-7xl md:text-[90px] font-thin text-stone-900 tracking-tight leading-none mb-9">Martinique</h1>
     <div class="flex items-center justify-center gap-3 mb-9">
@@ -32,6 +32,12 @@
       <div class="h-px w-10 bg-stone-300"></div>
     </div>
     <p id="hero-subtitle" class="text-stone-500 text-base max-w-xs mx-auto leading-relaxed"></p>
+  </div>
+
+  <!-- Image de couverture -->
+  <div id="cover-wrap" class="hidden max-w-5xl mx-auto px-6 pb-20">
+    <img id="cover-img" src="" alt="Martinique"
+      class="w-full h-64 md:h-[480px] object-cover rounded-3xl shadow-sm" loading="eager" />
   </div>
 
   <!-- Contenu -->
@@ -197,8 +203,17 @@
     function render(d) {
 
       document.title = 'Guide ' + d.meta.title;
-      document.getElementById('hero-title').textContent  = d.meta.title;
+      document.getElementById('hero-title').textContent    = d.meta.title;
       document.getElementById('hero-subtitle').textContent = d.meta.subtitle;
+
+      const coverWrap = document.getElementById('cover-wrap');
+      const coverImg  = document.getElementById('cover-img');
+      if (d.meta.coverImage) {
+        coverImg.src = d.meta.coverImage;
+        coverWrap.classList.remove('hidden');
+      } else {
+        coverWrap.classList.add('hidden');
+      }
 
       document.getElementById('nav-links').innerHTML = d.sections.map(s =>
         `<a href="#${s.id}"
