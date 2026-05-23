@@ -47,6 +47,17 @@
           <input id="cfg-token" type="password" placeholder="ghp_…" autocapitalize="none" autocorrect="off"
             class="w-full border border-stone-200 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-stone-400 transition-colors bg-white font-mono" />
         </div>
+        <div class="pt-2 border-t border-stone-100">
+          <label class="text-[10px] font-semibold uppercase tracking-[0.15em] text-stone-400 block mb-1">
+            Clé API Unsplash <span class="normal-case font-normal text-stone-300">— optionnel</span>
+          </label>
+          <p class="text-[10px] text-stone-400 mb-2">
+            Pour rechercher des photos directement dans l'admin.
+            Créer une app gratuite sur <a href="https://unsplash.com/developers" target="_blank" class="underline">unsplash.com/developers</a> et copier l'<em>Access Key</em>.
+          </p>
+          <input id="cfg-unsplash" type="text" placeholder="Votre Access Key Unsplash" autocapitalize="none" autocorrect="off"
+            class="w-full border border-stone-200 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-stone-400 transition-colors bg-white font-mono" />
+        </div>
       </div>
 
       <div id="cfg-error" class="hidden mt-4 text-xs text-red-500 bg-red-50 rounded-xl px-4 py-3"></div>
@@ -125,10 +136,17 @@
             <div id="cover-preview-wrap" class="hidden rounded-2xl overflow-hidden border border-gray-100">
               <img id="cover-preview-img" src="" alt="" class="w-full h-40 object-cover" />
             </div>
-            <div class="flex gap-2">
+            <div class="flex gap-2 flex-wrap">
               <input id="meta-cover-url" type="url" placeholder="https://… ou laisser vide"
-                class="flex-1 border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-gray-400 transition-colors"
+                class="flex-1 min-w-0 border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-gray-400 transition-colors"
                 oninput="updateCoverPreview()" />
+            </div>
+            <div class="flex gap-2">
+              <button type="button" id="meta-cover-unsplash"
+                class="text-xs text-gray-500 hover:text-gray-900 border border-gray-200 hover:border-gray-400 rounded-xl px-3 py-2.5 inline-flex items-center gap-1.5 transition-colors whitespace-nowrap">
+                <svg class="w-3.5 h-3.5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="9" cy="9" r="6"/><path d="m15 15 3 3" stroke-linecap="round"/></svg>
+                Chercher sur Unsplash
+              </button>
               <label class="cursor-pointer shrink-0">
                 <span class="text-xs text-gray-500 hover:text-gray-900 border border-gray-200 hover:border-gray-400 rounded-xl px-3 py-2.5 inline-flex items-center gap-1.5 transition-colors whitespace-nowrap">
                   <svg class="w-3.5 h-3.5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 13l4-4 3 3 3-4 4 5H3z"/><circle cx="13.5" cy="6.5" r="1.5"/><rect x="1" y="1" width="18" height="18" rx="3"/></svg>
@@ -156,6 +174,35 @@
     </button>
 
   </main>
+
+  <!-- ── Modale Unsplash ───────────────────────────────────────── -->
+  <div id="unsplash-modal" class="hidden fixed inset-0 z-50 flex flex-col">
+    <div id="unsplash-backdrop" class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
+    <div class="relative mt-auto md:m-auto bg-white rounded-t-3xl md:rounded-3xl w-full md:max-w-xl flex flex-col max-h-[85vh] md:max-h-[72vh] shadow-2xl">
+      <!-- Barre de recherche -->
+      <div class="flex items-center gap-3 p-4 border-b border-gray-100 shrink-0">
+        <div class="flex-1 flex items-center gap-2 bg-gray-50 rounded-xl px-3.5 py-2.5">
+          <svg class="w-4 h-4 text-gray-400 shrink-0" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="9" cy="9" r="6"/><path d="m15 15 3 3" stroke-linecap="round"/>
+          </svg>
+          <input id="unsplash-input" type="search" placeholder="Rechercher une photo…" autocomplete="off"
+            class="flex-1 bg-transparent text-sm focus:outline-none" />
+        </div>
+        <button id="unsplash-close"
+          class="w-9 h-9 flex items-center justify-center rounded-xl text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors shrink-0">
+          <svg class="w-4 h-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+            <path d="M5 5l10 10M15 5L5 15"/>
+          </svg>
+        </button>
+      </div>
+      <!-- Résultats -->
+      <div id="unsplash-results" class="flex-1 overflow-y-auto p-3 grid grid-cols-3 gap-2 content-start"></div>
+      <!-- Attribution -->
+      <div class="shrink-0 px-4 py-2.5 border-t border-gray-100 text-center">
+        <span class="text-[10px] text-gray-400">Photos libres de droits par <a href="https://unsplash.com" target="_blank" class="underline">Unsplash</a></span>
+      </div>
+    </div>
+  </div>
 
   <script>
     const CFG_KEY  = 'mtq-gh-config';
@@ -354,6 +401,11 @@
               </span>
               <input type="file" accept="image/*" class="hidden" data-photo-input />
             </label>
+            <button type="button" data-unsplash-btn
+              class="text-xs text-gray-400 hover:text-gray-900 border border-gray-200 hover:border-gray-400 rounded-lg px-2 py-2 inline-flex items-center gap-1 transition-colors whitespace-nowrap min-h-[36px] shrink-0">
+              <svg class="w-3 h-3" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="9" cy="9" r="6"/><path d="m15 15 3 3" stroke-linecap="round"/></svg>
+              Unsplash
+            </button>
             <button type="button" data-remove-photo
               class="text-xs text-gray-400 hover:text-red-500 transition-colors hidden whitespace-nowrap py-2 px-1 min-h-[36px]">
               Retirer
@@ -381,6 +433,13 @@
           updatePhotoUI(row, data);
         } catch {}
         e.target.value = '';
+      });
+
+      row.querySelector('[data-unsplash-btn]').addEventListener('click', () => {
+        openUnsplashSearch(url => {
+          row._photo = url;
+          updatePhotoUI(row, url);
+        });
       });
 
       row.querySelector('[data-remove-photo]').addEventListener('click', () => {
@@ -487,6 +546,13 @@
       updateCoverPreview();
     });
 
+    document.getElementById('meta-cover-unsplash').addEventListener('click', () => {
+      openUnsplashSearch(url => {
+        document.getElementById('meta-cover-url').value = url;
+        updateCoverPreview();
+      });
+    });
+
     /* ── Collecte du formulaire ──────────────────────────────────── */
     function collectData() {
       return {
@@ -554,7 +620,7 @@
       btn.textContent = 'Connexion…';
       errEl.classList.add('hidden');
 
-      const cfg = { owner, repo, token };
+      const cfg = { owner, repo, token, unsplashKey: document.getElementById('cfg-unsplash').value.trim() };
       try {
         const data = await loadFromGitHub(cfg);
         saveConfig(cfg);
@@ -572,11 +638,89 @@
     document.getElementById('settings-btn').addEventListener('click', () => {
       const cfg = loadConfig();
       if (cfg) {
-        document.getElementById('cfg-owner').value = cfg.owner || '';
-        document.getElementById('cfg-repo').value  = cfg.repo  || '';
-        document.getElementById('cfg-token').value = cfg.token || '';
+        document.getElementById('cfg-owner').value    = cfg.owner       || '';
+        document.getElementById('cfg-repo').value     = cfg.repo        || '';
+        document.getElementById('cfg-token').value    = cfg.token       || '';
+        document.getElementById('cfg-unsplash').value = cfg.unsplashKey || '';
       }
       openConfigScreen(true);
+    });
+
+    /* ── Unsplash search ─────────────────────────────────────────── */
+    let _unsplashCb      = null;
+    let _unsplashTimer   = null;
+
+    function openUnsplashSearch(callback) {
+      const cfg = loadConfig();
+      if (!cfg?.unsplashKey) {
+        showToast('Clé API Unsplash manquante — ouvrir les paramètres ⚙', true);
+        return;
+      }
+      _unsplashCb = callback;
+      document.getElementById('unsplash-modal').classList.remove('hidden');
+      const input = document.getElementById('unsplash-input');
+      input.value = '';
+      document.getElementById('unsplash-results').innerHTML = '';
+      setTimeout(() => input.focus(), 80);
+    }
+
+    function closeUnsplashSearch() {
+      document.getElementById('unsplash-modal').classList.add('hidden');
+      _unsplashCb = null;
+    }
+
+    async function runUnsplashSearch(query) {
+      query = query.trim();
+      if (!query) return;
+      const cfg = loadConfig();
+      if (!cfg?.unsplashKey) return;
+      const results = document.getElementById('unsplash-results');
+      results.innerHTML = `<div class="col-span-3 flex items-center justify-center py-14 text-sm text-gray-400">
+        <svg class="w-4 h-4 animate-spin mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+        </svg>Recherche…</div>`;
+      try {
+        const resp = await fetch(
+          `https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}&per_page=18&orientation=landscape&client_id=${cfg.unsplashKey}`
+        );
+        if (!resp.ok) throw new Error('HTTP ' + resp.status);
+        const data = await resp.json();
+        if (!data.results?.length) {
+          results.innerHTML = '<div class="col-span-3 text-center py-14 text-sm text-gray-400">Aucun résultat</div>';
+          return;
+        }
+        results.innerHTML = '';
+        data.results.forEach(photo => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'relative group rounded-xl overflow-hidden bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-900';
+          btn.style.aspectRatio = '3/2';
+          btn.innerHTML = `
+            <img src="${photo.urls.small}" alt="${esc(photo.alt_description || '')}"
+              class="w-full h-full object-cover transition-transform duration-200 group-hover:scale-105" loading="lazy" />
+            <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 px-2 py-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+              <span class="text-[9px] text-white/90 block truncate">${esc(photo.user.name)}</span>
+            </div>`;
+          btn.addEventListener('click', () => {
+            if (_unsplashCb) _unsplashCb(photo.urls.regular);
+            closeUnsplashSearch();
+          });
+          results.appendChild(btn);
+        });
+      } catch (e) {
+        results.innerHTML = `<div class="col-span-3 text-center py-14 text-sm text-red-500">Erreur : ${esc(e.message)}</div>`;
+      }
+    }
+
+    document.getElementById('unsplash-close').addEventListener('click', closeUnsplashSearch);
+    document.getElementById('unsplash-backdrop').addEventListener('click', closeUnsplashSearch);
+    document.getElementById('unsplash-input').addEventListener('input', e => {
+      clearTimeout(_unsplashTimer);
+      _unsplashTimer = setTimeout(() => runUnsplashSearch(e.target.value), 500);
+    });
+    document.getElementById('unsplash-input').addEventListener('keydown', e => {
+      if (e.key === 'Enter') { clearTimeout(_unsplashTimer); runUnsplashSearch(e.target.value); }
+      if (e.key === 'Escape') closeUnsplashSearch();
     });
 
     /* ── Publier ─────────────────────────────────────────────────── */
@@ -621,9 +765,10 @@
       }
 
       // Pré-remplir les champs de config
-      document.getElementById('cfg-owner').value = cfg.owner || '';
-      document.getElementById('cfg-repo').value  = cfg.repo  || '';
-      document.getElementById('cfg-token').value = cfg.token || '';
+      document.getElementById('cfg-owner').value    = cfg.owner       || '';
+      document.getElementById('cfg-repo').value     = cfg.repo        || '';
+      document.getElementById('cfg-token').value    = cfg.token       || '';
+      document.getElementById('cfg-unsplash').value = cfg.unsplashKey || '';
 
       // Rendu instantané depuis le cache
       const cached = (() => { try { return JSON.parse(localStorage.getItem(CACHE_KEY)); } catch {} return null; })();
