@@ -4,64 +4,78 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Guide Martinique</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
+    *, *::before, *::after { box-sizing: border-box; }
     ::selection { background: #d6c5b0; }
     html { scroll-behavior: smooth; }
-    body { background: #edeae5; }
+    body { background: #e8e4df; font-family: 'DM Sans', system-ui, sans-serif; }
+
+    .font-display { font-family: 'Cormorant Garamond', Georgia, serif; }
 
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(20px); }
+      from { opacity: 0; transform: translateY(22px); }
       to   { opacity: 1; transform: translateY(0); }
     }
-    .fade-up   { animation: fadeUp  .9s            ease both; }
-    .fade-up-2 { animation: fadeUp 1.1s .15s        ease both; }
-    .fade-up-3 { animation: fadeUp 1.1s  .3s        ease both; }
+    .fade-up   { animation: fadeUp  .95s            cubic-bezier(.22,.68,0,1.2) both; }
+    .fade-up-2 { animation: fadeUp 1.05s .18s        cubic-bezier(.22,.68,0,1.2) both; }
+    .fade-up-3 { animation: fadeUp 1.05s  .36s       cubic-bezier(.22,.68,0,1.2) both; }
 
-    /* Hover zoom sur les images */
-    .img-zoom img { transition: transform .7s cubic-bezier(.25,.46,.45,.94); }
-    .img-zoom:hover img { transform: scale(1.04); }
+    .img-zoom { overflow: hidden; }
+    .img-zoom img, .img-zoom-el {
+      transition: transform .75s cubic-bezier(.25,.46,.45,.94);
+    }
+    .img-zoom:hover img, .img-zoom:hover .img-zoom-el {
+      transform: scale(1.05);
+    }
+
+    /* Card shadow */
+    .card { box-shadow: 0 1px 2px rgba(0,0,0,.05), 0 2px 8px rgba(0,0,0,.04); }
   </style>
 </head>
 <body class="text-stone-800 antialiased">
 
   <!-- ── Header ───────────────────────────────────────────────── -->
   <header id="site-header" class="fixed inset-x-0 top-0 z-40 transition-all duration-300">
-    <div class="max-w-6xl mx-auto px-6 py-5 flex items-center gap-8">
+    <div class="max-w-6xl mx-auto px-5 sm:px-8 py-5 flex items-center gap-8">
       <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false"
         id="header-brand"
-        class="text-[10px] tracking-[0.32em] font-semibold uppercase text-white shrink-0 transition-colors duration-300 hover:opacity-60">
+        class="font-display text-[13px] tracking-[0.25em] font-light text-white shrink-0 transition-colors duration-300 hover:opacity-60">
         Martinique
       </a>
-      <nav id="nav-links" class="hidden md:flex gap-7 flex-1 overflow-x-auto"></nav>
+      <nav id="nav-links" class="hidden md:flex gap-6 flex-1 overflow-x-auto"></nav>
     </div>
   </header>
 
   <!-- ── Hero full-bleed ──────────────────────────────────────── -->
   <section id="hero" class="relative min-h-[95vh] flex flex-col justify-end overflow-hidden bg-stone-950">
     <img id="cover-img" src="" alt="Martinique"
-      class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-[1200ms]"
+      class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-[1400ms]"
       loading="eager" />
-    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/30 pointer-events-none"></div>
-    <div class="relative z-10 max-w-6xl mx-auto px-6 pb-20 md:pb-28 w-full">
-      <p class="text-[9px] tracking-[0.55em] uppercase text-white/45 mb-6 fade-up">Guide de voyage</p>
+    <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-black/30 pointer-events-none"></div>
+    <div class="relative z-10 max-w-6xl mx-auto px-5 sm:px-8 pb-20 md:pb-32 w-full">
+      <p class="text-[9px] tracking-[0.6em] uppercase text-white/40 mb-7 fade-up">Guide de voyage</p>
       <h1 id="hero-title"
-        class="text-[clamp(58px,10vw,108px)] font-thin text-white tracking-tight leading-none mb-5 fade-up-2">
+        class="font-display text-[clamp(56px,10vw,112px)] font-light text-white tracking-tight leading-[0.92] mb-7 fade-up-2">
         Martinique
       </h1>
-      <p id="hero-subtitle" class="text-white/60 text-base max-w-sm leading-relaxed fade-up-3"></p>
+      <p id="hero-subtitle" class="text-white/55 text-[15px] max-w-xs leading-relaxed fade-up-3"
+        style="font-family:'DM Sans',sans-serif;font-weight:300"></p>
     </div>
-    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 opacity-30 pointer-events-none">
-      <div class="w-px h-11 bg-white"></div>
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 opacity-25 pointer-events-none">
+      <div class="w-px h-12 bg-white"></div>
     </div>
   </section>
 
   <!-- ── Contenu ──────────────────────────────────────────────── -->
-  <main id="content" class="max-w-6xl mx-auto px-4 sm:px-6 pb-40 pt-20"></main>
+  <main id="content" class="max-w-6xl mx-auto px-4 sm:px-8 pb-40 pt-16 md:pt-20"></main>
 
   <!-- ── Footer ───────────────────────────────────────────────── -->
-  <footer class="border-t border-stone-300/50 py-16 text-center" style="background:#edeae5">
-    <p class="text-[9px] tracking-[0.4em] uppercase text-stone-400">Guide personnel · Martinique</p>
+  <footer class="py-16 text-center" style="background:#e8e4df;border-top:1px solid rgba(180,170,158,.4)">
+    <p class="text-[9px] tracking-[0.45em] uppercase text-stone-400">Guide personnel · Martinique</p>
   </footer>
 
   <script>
@@ -71,52 +85,52 @@
       meta: { title: 'Martinique', subtitle: 'Quelques plans et tips pour ton voyage en Martinique', coverImage: '' },
       sections: [
         { id: 'generalites', title: 'Généralités', items: [
-          { text: "Tout le monde parle français, mais comprendre quelques mots de créole aide vraiment — pour la culture, les paroles des sons et… les insultes !", url: '', photo: '', layout: 'default' },
-          { text: "Le fléau des sargasses : ces algues brunes venues du large sont toxiques et sentent très fort. La côte atlantique est particulièrement touchée.", url: 'https://meteofrance.mq/fr/sargasses', photo: '', layout: 'default' },
-          { text: "Vérifier sa couverture téléphonique — souvent incluse dans les forfaits, sinon une SIM disponible à l'aéroport.", url: '', photo: '', layout: 'default' },
-          { text: "L'histoire est omniprésente : l'esclavage, le rôle des « békés »… indispensable pour comprendre l'île.", url: '', photo: '', layout: 'default' },
+          { title: 'Le créole', text: "Tout le monde parle français, mais comprendre quelques mots de créole aide vraiment — pour la culture, les paroles des sons et… les insultes !", url: '', photo: '', layout: 'default', objectPosition: 'center' },
+          { title: 'Les sargasses', text: "Le fléau des sargasses : ces algues brunes venues du large sont toxiques et sentent très fort. La côte atlantique est particulièrement touchée.", url: 'https://meteofrance.mq/fr/sargasses', photo: '', layout: 'default', objectPosition: 'center' },
+          { title: 'Connectivité', text: "Vérifier sa couverture téléphonique — souvent incluse dans les forfaits, sinon une SIM disponible à l'aéroport.", url: '', photo: '', layout: 'default', objectPosition: 'center' },
+          { title: "L'histoire", text: "L'histoire est omniprésente : l'esclavage, le rôle des « békés »… indispensable pour comprendre l'île.", url: '', photo: '', layout: 'default', objectPosition: 'center' },
         ]},
         { id: 'mood', title: 'Mood', items: [
-          { text: "Se lever tôt (7h max), se coucher tôt — calé sur la vie locale, décalage horaire (2h) atténué.", url: '', photo: '', layout: 'default' },
-          { text: "Les gens sont ultra cool et aiment qu'on leur parle. Certaines discussions peuvent dériver vers la politique (souvent juste) ou le complotisme (souvent vertigineux).", url: '', photo: '', layout: 'default' },
-          { text: "Éviter les ghettos touristiques : Fort-de-France (sans grand intérêt le soir), Trois-Îlets / Pointe du Bout (le Disney de l'île), les Salines (superbe mais aux heures creuses).", url: '', photo: '', layout: 'default' },
-          { text: "La vie chère n'est pas une légende — éviter d'acheter sur place les produits importés : masque de snorkeling, crème solaire de marque, etc.", url: '', photo: '', layout: 'default' },
+          { title: 'Rythme de vie', text: "Se lever tôt (7h max), se coucher tôt — calé sur la vie locale, décalage horaire (2h) atténué.", url: '', photo: '', layout: 'default', objectPosition: 'center' },
+          { title: 'Conversations', text: "Les gens sont ultra cool et aiment qu'on leur parle. Certaines discussions peuvent dériver vers la politique (souvent juste) ou le complotisme (souvent vertigineux).", url: '', photo: '', layout: 'default', objectPosition: 'center' },
+          { title: 'Éviter les pièges', text: "Éviter les ghettos touristiques : Fort-de-France (sans grand intérêt le soir), Trois-Îlets / Pointe du Bout (le Disney de l'île), les Salines (superbe mais aux heures creuses).", url: '', photo: '', layout: 'default', objectPosition: 'center' },
+          { title: 'La vie chère', text: "La vie chère n'est pas une légende — éviter d'acheter sur place les produits importés : masque de snorkeling, crème solaire de marque, etc.", url: '', photo: '', layout: 'default', objectPosition: 'center' },
         ]},
         { id: 'transports', title: 'Transports', items: [
-          { text: "La voiture est indispensable. Bus et « taxi co » (mini-bus) existent mais sont vraiment galère pour les coins reculés.", url: '', photo: '', layout: 'default' },
-          { text: "L'île est petite — on en fait le tour en 5h de voiture. Ne pas hésiter à partir à l'opposé pour la journée.", url: '', photo: '', layout: 'default' },
-          { text: "Se garer à l'arrache est la norme — petite voiture recommandée.", url: '', photo: '', layout: 'default' },
-          { text: "Routes sûres, mais prudence sur « la Trace » (nord) par temps de pluie.", url: '', photo: '', layout: 'default' },
-          { text: "Les locaux roulent très vite. Les ronds-points sont sans pitié — bien les prendre.", url: '', photo: '', layout: 'default' },
-          { text: "Attention aux radars : une seule grande route, facile d'y placer des contrôles (et de les repérer sur Waze).", url: '', photo: '', layout: 'default' },
-          { text: "Bouchons fréquents entre Schœlcher et Saint-Esprit aux heures de pointe.", url: '', photo: '', layout: 'default' },
+          { title: 'Voiture indispensable', text: "La voiture est indispensable. Bus et « taxi co » (mini-bus) existent mais sont vraiment galère pour les coins reculés.", url: '', photo: '', layout: 'default', objectPosition: 'center' },
+          { title: "L'île en 5h", text: "L'île est petite — on en fait le tour en 5h de voiture. Ne pas hésiter à partir à l'opposé pour la journée.", url: '', photo: '', layout: 'default', objectPosition: 'center' },
+          { title: 'Se garer', text: "Se garer à l'arrache est la norme — petite voiture recommandée.", url: '', photo: '', layout: 'default', objectPosition: 'center' },
+          { title: 'La Trace', text: "Routes sûres, mais prudence sur « la Trace » (nord) par temps de pluie.", url: '', photo: '', layout: 'default', objectPosition: 'center' },
+          { title: 'Ronds-points', text: "Les locaux roulent très vite. Les ronds-points sont sans pitié — bien les prendre.", url: '', photo: '', layout: 'default', objectPosition: 'center' },
+          { title: 'Radars', text: "Attention aux radars : une seule grande route, facile d'y placer des contrôles (et de les repérer sur Waze).", url: '', photo: '', layout: 'default', objectPosition: 'center' },
+          { title: 'Bouchons', text: "Bouchons fréquents entre Schœlcher et Saint-Esprit aux heures de pointe.", url: '', photo: '', layout: 'default', objectPosition: 'center' },
         ]},
         { id: 'manger', title: 'Manger', items: [
-          { text: "Le rapport qualité-prix au restaurant peut décevoir. Se préparer un repas pour la plage est souvent le meilleur plan.", url: '', photo: '', layout: 'default' },
-          { text: "Ne pas être pressé — le service antillais a son propre rythme.", url: '', photo: '', layout: 'default' },
-          { text: "Fruits et légumes : le vrai trésor de l'île. Acheter sur les marchés ou en bord de route — plus « peyi » que les supermarchés.", url: '', photo: '', layout: 'default' },
-          { text: "Les meilleures glaces de l'île : au Robert.", url: 'https://share.google/lf8EHgTlsH01BCBzg', photo: '', layout: 'default' },
-          { text: "Très bons bokits à Sainte-Anne.", url: 'https://share.google/i0fOSeoLE6iH9EBPB', photo: '', layout: 'default' },
-          { text: "La Terrasse au rond-point du Diamant.", url: 'https://maps.app.goo.gl/kY8sKMjxQefgL8iz7', photo: '', layout: 'default' },
-          { text: "Le M à Sainte-Anne.", url: 'https://maps.app.goo.gl/7av7AvQXTnNL7Rbi6', photo: '', layout: 'default' },
-          { text: "Le Petibonom sur la plage du Carbet.", url: 'https://maps.app.goo.gl/Hmau3YVa19dj4zmF9', photo: '', layout: 'default' },
-          { text: "Incontournable absolu : le poulet boucané en bord de route. Et le snack Alizé (le « McDo local »), partout sur l'île.", url: '', photo: '', layout: 'default' },
+          { title: 'Restaurants', text: "Le rapport qualité-prix au restaurant peut décevoir. Se préparer un repas pour la plage est souvent le meilleur plan.", url: '', photo: '', layout: 'default', objectPosition: 'center' },
+          { title: 'Service', text: "Ne pas être pressé — le service antillais a son propre rythme.", url: '', photo: '', layout: 'default', objectPosition: 'center' },
+          { title: 'Marchés & bord de route', text: "Fruits et légumes : le vrai trésor de l'île. Acheter sur les marchés ou en bord de route — plus « peyi » que les supermarchés.", url: '', photo: '', layout: 'default', objectPosition: 'center' },
+          { title: 'Glaces au Robert', text: "Les meilleures glaces de l'île : au Robert.", url: 'https://share.google/lf8EHgTlsH01BCBzg', photo: '', layout: 'default', objectPosition: 'center' },
+          { title: 'Bokits à Sainte-Anne', text: "Très bons bokits à Sainte-Anne.", url: 'https://share.google/i0fOSeoLE6iH9EBPB', photo: '', layout: 'default', objectPosition: 'center' },
+          { title: 'La Terrasse', text: "La Terrasse au rond-point du Diamant.", url: 'https://maps.app.goo.gl/kY8sKMjxQefgL8iz7', photo: '', layout: 'default', objectPosition: 'center' },
+          { title: 'Le M', text: "Le M à Sainte-Anne.", url: 'https://maps.app.goo.gl/7av7AvQXTnNL7Rbi6', photo: '', layout: 'default', objectPosition: 'center' },
+          { title: 'Le Petibonom', text: "Le Petibonom sur la plage du Carbet.", url: 'https://maps.app.goo.gl/Hmau3YVa19dj4zmF9', photo: '', layout: 'default', objectPosition: 'center' },
+          { title: 'Poulet boucané', text: "Incontournable absolu : le poulet boucané en bord de route. Et le snack Alizé (le « McDo local »), partout sur l'île.", url: '', photo: '', layout: 'default', objectPosition: 'center' },
         ]},
         { id: 'activites', title: 'Activités', items: [
-          { text: "Snorkeling à Grande Anse ou Anse Dufour pour les tortues. Y aller au lever du soleil, repartir avant l'afflux touristique.", url: '', photo: '', layout: 'default' },
-          { text: "Plongée au canon aux Anses d'Arlet.", url: '', photo: '', layout: 'default' },
-          { text: "Sortie dauphins avec Markus — la demi-journée est canon ! +596 696 41 18 03", url: 'tel:+596696411803', photo: '', layout: 'default' },
-          { text: "Randonnées : Morne Larcher, Montagne Pelée (si bonne météo), grand tour de la presqu'île de la Caravelle (Baie du Trésor).", url: '', photo: '', layout: 'default' },
-          { text: "Jardin de Balata — touristique mais immanquable. Éviter les horaires bondés.", url: '', photo: '', layout: 'default' },
-          { text: "Kayak dans la mangrove au canal Cocotte — prévoir un répulsif anti-moustiques.", url: '', photo: '', layout: 'default' },
-          { text: "Carnaval ou Tour des Yoles : fête permanente.", url: '', photo: '', layout: 'default' },
-          { text: "Jours de pluie : cinéma Madiana à Schœlcher — excellent complexe.", url: '', photo: '', layout: 'default' },
+          { title: 'Snorkeling & tortues', text: "Snorkeling à Grande Anse ou Anse Dufour pour les tortues. Y aller au lever du soleil, repartir avant l'afflux touristique.", url: '', photo: '', layout: 'default', objectPosition: 'center' },
+          { title: 'Plongée au canon', text: "Plongée au canon aux Anses d'Arlet.", url: '', photo: '', layout: 'default', objectPosition: 'center' },
+          { title: 'Sortie dauphins', text: "Sortie dauphins avec Markus — la demi-journée est canon ! +596 696 41 18 03", url: 'tel:+596696411803', photo: '', layout: 'default', objectPosition: 'center' },
+          { title: 'Randonnées', text: "Morne Larcher, Montagne Pelée (si bonne météo), grand tour de la presqu'île de la Caravelle (Baie du Trésor).", url: '', photo: '', layout: 'default', objectPosition: 'center' },
+          { title: 'Jardin de Balata', text: "Touristique mais immanquable. Éviter les horaires bondés.", url: '', photo: '', layout: 'default', objectPosition: 'center' },
+          { title: 'Kayak en mangrove', text: "Kayak dans la mangrove au canal Cocotte — prévoir un répulsif anti-moustiques.", url: '', photo: '', layout: 'default', objectPosition: 'center' },
+          { title: 'Carnaval & Yoles', text: "Carnaval ou Tour des Yoles : fête permanente.", url: '', photo: '', layout: 'default', objectPosition: 'center' },
+          { title: 'Cinéma Madiana', text: "Jours de pluie : cinéma Madiana à Schœlcher — excellent complexe.", url: '', photo: '', layout: 'default', objectPosition: 'center' },
         ]},
         { id: 'nature', title: 'Nature', items: [
-          { text: "Mer ou rivière (« rivié ») — les locaux préfèrent souvent la fraîcheur des rivières.", url: '', photo: '', layout: 'default' },
-          { text: "Cascades : pas spectaculaires, mais les balades pour y accéder sont sympas. Cascade Didier en particulier.", url: '', photo: '', layout: 'default' },
-          { text: "Les meilleures anses (eau à 28°) : Anse Couleuvre, Anse Figuier, Petite Anse, presqu'île de la Caravelle, plage du Diamant (attention aux courants).", url: '', photo: '', layout: 'default' },
-          { text: "Ne jamais s'abriter sous les mancelliniers (arbres marqués rouge — pluie acide), ni sous des cocotiers secs, ni près des sorties d'eau sale.", url: '', photo: '', layout: 'default' },
+          { title: 'Mer ou rivière', text: "Mer ou rivière (« rivié ») — les locaux préfèrent souvent la fraîcheur des rivières.", url: '', photo: '', layout: 'default', objectPosition: 'center' },
+          { title: 'Cascades', text: "Pas spectaculaires, mais les balades pour y accéder sont sympas. Cascade Didier en particulier.", url: '', photo: '', layout: 'default', objectPosition: 'center' },
+          { title: 'Les meilleures anses', text: "Eau à 28° : Anse Couleuvre, Anse Figuier, Petite Anse, presqu'île de la Caravelle, plage du Diamant (attention aux courants).", url: '', photo: '', layout: 'default', objectPosition: 'center' },
+          { title: 'Mancelliniers', text: "Ne jamais s'abriter sous les mancelliniers (arbres marqués rouge — pluie acide), ni sous des cocotiers secs, ni près des sorties d'eau sale.", url: '', photo: '', layout: 'default', objectPosition: 'center' },
         ]},
       ]
     };
@@ -124,84 +138,82 @@
     /* ── Illustrations ──────────────────────────────────────────── */
     const ILLUSTRATIONS = {
       generalites: `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="50" cy="50" r="34" stroke-width="1.1"/><circle cx="50" cy="50" r="3.5" fill="currentColor" stroke="none"/>
-        <line x1="50" y1="16" x2="50" y2="27" stroke-width="1.4"/><line x1="50" y1="73" x2="50" y2="84" stroke-width="1.4"/>
-        <line x1="16" y1="50" x2="27" y2="50" stroke-width="1.4"/><line x1="73" y1="50" x2="84" y2="50" stroke-width="1.4"/>
-        <path d="M50 20 L53.5 47 L50 53 L46.5 47Z" fill="currentColor" stroke="none" opacity="0.55"/>
+        <circle cx="50" cy="50" r="34" stroke-width="1.8"/><circle cx="50" cy="50" r="4" fill="currentColor" stroke="none"/>
+        <line x1="50" y1="16" x2="50" y2="28" stroke-width="2"/><line x1="50" y1="72" x2="50" y2="84" stroke-width="2"/>
+        <line x1="16" y1="50" x2="28" y2="50" stroke-width="2"/><line x1="72" y1="50" x2="84" y2="50" stroke-width="2"/>
+        <path d="M50 20 L53.5 47 L50 53 L46.5 47Z" fill="currentColor" stroke="none" opacity="0.7"/>
       </svg>`,
       mood: `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-linecap="round">
-        <line x1="12" y1="66" x2="88" y2="66" stroke-width="1"/><circle cx="50" cy="55" r="15" stroke-width="1.2"/>
-        <line x1="50" y1="22" x2="50" y2="31" stroke-width="1.3"/><line x1="70.6" y1="28.4" x2="65" y2="34" stroke-width="1.3"/>
-        <line x1="77" y1="49" x2="68" y2="49" stroke-width="1.3"/><line x1="29.4" y1="28.4" x2="35" y2="34" stroke-width="1.3"/>
-        <line x1="23" y1="49" x2="32" y2="49" stroke-width="1.3"/>
-        <path d="M12 74 Q25 71 38 74 Q51 77 64 74 Q77 71 88 74" stroke-width="1" opacity="0.5"/>
+        <circle cx="50" cy="52" r="18" stroke-width="1.8"/>
+        <line x1="50" y1="20" x2="50" y2="30" stroke-width="2"/><line x1="72" y1="27" x2="66" y2="33" stroke-width="2"/>
+        <line x1="79" y1="49" x2="69" y2="49" stroke-width="2"/><line x1="28" y1="27" x2="34" y2="33" stroke-width="2"/>
+        <line x1="21" y1="49" x2="31" y2="49" stroke-width="2"/>
+        <line x1="12" y1="68" x2="88" y2="68" stroke-width="1.4"/>
+        <path d="M12 76 Q30 72 50 76 Q70 80 88 76" stroke-width="1.2" opacity="0.5"/>
       </svg>`,
       transports: `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="50" cy="50" r="33" stroke-width="1.2"/><circle cx="50" cy="50" r="9" stroke-width="1.2"/>
-        <line x1="50" y1="41" x2="50" y2="17" stroke-width="1.2"/>
-        <line x1="42.2" y1="45.5" x2="21" y2="62.5" stroke-width="1.2"/>
-        <line x1="57.8" y1="45.5" x2="79" y2="62.5" stroke-width="1.2"/>
+        <circle cx="50" cy="50" r="33" stroke-width="1.8"/><circle cx="50" cy="50" r="9" stroke-width="1.8"/>
+        <line x1="50" y1="41" x2="50" y2="17" stroke-width="1.8"/>
+        <line x1="42.2" y1="45.5" x2="21" y2="62.5" stroke-width="1.8"/>
+        <line x1="57.8" y1="45.5" x2="79" y2="62.5" stroke-width="1.8"/>
       </svg>`,
       manger: `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="34" y1="78" x2="34" y2="51" stroke-width="1.2"/><line x1="28" y1="22" x2="28" y2="40" stroke-width="1.2"/>
-        <line x1="34" y1="22" x2="34" y2="40" stroke-width="1.2"/><line x1="40" y1="22" x2="40" y2="40" stroke-width="1.2"/>
-        <path d="M28 40 Q34 48 40 40" stroke-width="1.2"/>
-        <line x1="66" y1="22" x2="66" y2="78" stroke-width="1.2"/><path d="M66 22 Q77 33 66 54" stroke-width="1.2"/>
+        <line x1="34" y1="78" x2="34" y2="50" stroke-width="1.8"/><line x1="27" y1="22" x2="27" y2="42" stroke-width="1.8"/>
+        <line x1="34" y1="22" x2="34" y2="42" stroke-width="1.8"/><line x1="41" y1="22" x2="41" y2="42" stroke-width="1.8"/>
+        <path d="M27 42 Q34 51 41 42" stroke-width="1.8"/>
+        <line x1="66" y1="22" x2="66" y2="78" stroke-width="1.8"/><path d="M66 22 Q78 34 66 55" stroke-width="1.8"/>
       </svg>`,
       activites: `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M15 63 Q28 34 58 37 Q77 39 82 55 Q85 66 72 68 Q59 70 49 59 Q39 48 15 63Z" stroke-width="1.2"/>
-        <path d="M15 63 Q7 51 11 40" stroke-width="1.2"/><path d="M15 63 Q5 68 9 76" stroke-width="1.2"/>
-        <path d="M54 41 Q58 24 67 33" stroke-width="1.2"/>
-        <circle cx="73" cy="57" r="2.2" fill="currentColor" stroke="none"/>
+        <path d="M15 63 Q28 34 58 37 Q77 39 82 55 Q85 66 72 68 Q59 70 49 59 Q39 48 15 63Z" stroke-width="1.8"/>
+        <path d="M15 63 Q7 51 11 40" stroke-width="1.8"/><path d="M15 63 Q5 68 9 76" stroke-width="1.8"/>
+        <path d="M54 41 Q58 24 67 33" stroke-width="1.8"/>
+        <circle cx="73" cy="57" r="3" fill="currentColor" stroke="none"/>
       </svg>`,
       nature: `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M10 76 L42 22 L60 44 L70 32 L90 76Z" stroke-width="1.2"/>
-        <line x1="20" y1="76" x2="27" y2="47" stroke-width="1.2"/>
-        <path d="M27 47 Q16 39 10 44" stroke-width="1.1"/>
-        <path d="M27 47 Q22 37 27 28" stroke-width="1.1"/>
-        <path d="M27 47 Q36 39 42 44" stroke-width="1.1"/>
+        <path d="M10 76 L42 22 L60 44 L70 32 L90 76Z" stroke-width="1.8"/>
+        <line x1="20" y1="76" x2="27" y2="47" stroke-width="1.8"/>
+        <path d="M27 47 Q15 38 9 44" stroke-width="1.6"/>
+        <path d="M27 47 Q22 36 27 26" stroke-width="1.6"/>
+        <path d="M27 47 Q37 38 43 44" stroke-width="1.6"/>
       </svg>`,
     };
     const ILLUS_FALLBACK = `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-linecap="round">
-      <circle cx="50" cy="50" r="32" stroke-width="1" opacity="0.3"/>
-    </svg>`;
+      <circle cx="50" cy="50" r="32" stroke-width="1.8"/></svg>`;
 
-    /* ── Helpers ────────────────────────────────────────────────── */
     function esc(s) {
       return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
     }
     function illus(id) { return ILLUSTRATIONS[id] || ILLUS_FALLBACK; }
 
-    /* ── Header scroll ──────────────────────────────────────────── */
+    /* ── Header ─────────────────────────────────────────────────── */
     let _scrolled = false;
-    function applyHeaderState(scrolled) {
-      _scrolled = scrolled;
+    function applyHeader(on) {
+      _scrolled = on;
       const h = document.getElementById('site-header');
       const b = document.getElementById('header-brand');
-      if (scrolled) {
-        h.style.cssText = 'background:rgba(237,234,229,.96);backdrop-filter:blur(14px);border-bottom:1px solid rgba(180,170,158,.35)';
-        b.style.color = '#1c1917';
-      } else {
-        h.style.cssText = '';
-        b.style.color = '#fff';
-      }
+      h.style.cssText = on
+        ? 'background:rgba(232,228,223,.97);backdrop-filter:blur(16px);border-bottom:1px solid rgba(175,165,152,.3)'
+        : '';
+      b.style.color = on ? '#1c1917' : '#fff';
       document.querySelectorAll('#nav-links a').forEach(a => {
-        a.style.color = scrolled ? '#a8a29e' : 'rgba(255,255,255,.5)';
-        a.onmouseover = () => { a.style.color = scrolled ? '#1c1917' : '#fff'; };
-        a.onmouseout  = () => { a.style.color = scrolled ? '#a8a29e' : 'rgba(255,255,255,.5)'; };
+        a.style.color = on ? '#78716c' : 'rgba(255,255,255,.45)';
+        a.onmouseover = () => { a.style.color = on ? '#1c1917' : '#fff'; };
+        a.onmouseout  = () => { a.style.color = on ? '#78716c' : 'rgba(255,255,255,.45)'; };
       });
     }
     window.addEventListener('scroll', () => {
-      applyHeaderState(window.scrollY > (document.getElementById('hero')?.offsetHeight || 600) * 0.55);
+      applyHeader(window.scrollY > (document.getElementById('hero')?.offsetHeight || 600) * 0.5);
     }, { passive: true });
 
     /* ── Lien ───────────────────────────────────────────────────── */
-    function renderLink(item) {
+    function mkLink(item, light) {
       if (!item.url?.trim()) return '';
-      const isPhone = item.url.startsWith('tel:');
-      return `<a href="${esc(item.url)}"${isPhone ? '' : ' target="_blank" rel="noopener"'}
-        class="inline-flex items-center gap-1.5 text-[10px] tracking-[0.14em] uppercase text-stone-400 hover:text-stone-900 border-b border-stone-200 hover:border-stone-700 pb-px transition-colors whitespace-nowrap">
-        ${isPhone ? 'Appeler' : '↗ Voir'}
+      const phone = item.url.startsWith('tel:');
+      const cls = light
+        ? 'inline-flex items-center gap-1 text-[9px] tracking-[0.15em] uppercase text-white/60 hover:text-white border-b border-white/25 hover:border-white pb-px transition-colors'
+        : 'inline-flex items-center gap-1 text-[9px] tracking-[0.15em] uppercase text-stone-400 hover:text-stone-900 border-b border-stone-200 hover:border-stone-700 pb-px transition-colors';
+      return `<a href="${esc(item.url)}"${phone?'':' target="_blank" rel="noopener"'} class="${cls}">
+        ${phone ? 'Appeler' : '↗ Voir'}
       </a>`;
     }
 
@@ -209,46 +221,67 @@
     function renderItem(item) {
       const hasPhoto = item.photo?.trim();
       const layout   = item.layout || 'default';
-      const link     = renderLink(item);
-      const card     = 'bg-white rounded-2xl overflow-hidden shadow-[0_1px_3px_rgba(0,0,0,.06),0_1px_2px_rgba(0,0,0,.04)]';
+      const pos      = item.objectPosition || 'center';
+      const title    = item.title?.trim();
 
-      /* ── Mise en avant : pleine largeur, grande photo ── */
+      /* BANNIÈRE — photo pleine largeur, texte superposé */
       if (hasPhoto && layout === 'highlight') {
         return `
-          <article class="${card} col-span-full">
-            <div class="overflow-hidden img-zoom aspect-video">
-              <img src="${esc(item.photo)}" alt="" class="w-full h-full object-cover" loading="lazy" />
-            </div>
-            <div class="p-6 md:p-8 flex items-end justify-between gap-6">
-              <p class="text-[15px] text-stone-600 leading-relaxed max-w-2xl">${esc(item.text)}</p>
-              ${link ? `<div class="shrink-0">${link}</div>` : ''}
+          <article class="col-span-full relative img-zoom rounded-2xl overflow-hidden card cursor-default"
+            style="min-height:320px;aspect-ratio:21/9">
+            <img src="${esc(item.photo)}" alt=""
+              class="img-zoom-el absolute inset-0 w-full h-full object-cover"
+              style="object-position:${esc(pos)}" loading="lazy" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/5"></div>
+            <div class="absolute inset-x-0 bottom-0 p-6 md:p-10">
+              ${title ? `<h3 class="font-display text-white font-light leading-tight mb-3"
+                style="font-size:clamp(22px,3vw,38px)">${esc(title)}</h3>` : ''}
+              <p class="text-white/65 text-[13px] md:text-[14px] leading-relaxed max-w-xl mb-4">${esc(item.text)}</p>
+              ${mkLink(item, true)}
             </div>
           </article>`;
       }
 
-      /* ── Côte à côte : photo + texte dans la même carte ── */
+      /* PHOTO VIGNETTE — image avec texte superposé, 1 colonne */
       if (hasPhoto) {
         return `
-          <article class="${card}">
-            <div class="overflow-hidden img-zoom aspect-video">
-              <img src="${esc(item.photo)}" alt="" class="w-full h-full object-cover" loading="lazy" />
-            </div>
-            <div class="p-5 flex flex-col gap-3">
-              <p class="text-[14px] text-stone-600 leading-relaxed">${esc(item.text)}</p>
-              ${link ? `<div>${link}</div>` : ''}
+          <article class="relative img-zoom rounded-2xl overflow-hidden card cursor-default"
+            style="min-height:260px">
+            <img src="${esc(item.photo)}" alt=""
+              class="img-zoom-el absolute inset-0 w-full h-full object-cover"
+              style="object-position:${esc(pos)}" loading="lazy" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+            <div class="absolute inset-x-0 bottom-0 p-5">
+              ${title ? `<h3 class="font-display text-white font-light text-[22px] leading-tight mb-1.5">${esc(title)}</h3>` : ''}
+              <p class="text-white/70 text-[12.5px] leading-relaxed mb-2.5">${esc(item.text)}</p>
+              ${mkLink(item, true)}
             </div>
           </article>`;
       }
 
-      /* ── Texte seul ─────────────────────────────────── */
+      /* TEXTE À PLAT — pleine largeur, sans cadre */
+      if (layout === 'highlight') {
+        return `
+          <article class="col-span-full py-8 px-1 border-b border-stone-300/40 last:border-0">
+            ${title ? `<h3 class="font-display text-stone-900 font-light leading-tight mb-3"
+              style="font-size:clamp(24px,3vw,40px)">${esc(title)}</h3>` : ''}
+            <div class="flex items-end justify-between gap-8">
+              <p class="text-[15px] text-stone-500 leading-relaxed max-w-2xl">${esc(item.text)}</p>
+              ${mkLink(item, false)}
+            </div>
+          </article>`;
+      }
+
+      /* CARTE TEXTE — fond blanc, grille */
       return `
-        <article class="${card} p-5 md:p-6 flex flex-col justify-between gap-5 min-h-[130px]">
-          <p class="text-[14px] text-stone-600 leading-relaxed">${esc(item.text)}</p>
-          ${link ? `<div>${link}</div>` : ''}
+        <article class="bg-white rounded-2xl p-5 md:p-6 flex flex-col gap-3 card" style="min-height:140px">
+          ${title ? `<h3 class="font-display text-stone-900 font-medium leading-snug" style="font-size:18px">${esc(title)}</h3>` : ''}
+          <p class="text-[13.5px] text-stone-500 leading-relaxed flex-1">${esc(item.text)}</p>
+          ${mkLink(item, false)}
         </article>`;
     }
 
-    /* ── Render ─────────────────────────────────────────────────── */
+    /* ── Section ─────────────────────────────────────────────────── */
     function render(d) {
       document.title = 'Guide ' + d.meta.title;
 
@@ -268,37 +301,35 @@
 
       /* Nav */
       document.getElementById('nav-links').innerHTML = d.sections.map(s =>
-        `<a href="#${s.id}"
-          class="text-[9px] tracking-[0.22em] uppercase transition-colors whitespace-nowrap"
-          style="color:${_scrolled ? '#a8a29e' : 'rgba(255,255,255,.5)'}">
+        `<a href="#${s.id}" style="color:${_scrolled?'#78716c':'rgba(255,255,255,.45)'}"
+          class="font-display text-[11px] tracking-[0.18em] uppercase transition-colors whitespace-nowrap"
+          onmouseover="this.style.color='${_scrolled?'#1c1917':'#fff'}'"
+          onmouseout="this.style.color='${_scrolled?'#78716c':'rgba(255,255,255,.45)'}'">
           ${esc(s.title)}
         </a>`
       ).join('');
-      applyHeaderState(_scrolled);
 
       /* Sections */
       document.getElementById('content').innerHTML = d.sections.map((s, i) => `
-        <section id="${s.id}" class="scroll-mt-24 mb-16 md:mb-20">
-
-          <!-- En-tête de section -->
-          <div class="flex items-center justify-between gap-4 mb-5 pb-4 border-b border-stone-300/60">
-            <div class="flex items-center gap-3">
-              <span class="text-[10px] tabular-nums tracking-[0.25em] text-stone-400 font-medium">
+        <section id="${s.id}" class="scroll-mt-24 mb-14 md:mb-20">
+          <div class="flex items-center justify-between gap-4 mb-5 pb-4"
+            style="border-bottom:1px solid rgba(160,150,140,.35)">
+            <div class="flex items-center gap-3.5">
+              <span class="text-[10px] tabular-nums tracking-[0.28em] text-stone-400 font-light select-none">
                 ${String(i+1).padStart(2,'0')}
               </span>
-              <span class="w-px h-3 bg-stone-300 block"></span>
-              <h2 class="text-sm font-semibold text-stone-800 tracking-wide uppercase">${esc(s.title)}</h2>
+              <div class="w-px h-3.5 bg-stone-400/40"></div>
+              <h2 class="font-display text-[17px] font-medium text-stone-800 tracking-wide">${esc(s.title)}</h2>
             </div>
-            <div class="w-5 h-5 text-stone-400 shrink-0">${illus(s.id)}</div>
+            <div class="w-[22px] h-[22px] shrink-0 text-stone-600">${illus(s.id)}</div>
           </div>
-
-          <!-- Grille de cartes -->
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
             ${s.items.map(item => renderItem(item)).join('')}
           </div>
-
         </section>
       `).join('');
+
+      applyHeader(_scrolled);
     }
 
     /* ── Données ────────────────────────────────────────────────── */
@@ -307,11 +338,7 @@
 
     fetch('./data.json?' + Date.now())
       .then(r => r.ok ? r.json() : null)
-      .then(data => {
-        if (!data) return;
-        try { localStorage.setItem(KEY, JSON.stringify(data)); } catch {}
-        render(data);
-      })
+      .then(data => { if (!data) return; try { localStorage.setItem(KEY, JSON.stringify(data)); } catch {} render(data); })
       .catch(() => {});
 
     window.addEventListener('storage', () => {
@@ -319,10 +346,7 @@
       if (d) render(d);
     });
     window.addEventListener('pageshow', e => {
-      if (e.persisted) {
-        const d = (() => { try { return JSON.parse(localStorage.getItem(KEY)); } catch {} return null; })();
-        render(d || DEFAULTS);
-      }
+      if (e.persisted) { const d = (() => { try { return JSON.parse(localStorage.getItem(KEY)); } catch {} return null; })(); render(d || DEFAULTS); }
     });
   </script>
 </body>

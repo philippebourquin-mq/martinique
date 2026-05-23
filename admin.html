@@ -342,35 +342,53 @@
 
     /* ── Mise à jour UI photo ────────────────────────────────────── */
     function updatePhotoUI(row, photoData) {
-      const preview    = row.querySelector('[data-photo-preview]');
-      const img        = row.querySelector('[data-photo-img]');
-      const label      = row.querySelector('[data-photo-label]');
-      const removeBtn  = row.querySelector('[data-remove-photo]');
-      const layoutRow  = row.querySelector('[data-layout-row]');
+      const preview     = row.querySelector('[data-photo-preview]');
+      const img         = row.querySelector('[data-photo-img]');
+      const label       = row.querySelector('[data-photo-label]');
+      const removeBtn   = row.querySelector('[data-remove-photo]');
+      const layoutRow   = row.querySelector('[data-layout-row]');
+      const layoutText  = row.querySelector('[data-layout-text-row]');
+      const posRow      = row.querySelector('[data-position-row]');
       if (photoData) {
         preview.classList.remove('hidden');
         img.src = photoData;
         label.textContent = 'Changer';
         removeBtn.classList.remove('hidden');
         layoutRow?.classList.remove('hidden');
+        layoutText?.classList.add('hidden');
+        posRow?.classList.remove('hidden');
+        setLayoutActive(row, row._layout);
       } else {
         preview.classList.add('hidden');
         img.src = '';
         label.textContent = '+ Photo';
         removeBtn.classList.add('hidden');
         layoutRow?.classList.add('hidden');
-        row._layout = 'default';
-        setLayoutActive(row, 'default');
+        layoutText?.classList.remove('hidden');
+        posRow?.classList.add('hidden');
+        row._objectPosition = 'center';
+        setPosActive(row, 'center');
       }
     }
 
     /* ── Sélecteur de layout ─────────────────────────────────────── */
     function setLayoutActive(row, layout) {
+      /* Met à jour les deux groupes de boutons layout */
       row.querySelectorAll('[data-layout-opt]').forEach(btn => {
         const active = btn.dataset.layoutOpt === layout;
         btn.className = active
           ? 'text-[10px] px-2.5 py-1.5 rounded-md font-semibold bg-white text-gray-900 shadow-sm transition-all'
           : 'text-[10px] px-2.5 py-1.5 rounded-md font-medium text-gray-400 hover:text-gray-700 transition-all';
+      });
+    }
+
+    /* ── Sélecteur de position ───────────────────────────────────── */
+    function setPosActive(row, pos) {
+      row.querySelectorAll('[data-pos-opt]').forEach(btn => {
+        const active = btn.dataset.posOpt === pos;
+        btn.style.background = active ? '#fff' : '';
+        btn.style.color      = active ? '#111' : '';
+        btn.style.fontWeight = active ? '700'  : '';
       });
     }
 
@@ -382,10 +400,15 @@
 
       row.innerHTML = `
         <div class="flex gap-2 items-start">
+          <div class="flex-1 space-y-1.5">
+            <input data-field="title" type="text" placeholder="Titre du tip…"
+              class="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm font-medium bg-white
+                     focus:outline-none focus:border-gray-400 transition-colors" />
           <textarea data-field="text" rows="2" placeholder="Texte du tip…"
-            class="flex-1 border border-gray-200 rounded-xl px-3 py-2.5 text-sm resize-none bg-white
+            class="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm resize-none bg-white
                    focus:outline-none focus:border-gray-400 transition-colors leading-relaxed min-h-[52px]"
           ></textarea>
+          </div>
           <div class="flex flex-col gap-1 shrink-0 pt-0.5">
             <button type="button" data-action="up"
               class="w-9 h-9 flex items-center justify-center rounded-lg text-gray-400 hover:text-gray-800 hover:bg-white transition-colors text-sm" title="Monter">↑</button>
@@ -420,13 +443,43 @@
           <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider w-10 shrink-0">Style</span>
           <div class="flex gap-0.5 bg-gray-100 rounded-lg p-0.5">
             <button type="button" data-layout-opt="default"
+              class="text-[10px] px-2.5 py-1.5 rounded-md font-semibold bg-white text-gray-900 shadow-sm transition-all"
+              data-label-default="Vignette" data-label-highlight-owner="Vignette">
+              Vignette
+            </button>
+            <button type="button" data-layout-opt="highlight"
+              class="text-[10px] px-2.5 py-1.5 rounded-md font-medium text-gray-400 hover:text-gray-700 transition-all"
+              data-label-default="Bannière" data-label-highlight-owner="Bannière">
+              Bannière
+            </button>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2 pl-1 hidden" data-layout-text-row>
+          <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider w-10 shrink-0">Style</span>
+          <div class="flex gap-0.5 bg-gray-100 rounded-lg p-0.5">
+            <button type="button" data-layout-opt="default"
               class="text-[10px] px-2.5 py-1.5 rounded-md font-semibold bg-white text-gray-900 shadow-sm transition-all">
-              Côte à côte
+              Carte
             </button>
             <button type="button" data-layout-opt="highlight"
               class="text-[10px] px-2.5 py-1.5 rounded-md font-medium text-gray-400 hover:text-gray-700 transition-all">
-              Mise en avant
+              À plat
             </button>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2 pl-1 hidden" data-position-row>
+          <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider w-10 shrink-0">Focus</span>
+          <div class="grid grid-cols-3 gap-px rounded-xl overflow-hidden bg-gray-200" style="width:66px;height:50px">
+            ${[['top left','↖'],['top center','↑'],['top right','↗'],
+               ['center left','←'],['center','·'],['center right','→'],
+               ['bottom left','↙'],['bottom center','↓'],['bottom right','↘']
+              ].map(([pos,icon]) =>
+              `<button type="button" data-pos-opt="${pos}"
+                class="flex items-center justify-center text-[10px] bg-gray-100 hover:bg-white text-gray-400 hover:text-gray-800 transition-colors" title="${pos}">
+                ${icon}
+              </button>`).join('')}
           </div>
         </div>
 
@@ -450,15 +503,34 @@
 
       row.querySelector('[data-field="url"]').value = item.url || '';
 
-      row._photo  = item.photo  || '';
-      row._layout = item.layout || 'default';
+      /* Titre */
+      row.querySelector('[data-field="title"]').value = item.title || '';
+
+      row._photo          = item.photo          || '';
+      row._layout         = item.layout         || 'default';
+      row._objectPosition = item.objectPosition || 'center';
+
       setLayoutActive(row, row._layout);
-      if (row._photo) updatePhotoUI(row, row._photo);
+      setPosActive(row, row._objectPosition);
+      if (row._photo) {
+        updatePhotoUI(row, row._photo);
+      } else {
+        /* Afficher le sélecteur texte par défaut */
+        row.querySelector('[data-layout-text-row]')?.classList.remove('hidden');
+        setLayoutActive(row, row._layout);
+      }
 
       row.querySelectorAll('[data-layout-opt]').forEach(btn => {
         btn.addEventListener('click', () => {
           row._layout = btn.dataset.layoutOpt;
           setLayoutActive(row, row._layout);
+        });
+      });
+
+      row.querySelectorAll('[data-pos-opt]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          row._objectPosition = btn.dataset.posOpt;
+          setPosActive(row, row._objectPosition);
         });
       });
 
@@ -512,10 +584,16 @@
       header.innerHTML = `
         <input data-field="section-title" type="text" value="${esc(section.title)}"
           class="flex-1 font-semibold text-sm text-gray-700 bg-transparent border-0 focus:outline-none min-h-[36px]" />
-        <button type="button" data-collapse
-          class="text-[10px] text-gray-400 hover:text-gray-700 uppercase tracking-wider transition-colors shrink-0 py-2 px-1">
-          Réduire
-        </button>
+        <div class="flex items-center gap-0.5 shrink-0">
+          <button type="button" data-sec-up title="Monter"
+            class="w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:text-gray-800 hover:bg-white transition-colors text-sm">↑</button>
+          <button type="button" data-sec-down title="Descendre"
+            class="w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:text-gray-800 hover:bg-white transition-colors text-sm">↓</button>
+          <button type="button" data-collapse
+            class="text-[10px] text-gray-400 hover:text-gray-700 uppercase tracking-wider transition-colors py-2 px-2 ml-1">
+            Réduire
+          </button>
+        </div>
       `;
       card.appendChild(header);
 
@@ -538,6 +616,14 @@
       header.querySelector('[data-collapse]').addEventListener('click', function () {
         const collapsed = body.classList.toggle('hidden');
         this.textContent = collapsed ? 'Développer' : 'Réduire';
+      });
+      header.querySelector('[data-sec-up]').addEventListener('click', () => {
+        const prev = card.previousElementSibling;
+        if (prev) card.parentNode.insertBefore(card, prev);
+      });
+      header.querySelector('[data-sec-down]').addEventListener('click', () => {
+        const next = card.nextElementSibling;
+        if (next) card.parentNode.insertBefore(next, card);
       });
 
       footer.querySelector('[data-add-item]').addEventListener('click', () => {
@@ -606,8 +692,10 @@
             .map(row => ({
               text:  row.querySelector('[data-field="text"]').value.trim(),
               url:   row.querySelector('[data-field="url"]').value.trim(),
-              photo:  row._photo  || '',
-              layout: row._layout || 'default',
+              title:          row.querySelector('[data-field="title"]').value.trim(),
+              photo:          row._photo          || '',
+              layout:         row._layout         || 'default',
+              objectPosition: row._objectPosition || 'center',
             }))
             .filter(item => item.text),
         })),
