@@ -25,7 +25,7 @@
           "text": "Le fléau des sargasses : ces algues brunes venues du large sont toxiques et sentent très fort. La côte atlantique est particulièrement touchée.",
           "url": "https://meteofrance.mq/fr/sargasses",
           "photo": "https://images.unsplash.com/photo-1617813815451-190de34be122?w=800&q=80",
-          "layout": "1x3",
+          "layout": "1x2",
           "textStyle": "card",
           "objectPosition": "center"
         },
@@ -34,7 +34,7 @@
           "text": "Vérifier sa couverture téléphonique — souvent incluse dans les forfaits, sinon une SIM disponible à l'aéroport.",
           "url": "",
           "photo": "",
-          "layout": "1x2",
+          "layout": "2x2",
           "textStyle": "citation",
           "objectPosition": "center"
         },
