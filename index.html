@@ -226,6 +226,23 @@
           </article>`;
       }
 
+      /* PHOTO DOUBLE — image à gauche, texte à droite, 2 colonnes */
+      if (hasPhoto && layout === 'wide') {
+        return `
+          <article class="sm:col-span-2 flex rounded-xl overflow-hidden card bg-white cursor-default" style="min-height:220px">
+            <div class="relative w-2/5 shrink-0 img-zoom">
+              <img src="${esc(item.photo)}" alt=""
+                class="img-zoom-el absolute inset-0 w-full h-full object-cover"
+                style="object-position:${esc(pos)}" loading="lazy" />
+            </div>
+            <div class="flex-1 p-5 md:p-7 flex flex-col gap-3 justify-center">
+              ${title ? `<h3 class="text-stone-900 font-semibold leading-snug" style="font-size:18px">${esc(title)}</h3>` : ''}
+              <p class="text-[13px] text-stone-500 leading-relaxed font-light">${esc(item.text)}</p>
+              ${mkLink(item, false)}
+            </div>
+          </article>`;
+      }
+
       /* PHOTO VIGNETTE — image avec texte superposé, 1 colonne */
       if (hasPhoto) {
         return `
@@ -240,6 +257,16 @@
               <p class="text-white/70 text-[12.5px] leading-relaxed mb-2.5 font-light">${esc(item.text)}</p>
               ${mkLink(item, true)}
             </div>
+          </article>`;
+      }
+
+      /* DOUBLE TEXTE — carte blanche sur 2 colonnes */
+      if (layout === 'wide') {
+        return `
+          <article class="sm:col-span-2 bg-white rounded-xl p-5 md:p-6 flex flex-col gap-3 card" style="min-height:140px">
+            ${title ? `<h3 class="text-stone-900 font-semibold leading-snug" style="font-size:16px">${esc(title)}</h3>` : ''}
+            <p class="text-[13px] text-stone-500 leading-relaxed flex-1 font-light">${esc(item.text)}</p>
+            ${mkLink(item, false)}
           </article>`;
       }
 
