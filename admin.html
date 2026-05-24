@@ -369,7 +369,19 @@
       return JSON.parse(text);
     }
     async function saveToGitHub(cfg, data) {
-      const r = await ghFetch(cfg, 'PUT', { message: 'Mise à jour du guide (' + new Date().toLocaleDateString('fr-FR') + ')', content: toBase64(JSON.stringify(data, null, 2)), sha: window._fileSha });
+      const payload = { message: 'Mise à jour du guide (' + new Date().toLocaleDateString('fr-FR') + ')', content: toBase64(JSON.stringify(data, null, 2)), sha: window._fileSha };
+      let r;
+      try {
+        r = await ghFetch(cfg, 'PUT', payload);
+      } catch(e) {
+        // SHA périmé (commit git direct entre-temps) → re-fetch le SHA courant et réessaie
+        if (e.message && e.message.includes('does not match')) {
+          const file = await ghFetch(cfg, 'GET');
+          window._fileSha = file.sha;
+          payload.sha = file.sha;
+          r = await ghFetch(cfg, 'PUT', payload);
+        } else { throw e; }
+      }
       window._fileSha = r.content.sha;
       try { localStorage.setItem(CACHE_KEY, JSON.stringify(data)); } catch {}
     }
@@ -622,7 +634,7 @@
           <button type="button" data-collapse
             class="text-[10px] text-gray-400 hover:text-gray-700 uppercase tracking-wider transition-colors py-2 px-2 ml-1">Réduire</button>
           <button type="button" data-sec-delete title="Supprimer la section"
-            class="w-8 h-8 flex items-center justify-center rounded-md text-gray-300 hover:text-red-500 hover:bg-red-50 transition-colors text-lg leading-none ml-1">×</button>
+            class="w-8 h-8 flex items-center justify-center rounded-md text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors text-lg leading-none ml-2">×</button>
         </div>
       `;
       card.appendChild(header);
@@ -656,25 +668,20 @@
       header.querySelector('[data-sec-down]').addEventListener('click', () => {
         const n = card.nextElementSibling; if (n) card.parentNode.insertBefore(n, card);
       });
+      let _deleteArmed = false, _deleteTimer = null;
       header.querySelector('[data-sec-delete]').addEventListener('click', function() {
         const btn = this;
-        if (btn.dataset.confirm !== '1') {
-          // Premier clic : passe en mode confirmation
-          btn.dataset.confirm = '1';
+        if (!_deleteArmed) {
+          _deleteArmed = true;
           btn.textContent = 'Supprimer ?';
-          btn.style.width = 'auto';
-          btn.className = 'flex items-center justify-center rounded-md text-red-500 bg-red-50 hover:bg-red-100 transition-colors text-[10px] font-semibold px-2 py-1 ml-1 whitespace-nowrap';
-          // Annulation automatique après 3 secondes
-          setTimeout(() => {
-            if (btn.dataset.confirm === '1') {
-              btn.dataset.confirm = '';
-              btn.textContent = '×';
-              btn.style.width = '';
-              btn.className = 'w-8 h-8 flex items-center justify-center rounded-md text-gray-300 hover:text-red-500 hover:bg-red-50 transition-colors text-lg leading-none ml-1';
-            }
+          btn.className = 'text-[10px] font-semibold px-2.5 py-1 rounded-md bg-red-100 text-red-600 hover:bg-red-200 transition-colors ml-2 whitespace-nowrap';
+          _deleteTimer = setTimeout(() => {
+            _deleteArmed = false;
+            btn.textContent = '×';
+            btn.className = 'w-8 h-8 flex items-center justify-center rounded-md text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors text-lg leading-none ml-2';
           }, 3000);
         } else {
-          // Deuxième clic : suppression avec fondu
+          clearTimeout(_deleteTimer);
           card.style.cssText = 'opacity:0;transform:translateY(-4px);transition:opacity .2s,transform .2s';
           setTimeout(() => card.remove(), 200);
         }
