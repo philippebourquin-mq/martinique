@@ -285,6 +285,7 @@
     const CFG_KEY   = 'mtq-gh-config';
     const CACHE_KEY = 'mtq-guide-v1';
     const SES_KEY   = 'mtq-admin-session';
+    const EMBEDDED_CONFIG = null; // !cfg-embed — ne pas modifier manuellement
 
     /* ── Illustrations ─────────────────────────────────────────── */
     const ILLUSTRATIONS = {
@@ -335,6 +336,25 @@
       const bin = atob(b64); const bytes = new Uint8Array(bin.length);
       for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
       return new TextDecoder().decode(bytes);
+    }
+
+    /* ── Embed config dans admin.html sur GitHub ─────────────────── */
+    async function embedConfigInHtml(cfg) {
+      try {
+        const url = `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/admin.html`;
+        const headers = { Authorization: `Bearer ${cfg.token}`, Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28' };
+        const file = await (await fetch(url, { headers })).json();
+        if (!file.sha) return;
+        const html = fromBase64(file.content.replace(/\n/g, ''));
+        const serialized = JSON.stringify({ password: cfg.password, owner: cfg.owner, repo: cfg.repo, token: cfg.token, unsplashKey: cfg.unsplashKey || '' });
+        const updated = html.replace(
+          /const EMBEDDED_CONFIG = .*; \/\/ !cfg-embed.*$/m,
+          `const EMBEDDED_CONFIG = ${serialized}; // !cfg-embed — ne pas modifier manuellement`
+        );
+        if (updated === html) return; // rien à changer
+        await fetch(url, { method: 'PUT', headers: { ...headers, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: 'chore: embed admin config', content: toBase64(updated), sha: file.sha }) });
+      } catch(e) { console.warn('embedConfigInHtml:', e); }
     }
 
     /* ── GitHub API ──────────────────────────────────────────────── */
@@ -774,12 +794,14 @@
     document.getElementById('login-btn').addEventListener('click', () => {
       const pwd = document.getElementById('login-pwd').value;
       const err = document.getElementById('login-error');
-      const cfg = loadConfig();
+      const cfg = loadConfig() || EMBEDDED_CONFIG;
       if (!cfg || cfg.password !== pwd) {
         err.textContent = 'Mot de passe incorrect.'; err.classList.remove('hidden');
         document.getElementById('login-pwd').select();
       } else {
         err.classList.add('hidden'); setLoggedIn();
+        // Si le device n'avait pas de config locale, on la sauve maintenant
+        if (!loadConfig()) saveConfig(cfg);
         document.getElementById('login-screen').classList.add('hidden');
         initAdmin();
       }
@@ -803,6 +825,7 @@
       try {
         await loadFromGitHub(cfg);
         saveConfig(cfg); setLoggedIn();
+        embedConfigInHtml(cfg); // non-bloquant — met à jour admin.html sur GitHub
         document.getElementById('setup-screen').classList.add('hidden');
         initAdmin();
       } catch(e) {
@@ -840,6 +863,7 @@
       if (owner) cfg.owner = owner; if (repo) cfg.repo = repo; if (token) cfg.token = token;
       cfg.unsplashKey = unsplash; if (pwd) cfg.password = pwd;
       saveConfig(cfg);
+      embedConfigInHtml(cfg); // non-bloquant — propage la config sur GitHub
       document.getElementById('settings-modal').classList.add('hidden');
       showToast('Paramètres enregistrés', false);
     });
@@ -931,26 +955,34 @@
     /* ── Boot ────────────────────────────────────────────────────── */
     (() => {
       const cfg = loadConfig();
-      // Pas de config, ou config sans mot de passe (migration) → setup
-      if (!cfg || !cfg.password) {
-        document.getElementById('login-screen').classList.add('hidden');
-        // Pré-remplir les champs si une config GitHub existe déjà
-        if (cfg) {
-          document.getElementById('setup-owner').value    = cfg.owner       || '';
-          document.getElementById('setup-repo').value     = cfg.repo        || '';
-          document.getElementById('setup-token').value    = cfg.token       || '';
-          document.getElementById('setup-unsplash').value = cfg.unsplashKey || '';
+
+      // Config locale complète → login ou admin direct
+      if (cfg?.password) {
+        if (isLoggedIn()) {
+          document.getElementById('login-screen').classList.add('hidden');
+          initAdmin();
+          return;
         }
-        document.getElementById('setup-screen').classList.remove('hidden');
-        setTimeout(() => document.getElementById('setup-pwd').focus(), 80);
+        setTimeout(() => document.getElementById('login-pwd').focus(), 80);
         return;
       }
-      if (isLoggedIn()) {
-        document.getElementById('login-screen').classList.add('hidden');
-        initAdmin();
+
+      // Pas de config locale mais config embarquée → login seul suffit
+      if (EMBEDDED_CONFIG?.password) {
+        setTimeout(() => document.getElementById('login-pwd').focus(), 80);
         return;
       }
-      setTimeout(() => document.getElementById('login-pwd').focus(), 80);
+
+      // Vraiment aucune config → premier lancement, setup complet
+      document.getElementById('login-screen').classList.add('hidden');
+      if (cfg) { // migration : config sans mot de passe, pré-remplir
+        document.getElementById('setup-owner').value    = cfg.owner       || '';
+        document.getElementById('setup-repo').value     = cfg.repo        || '';
+        document.getElementById('setup-token').value    = cfg.token       || '';
+        document.getElementById('setup-unsplash').value = cfg.unsplashKey || '';
+      }
+      document.getElementById('setup-screen').classList.remove('hidden');
+      setTimeout(() => document.getElementById('setup-pwd').focus(), 80);
     })();
   </script>
 </body>
