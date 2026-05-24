@@ -224,7 +224,7 @@
       /* BANNIÈRE — photo pleine largeur, texte superposé */
       if (hasPhoto && layout === 'highlight') {
         return `
-          <article class="col-span-full relative img-zoom rounded-2xl overflow-hidden card cursor-default"
+          <article class="col-span-full relative img-zoom rounded-xl overflow-hidden card cursor-default"
             style="min-height:320px;aspect-ratio:21/9">
             <img src="${esc(item.photo)}" alt=""
               class="img-zoom-el absolute inset-0 w-full h-full object-cover"
@@ -242,7 +242,7 @@
       /* PHOTO VIGNETTE — image avec texte superposé, 1 colonne */
       if (hasPhoto) {
         return `
-          <article class="relative img-zoom rounded-2xl overflow-hidden card cursor-default"
+          <article class="relative img-zoom rounded-xl overflow-hidden card cursor-default"
             style="min-height:260px">
             <img src="${esc(item.photo)}" alt=""
               class="img-zoom-el absolute inset-0 w-full h-full object-cover"
@@ -274,7 +274,7 @@
 
       /* CARTE TEXTE — fond blanc, grille */
       return `
-        <article class="bg-white rounded-2xl p-5 md:p-6 flex flex-col gap-3 card" style="min-height:140px">
+        <article class="bg-white rounded-xl p-5 md:p-6 flex flex-col gap-3 card" style="min-height:140px">
           ${title ? `<h3 class="text-stone-900 font-semibold leading-snug" style="font-size:16px">${esc(title)}</h3>` : ''}
           <p class="text-[13px] text-stone-500 leading-relaxed flex-1 font-light">${esc(item.text)}</p>
           ${mkLink(item, false)}

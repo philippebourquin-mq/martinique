@@ -25,10 +25,10 @@
       <p class="text-[9px] tracking-[0.5em] uppercase text-stone-400 mb-5 text-center">Guide Martinique</p>
       <h1 class="text-2xl font-semibold text-stone-900 tracking-tight mb-8 text-center">Administration</h1>
       <input id="login-pwd" type="password" placeholder="Mot de passe" autocomplete="current-password"
-        class="w-full border border-stone-200 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-stone-500 transition-colors bg-white mb-3" />
-      <div id="login-error" class="hidden text-xs text-red-500 bg-red-50 rounded-xl px-4 py-3 mb-3"></div>
+        class="w-full border border-stone-200 rounded-md px-4 py-3.5 text-sm focus:outline-none focus:border-stone-500 transition-colors bg-white mb-3" />
+      <div id="login-error" class="hidden text-xs text-red-500 bg-red-50 rounded-md px-4 py-3 mb-3"></div>
       <button id="login-btn"
-        class="w-full py-4 bg-stone-900 text-white text-sm font-semibold rounded-xl hover:bg-stone-700 active:bg-stone-800 transition-colors">
+        class="w-full py-4 bg-stone-900 text-white text-sm font-semibold rounded-md hover:bg-stone-700 active:bg-stone-800 transition-colors">
         Accéder
       </button>
     </div>
@@ -44,17 +44,17 @@
         <div>
           <label class="text-[10px] font-semibold uppercase tracking-[0.15em] text-stone-400 block mb-2">Mot de passe admin</label>
           <input id="setup-pwd" type="password" placeholder="Choisir un mot de passe" autocomplete="new-password"
-            class="w-full border border-stone-200 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-stone-400 bg-white" />
+            class="w-full border border-stone-200 rounded-md px-4 py-3.5 text-sm focus:outline-none focus:border-stone-400 bg-white" />
         </div>
         <div class="border-t border-stone-100 pt-4">
           <p class="text-[10px] font-semibold uppercase tracking-[0.15em] text-stone-400 mb-3">GitHub</p>
           <div class="space-y-2.5">
             <input id="setup-owner" type="text" placeholder="Propriétaire (username ou org)" autocapitalize="none" autocorrect="off"
-              class="w-full border border-stone-200 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-stone-400 bg-white" />
+              class="w-full border border-stone-200 rounded-md px-4 py-3.5 text-sm focus:outline-none focus:border-stone-400 bg-white" />
             <input id="setup-repo" type="text" placeholder="Nom du dépôt" autocapitalize="none" autocorrect="off"
-              class="w-full border border-stone-200 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-stone-400 bg-white" />
+              class="w-full border border-stone-200 rounded-md px-4 py-3.5 text-sm focus:outline-none focus:border-stone-400 bg-white" />
             <input id="setup-token" type="password" placeholder="Personal Access Token (ghp_…)" autocapitalize="none" autocorrect="off"
-              class="w-full border border-stone-200 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-stone-400 bg-white font-mono" />
+              class="w-full border border-stone-200 rounded-md px-4 py-3.5 text-sm focus:outline-none focus:border-stone-400 bg-white font-mono" />
           </div>
         </div>
         <div class="border-t border-stone-100 pt-3">
@@ -62,12 +62,12 @@
             Unsplash <span class="normal-case font-normal text-stone-300">— optionnel</span>
           </label>
           <input id="setup-unsplash" type="text" placeholder="Access Key Unsplash" autocapitalize="none" autocorrect="off"
-            class="w-full border border-stone-200 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-stone-400 bg-white font-mono" />
+            class="w-full border border-stone-200 rounded-md px-4 py-3.5 text-sm focus:outline-none focus:border-stone-400 bg-white font-mono" />
         </div>
       </div>
-      <div id="setup-error" class="hidden mt-4 text-xs text-red-500 bg-red-50 rounded-xl px-4 py-3"></div>
+      <div id="setup-error" class="hidden mt-4 text-xs text-red-500 bg-red-50 rounded-md px-4 py-3"></div>
       <button id="setup-btn"
-        class="mt-8 w-full py-4 bg-stone-900 text-white text-sm font-semibold rounded-xl hover:bg-stone-700 active:bg-stone-800 transition-colors">
+        class="mt-8 w-full py-4 bg-stone-900 text-white text-sm font-semibold rounded-md hover:bg-stone-700 active:bg-stone-800 transition-colors">
         Configurer et accéder
       </button>
     </div>
@@ -76,11 +76,11 @@
   <!-- ── Modale paramètres ──────────────────────────────────────── -->
   <div id="settings-modal" class="hidden fixed inset-0 z-50 flex flex-col">
     <div id="settings-backdrop" class="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
-    <div class="relative mt-auto md:m-auto bg-white rounded-t-3xl md:rounded-3xl w-full md:max-w-md flex flex-col max-h-[92vh] shadow-2xl">
+    <div class="relative mt-auto md:m-auto bg-white rounded-t-xl md:rounded-lg w-full md:max-w-md flex flex-col max-h-[92vh] shadow-2xl">
       <div class="flex items-center justify-between px-5 py-4 border-b border-gray-100 shrink-0">
         <span class="text-sm font-semibold">Paramètres</span>
         <button id="settings-close"
-          class="w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors">
+          class="w-8 h-8 flex items-center justify-center rounded-md text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors">
           <svg class="w-4 h-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M5 5l10 10M15 5L5 15"/></svg>
         </button>
       </div>
@@ -91,17 +91,17 @@
             <div>
               <label class="text-[10px] text-gray-400 block mb-1">Propriétaire</label>
               <input id="cfg-owner" type="text" autocapitalize="none" autocorrect="off"
-                class="w-full border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-gray-400 bg-white" />
+                class="w-full border border-gray-200 rounded-md px-3.5 py-2.5 text-sm focus:outline-none focus:border-gray-400 bg-white" />
             </div>
             <div>
               <label class="text-[10px] text-gray-400 block mb-1">Dépôt</label>
               <input id="cfg-repo" type="text" autocapitalize="none" autocorrect="off"
-                class="w-full border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-gray-400 bg-white" />
+                class="w-full border border-gray-200 rounded-md px-3.5 py-2.5 text-sm focus:outline-none focus:border-gray-400 bg-white" />
             </div>
             <div>
               <label class="text-[10px] text-gray-400 block mb-1">Personal Access Token</label>
               <input id="cfg-token" type="password" autocapitalize="none" autocorrect="off"
-                class="w-full border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-gray-400 bg-white font-mono" />
+                class="w-full border border-gray-200 rounded-md px-3.5 py-2.5 text-sm focus:outline-none focus:border-gray-400 bg-white font-mono" />
             </div>
           </div>
         </div>
@@ -110,23 +110,23 @@
             Unsplash <span class="normal-case font-normal text-gray-300">— optionnel</span>
           </label>
           <input id="cfg-unsplash" type="text" autocapitalize="none" autocorrect="off"
-            class="w-full border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-gray-400 bg-white font-mono" />
+            class="w-full border border-gray-200 rounded-md px-3.5 py-2.5 text-sm focus:outline-none focus:border-gray-400 bg-white font-mono" />
         </div>
         <div class="border-t border-gray-100 pt-4">
           <p class="text-[10px] font-semibold uppercase tracking-[0.15em] text-gray-400 mb-3">Changer le mot de passe</p>
           <div class="space-y-2.5">
             <input id="cfg-pwd" type="password" placeholder="Nouveau mot de passe" autocomplete="new-password"
-              class="w-full border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-gray-400 bg-white" />
+              class="w-full border border-gray-200 rounded-md px-3.5 py-2.5 text-sm focus:outline-none focus:border-gray-400 bg-white" />
             <input id="cfg-pwd2" type="password" placeholder="Confirmer"
-              class="w-full border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-gray-400 bg-white" />
+              class="w-full border border-gray-200 rounded-md px-3.5 py-2.5 text-sm focus:outline-none focus:border-gray-400 bg-white" />
           </div>
         </div>
       </div>
-      <div id="cfg-error" class="hidden mx-5 mb-2 text-xs text-red-500 bg-red-50 rounded-xl px-4 py-3"></div>
+      <div id="cfg-error" class="hidden mx-5 mb-2 text-xs text-red-500 bg-red-50 rounded-md px-4 py-3"></div>
       <div class="px-5 py-4 border-t border-gray-100 flex gap-2 shrink-0">
         <button id="settings-logout" class="text-xs text-gray-400 hover:text-red-500 transition-colors py-2 px-3">Déconnexion</button>
         <button id="cfg-save-btn"
-          class="flex-1 py-3 bg-gray-900 text-white text-sm font-semibold rounded-xl hover:bg-gray-700 transition-colors">
+          class="flex-1 py-3 bg-gray-900 text-white text-sm font-semibold rounded-md hover:bg-gray-700 transition-colors">
           Enregistrer
         </button>
       </div>
@@ -136,7 +136,7 @@
   <!-- ── Sélecteur d'icône ──────────────────────────────────────── -->
   <div id="icon-picker" class="hidden fixed inset-0 z-50 flex items-end md:items-center justify-center">
     <div id="icon-picker-backdrop" class="absolute inset-0 bg-black/40"></div>
-    <div class="relative bg-white rounded-t-3xl md:rounded-3xl w-full md:max-w-sm p-5 shadow-2xl">
+    <div class="relative bg-white rounded-t-xl md:rounded-lg w-full md:max-w-sm p-5 shadow-2xl">
       <p class="text-[10px] font-semibold uppercase tracking-[0.15em] text-gray-400 mb-4">Choisir une icône</p>
       <div id="icon-picker-grid" class="grid grid-cols-3 gap-2"></div>
     </div>
@@ -151,18 +151,18 @@
         <span class="text-sm text-gray-400">Guide Martinique</span>
       </div>
       <button id="settings-btn"
-        class="w-9 h-9 flex items-center justify-center rounded-lg text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors shrink-0" title="Paramètres">
+        class="w-9 h-9 flex items-center justify-center rounded-md text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors shrink-0" title="Paramètres">
         <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" class="w-4 h-4">
           <circle cx="10" cy="10" r="2.5"/>
           <path d="M10 2v2M10 16v2M2 10h2M16 10h2M4.1 4.1l1.4 1.4M14.5 14.5l1.4 1.4M4.1 15.9l1.4-1.4M14.5 5.5l1.4-1.4" stroke-linecap="round"/>
         </svg>
       </button>
       <button id="preview-btn"
-        class="text-xs text-gray-600 hover:text-gray-900 border border-gray-200 hover:border-gray-400 rounded-lg px-3 py-2 transition-colors whitespace-nowrap hidden md:block">
+        class="text-xs text-gray-600 hover:text-gray-900 border border-gray-200 hover:border-gray-400 rounded-md px-3 py-2 transition-colors whitespace-nowrap hidden md:block">
         Voir le site ↗
       </button>
       <button id="save-btn"
-        class="text-xs font-semibold bg-gray-900 text-white hover:bg-gray-700 active:bg-gray-800 rounded-lg px-4 py-2 transition-colors whitespace-nowrap min-h-[36px]">
+        class="text-xs font-semibold bg-gray-900 text-white hover:bg-gray-700 active:bg-gray-800 rounded-md px-4 py-2 transition-colors whitespace-nowrap min-h-[36px]">
         Publier
       </button>
     </div>
@@ -170,12 +170,12 @@
 
   <!-- ── Barre de statut ────────────────────────────────────────── -->
   <div id="status-bar" class="hidden max-w-3xl mx-auto px-5 pt-5">
-    <div id="status-inner" class="rounded-xl px-4 py-3 text-sm flex items-center gap-3"></div>
+    <div id="status-inner" class="rounded-md px-4 py-3 text-sm flex items-center gap-3"></div>
   </div>
 
   <!-- ── Toast ──────────────────────────────────────────────────── -->
   <div id="toast"
-    class="fixed top-[60px] right-5 z-50 bg-gray-900 text-white text-xs px-4 py-2.5 rounded-xl shadow-lg opacity-0 transition-opacity duration-300 pointer-events-none flex items-center gap-2 max-w-xs">
+    class="fixed top-[60px] right-5 z-50 bg-gray-900 text-white text-xs px-4 py-2.5 rounded-md shadow-lg opacity-0 transition-opacity duration-300 pointer-events-none flex items-center gap-2 max-w-xs">
     <span id="toast-icon" class="text-green-400 text-sm">✓</span>
     <span id="toast-text"></span>
   </div>
@@ -184,7 +184,7 @@
   <main id="main" class="max-w-3xl mx-auto px-5 py-8 space-y-4 hidden">
 
     <!-- Infos générales -->
-    <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden">
+    <div class="bg-white rounded-md border border-gray-200 overflow-hidden">
       <div class="px-5 py-3 bg-gray-50 border-b border-gray-100">
         <span class="text-[10px] font-semibold tracking-[0.2em] uppercase text-gray-400">Infos générales</span>
       </div>
@@ -192,23 +192,23 @@
         <div>
           <label class="text-[10px] font-semibold uppercase tracking-[0.15em] text-gray-400 block mb-1.5">Titre</label>
           <input id="meta-title" type="text"
-            class="w-full border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-gray-400 transition-colors" />
+            class="w-full border border-gray-200 rounded-md px-3.5 py-2.5 text-sm focus:outline-none focus:border-gray-400 transition-colors" />
         </div>
         <div>
           <label class="text-[10px] font-semibold uppercase tracking-[0.15em] text-gray-400 block mb-1.5">Sous-titre</label>
           <input id="meta-subtitle" type="text"
-            class="w-full border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-gray-400 transition-colors" />
+            class="w-full border border-gray-200 rounded-md px-3.5 py-2.5 text-sm focus:outline-none focus:border-gray-400 transition-colors" />
         </div>
         <div>
           <label class="text-[10px] font-semibold uppercase tracking-[0.15em] text-gray-400 block mb-1.5">Image de couverture</label>
           <div class="space-y-2">
-            <div id="cover-preview-wrap" class="hidden rounded-2xl overflow-hidden border border-gray-100">
+            <div id="cover-preview-wrap" class="hidden rounded-md overflow-hidden border border-gray-100">
               <img id="cover-preview-img" src="" alt="" class="w-full h-48 object-cover" />
             </div>
             <!-- Focal point — boutons codés en dur (pas de template literals ici) -->
             <div id="cover-pos-row" style="display:none" class="items-center gap-2">
               <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider shrink-0">Focus</span>
-              <div class="grid grid-cols-3 gap-px rounded-xl overflow-hidden bg-gray-200" style="width:66px;height:50px">
+              <div class="grid grid-cols-3 gap-px rounded-md overflow-hidden bg-gray-200" style="width:66px;height:50px">
                 <button type="button" data-cover-pos="top left"     class="flex items-center justify-center text-[10px] bg-gray-100 hover:bg-white text-gray-400 hover:text-gray-800 transition-colors">↖</button>
                 <button type="button" data-cover-pos="top center"   class="flex items-center justify-center text-[10px] bg-gray-100 hover:bg-white text-gray-400 hover:text-gray-800 transition-colors">↑</button>
                 <button type="button" data-cover-pos="top right"    class="flex items-center justify-center text-[10px] bg-gray-100 hover:bg-white text-gray-400 hover:text-gray-800 transition-colors">↗</button>
@@ -222,24 +222,24 @@
             </div>
             <div class="flex gap-2 flex-wrap">
               <input id="meta-cover-url" type="url" placeholder="https://… ou laisser vide"
-                class="flex-1 min-w-0 border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-gray-400 transition-colors"
+                class="flex-1 min-w-0 border border-gray-200 rounded-md px-3.5 py-2.5 text-sm focus:outline-none focus:border-gray-400 transition-colors"
                 oninput="updateCoverPreview()" />
             </div>
             <div class="flex gap-2 flex-wrap">
               <button type="button" id="meta-cover-unsplash"
-                class="text-xs text-gray-500 hover:text-gray-900 border border-gray-200 hover:border-gray-400 rounded-xl px-3 py-2.5 inline-flex items-center gap-1.5 transition-colors whitespace-nowrap">
+                class="text-xs text-gray-500 hover:text-gray-900 border border-gray-200 hover:border-gray-400 rounded-md px-3 py-2.5 inline-flex items-center gap-1.5 transition-colors whitespace-nowrap">
                 <svg class="w-3.5 h-3.5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="9" cy="9" r="6"/><path d="m15 15 3 3" stroke-linecap="round"/></svg>
                 Chercher sur Unsplash
               </button>
               <label class="cursor-pointer shrink-0">
-                <span class="text-xs text-gray-500 hover:text-gray-900 border border-gray-200 hover:border-gray-400 rounded-xl px-3 py-2.5 inline-flex items-center gap-1.5 transition-colors whitespace-nowrap">
+                <span class="text-xs text-gray-500 hover:text-gray-900 border border-gray-200 hover:border-gray-400 rounded-md px-3 py-2.5 inline-flex items-center gap-1.5 transition-colors whitespace-nowrap">
                   <svg class="w-3.5 h-3.5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 13l4-4 3 3 3-4 4 5H3z"/><circle cx="13.5" cy="6.5" r="1.5"/><rect x="1" y="1" width="18" height="18" rx="3"/></svg>
                   Upload
                 </span>
                 <input type="file" accept="image/*" class="hidden" id="meta-cover-file" />
               </label>
               <button type="button" id="meta-cover-clear"
-                class="hidden text-xs text-gray-400 hover:text-red-500 border border-gray-200 rounded-xl px-3 py-2.5 transition-colors whitespace-nowrap">
+                class="hidden text-xs text-gray-400 hover:text-red-500 border border-gray-200 rounded-md px-3 py-2.5 transition-colors whitespace-nowrap">
                 Retirer
               </button>
             </div>
@@ -253,7 +253,7 @@
 
     <!-- Nouvelle section -->
     <button id="add-section-btn"
-      class="w-full py-4 border-2 border-dashed border-gray-200 rounded-2xl text-sm text-gray-400 hover:border-gray-400 hover:text-gray-600 transition-colors">
+      class="w-full py-4 border-2 border-dashed border-gray-200 rounded-md text-sm text-gray-400 hover:border-gray-400 hover:text-gray-600 transition-colors">
       + Nouvelle section
     </button>
 
@@ -262,15 +262,15 @@
   <!-- ── Modale Unsplash ───────────────────────────────────────── -->
   <div id="unsplash-modal" class="hidden fixed inset-0 z-50 flex flex-col">
     <div id="unsplash-backdrop" class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
-    <div class="relative mt-auto md:m-auto bg-white rounded-t-3xl md:rounded-3xl w-full md:max-w-xl flex flex-col max-h-[85vh] md:max-h-[72vh] shadow-2xl">
+    <div class="relative mt-auto md:m-auto bg-white rounded-t-xl md:rounded-lg w-full md:max-w-xl flex flex-col max-h-[85vh] md:max-h-[72vh] shadow-2xl">
       <div class="flex items-center gap-3 p-4 border-b border-gray-100 shrink-0">
-        <div class="flex-1 flex items-center gap-2 bg-gray-50 rounded-xl px-3.5 py-2.5">
+        <div class="flex-1 flex items-center gap-2 bg-gray-50 rounded-md px-3.5 py-2.5">
           <svg class="w-4 h-4 text-gray-400 shrink-0" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="9" cy="9" r="6"/><path d="m15 15 3 3" stroke-linecap="round"/></svg>
           <input id="unsplash-input" type="search" placeholder="Rechercher une photo…" autocomplete="off"
             class="flex-1 bg-transparent text-sm focus:outline-none" />
         </div>
         <button id="unsplash-close"
-          class="w-9 h-9 flex items-center justify-center rounded-xl text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors shrink-0">
+          class="w-9 h-9 flex items-center justify-center rounded-md text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors shrink-0">
           <svg class="w-4 h-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M5 5l10 10M15 5L5 15"/></svg>
         </button>
       </div>
@@ -389,7 +389,7 @@
     function setStatus(type, html) {
       const bar = document.getElementById('status-bar'), inner = document.getElementById('status-inner');
       if (!type) { bar.classList.add('hidden'); return; }
-      inner.className = 'rounded-xl px-4 py-3 text-sm flex items-center gap-3 ' + (type === 'error' ? 'bg-red-50 text-red-600' : 'bg-stone-100 text-stone-500');
+      inner.className = 'rounded-md px-4 py-3 text-sm flex items-center gap-3 ' + (type === 'error' ? 'bg-red-50 text-red-600' : 'bg-stone-100 text-stone-500');
       inner.innerHTML = html;
       bar.classList.remove('hidden');
     }
@@ -398,8 +398,8 @@
       const btn = document.getElementById('save-btn');
       btn.disabled = on; btn.textContent = on ? 'Publication…' : 'Publier';
       btn.className = on
-        ? 'text-xs font-semibold bg-gray-400 text-white rounded-lg px-4 py-2 whitespace-nowrap min-h-[36px] cursor-not-allowed'
-        : 'text-xs font-semibold bg-gray-900 text-white hover:bg-gray-700 active:bg-gray-800 rounded-lg px-4 py-2 transition-colors whitespace-nowrap min-h-[36px]';
+        ? 'text-xs font-semibold bg-gray-400 text-white rounded-md px-4 py-2 whitespace-nowrap min-h-[36px] cursor-not-allowed'
+        : 'text-xs font-semibold bg-gray-900 text-white hover:bg-gray-700 active:bg-gray-800 rounded-md px-4 py-2 transition-colors whitespace-nowrap min-h-[36px]';
     }
 
     function resizeImage(file) {
@@ -431,7 +431,7 @@
       Object.keys(ILLUSTRATIONS).forEach(key => {
         const btn = document.createElement('button'); btn.type = 'button';
         const active = key === current;
-        btn.className = `flex flex-col items-center gap-2 p-3 rounded-xl transition-all ${active ? 'bg-gray-900 text-white' : 'bg-gray-50 text-gray-600 hover:bg-gray-100'}`;
+        btn.className = `flex flex-col items-center gap-2 p-3 rounded-md transition-all ${active ? 'bg-gray-900 text-white' : 'bg-gray-50 text-gray-600 hover:bg-gray-100'}`;
         btn.innerHTML = `<div class="w-9 h-9">${ILLUSTRATIONS[key]}</div><span class="text-[9px] font-semibold uppercase tracking-wider">${ICON_LABELS[key]}</span>`;
         btn.addEventListener('click', () => {
           if (_iconCb) _iconCb(key);
@@ -484,38 +484,38 @@
     function createItemRow(item) {
       const row = document.createElement('div');
       row.dataset.itemRow = '1';
-      row.className = 'bg-gray-50 rounded-xl p-3 space-y-2';
+      row.className = 'bg-gray-50 rounded-md p-3 space-y-2';
       row.innerHTML = `
         <div class="flex gap-2 items-start">
           <div class="flex-1 space-y-1.5">
             <input data-field="title" type="text" placeholder="Titre du tip…"
-              class="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm font-medium bg-white focus:outline-none focus:border-gray-400 transition-colors" />
+              class="w-full border border-gray-200 rounded-md px-3 py-2 text-sm font-medium bg-white focus:outline-none focus:border-gray-400 transition-colors" />
             <textarea data-field="text" rows="2" placeholder="Texte du tip…"
-              class="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm resize-none bg-white focus:outline-none focus:border-gray-400 transition-colors leading-relaxed min-h-[52px]"></textarea>
+              class="w-full border border-gray-200 rounded-md px-3 py-2.5 text-sm resize-none bg-white focus:outline-none focus:border-gray-400 transition-colors leading-relaxed min-h-[52px]"></textarea>
           </div>
           <div class="flex flex-col gap-1 shrink-0 pt-0.5">
-            <button type="button" data-action="up"     class="w-9 h-9 flex items-center justify-center rounded-lg text-gray-400 hover:text-gray-800 hover:bg-white transition-colors font-bold" title="Monter">↑</button>
-            <button type="button" data-action="down"   class="w-9 h-9 flex items-center justify-center rounded-lg text-gray-400 hover:text-gray-800 hover:bg-white transition-colors font-bold" title="Descendre">↓</button>
-            <button type="button" data-action="delete" class="w-9 h-9 flex items-center justify-center rounded-lg text-gray-400 hover:text-red-500 hover:bg-white transition-colors text-xl leading-none" title="Supprimer">×</button>
+            <button type="button" data-action="up"     class="w-9 h-9 flex items-center justify-center rounded-md text-gray-400 hover:text-gray-800 hover:bg-white transition-colors font-bold" title="Monter">↑</button>
+            <button type="button" data-action="down"   class="w-9 h-9 flex items-center justify-center rounded-md text-gray-400 hover:text-gray-800 hover:bg-white transition-colors font-bold" title="Descendre">↓</button>
+            <button type="button" data-action="delete" class="w-9 h-9 flex items-center justify-center rounded-md text-gray-400 hover:text-red-500 hover:bg-white transition-colors text-xl leading-none" title="Supprimer">×</button>
           </div>
         </div>
         <div class="flex items-center gap-2 pl-1">
           <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider w-10 shrink-0">Lien</span>
           <input data-field="url" type="url" inputmode="url" placeholder="https://… ou tel:+596…"
-            class="flex-1 border border-gray-200 rounded-lg px-2.5 py-2 text-xs text-gray-600 bg-white focus:outline-none focus:border-gray-400 transition-colors min-h-[36px]" />
+            class="flex-1 border border-gray-200 rounded-md px-2.5 py-2 text-xs text-gray-600 bg-white focus:outline-none focus:border-gray-400 transition-colors min-h-[36px]" />
         </div>
         <div class="flex items-center gap-2 pl-1">
           <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider w-10 shrink-0">Photo</span>
           <div class="flex items-center gap-2 flex-1 min-w-0 flex-wrap">
-            <div data-photo-preview class="w-14 h-10 rounded-lg overflow-hidden bg-gray-200 shrink-0 hidden">
+            <div data-photo-preview class="w-14 h-10 rounded-md overflow-hidden bg-gray-200 shrink-0 hidden">
               <img data-photo-img src="" alt="" class="w-full h-full object-cover" />
             </div>
             <label class="cursor-pointer shrink-0">
-              <span data-photo-label class="text-xs text-gray-500 hover:text-gray-900 border border-gray-200 hover:border-gray-400 rounded-lg px-2.5 py-2 inline-flex items-center transition-colors whitespace-nowrap min-h-[36px]">+ Photo</span>
+              <span data-photo-label class="text-xs text-gray-500 hover:text-gray-900 border border-gray-200 hover:border-gray-400 rounded-md px-2.5 py-2 inline-flex items-center transition-colors whitespace-nowrap min-h-[36px]">+ Photo</span>
               <input type="file" accept="image/*" class="hidden" data-photo-input />
             </label>
             <button type="button" data-unsplash-btn
-              class="text-xs text-gray-400 hover:text-gray-900 border border-gray-200 hover:border-gray-400 rounded-lg px-2 py-2 inline-flex items-center gap-1 transition-colors whitespace-nowrap min-h-[36px] shrink-0">
+              class="text-xs text-gray-400 hover:text-gray-900 border border-gray-200 hover:border-gray-400 rounded-md px-2 py-2 inline-flex items-center gap-1 transition-colors whitespace-nowrap min-h-[36px] shrink-0">
               <svg class="w-3 h-3" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="9" cy="9" r="6"/><path d="m15 15 3 3" stroke-linecap="round"/></svg>
               Unsplash
             </button>
@@ -524,21 +524,21 @@
         </div>
         <div class="flex items-center gap-2 pl-1 hidden" data-layout-row>
           <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider w-10 shrink-0">Style</span>
-          <div class="flex gap-0.5 bg-gray-100 rounded-lg p-0.5">
+          <div class="flex gap-0.5 bg-gray-100 rounded-md p-0.5">
             <button type="button" data-layout-opt="default"   class="text-[10px] px-2.5 py-1.5 rounded-md font-semibold bg-white text-gray-900 shadow-sm">Vignette</button>
             <button type="button" data-layout-opt="highlight" class="text-[10px] px-2.5 py-1.5 rounded-md font-medium text-gray-400 hover:text-gray-700">Bannière</button>
           </div>
         </div>
         <div class="flex items-center gap-2 pl-1 hidden" data-layout-text-row>
           <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider w-10 shrink-0">Style</span>
-          <div class="flex gap-0.5 bg-gray-100 rounded-lg p-0.5">
+          <div class="flex gap-0.5 bg-gray-100 rounded-md p-0.5">
             <button type="button" data-layout-opt="default"   class="text-[10px] px-2.5 py-1.5 rounded-md font-semibold bg-white text-gray-900 shadow-sm">Carte</button>
             <button type="button" data-layout-opt="highlight" class="text-[10px] px-2.5 py-1.5 rounded-md font-medium text-gray-400 hover:text-gray-700">Citation</button>
           </div>
         </div>
         <div class="flex items-center gap-2 pl-1 hidden" data-position-row>
           <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider w-10 shrink-0">Focus</span>
-          <div class="grid grid-cols-3 gap-px rounded-xl overflow-hidden bg-gray-200" style="width:66px;height:50px">
+          <div class="grid grid-cols-3 gap-px rounded-md overflow-hidden bg-gray-200" style="width:66px;height:50px">
             <button type="button" data-pos-opt="top left"      class="flex items-center justify-center text-[10px] bg-gray-100 hover:bg-white text-gray-400 hover:text-gray-800 transition-colors">↖</button>
             <button type="button" data-pos-opt="top center"    class="flex items-center justify-center text-[10px] bg-gray-100 hover:bg-white text-gray-400 hover:text-gray-800 transition-colors">↑</button>
             <button type="button" data-pos-opt="top right"     class="flex items-center justify-center text-[10px] bg-gray-100 hover:bg-white text-gray-400 hover:text-gray-800 transition-colors">↗</button>
@@ -602,22 +602,22 @@
       const card = document.createElement('div');
       card.dataset.sectionId   = section.id;
       card.dataset.sectionIcon = section.icon || 'generalites';
-      card.className = 'bg-white rounded-2xl border border-gray-200 overflow-hidden';
+      card.className = 'bg-white rounded-md border border-gray-200 overflow-hidden';
 
       const header = document.createElement('div');
       header.className = 'px-4 py-3.5 bg-gray-50 border-b border-gray-100 flex items-center gap-3';
       header.innerHTML = `
         <button type="button" data-icon-btn title="Changer l'icône"
-          class="w-9 h-9 shrink-0 p-1 rounded-lg text-gray-700 hover:text-gray-900 hover:bg-white transition-colors cursor-pointer">
+          class="w-9 h-9 shrink-0 p-1 rounded-md text-gray-700 hover:text-gray-900 hover:bg-white transition-colors cursor-pointer">
           ${illus(section.icon || 'generalites')}
         </button>
         <input data-field="section-title" type="text" value="${esc(section.title)}"
           class="flex-1 font-semibold text-sm text-gray-700 bg-transparent border-0 focus:outline-none min-h-[36px]" />
         <div class="flex items-center gap-0.5 shrink-0">
           <button type="button" data-sec-up title="Monter"
-            class="w-8 h-8 flex items-center justify-center rounded-lg text-gray-500 hover:text-gray-900 hover:bg-white transition-colors font-bold text-base">↑</button>
+            class="w-8 h-8 flex items-center justify-center rounded-md text-gray-500 hover:text-gray-900 hover:bg-white transition-colors font-bold text-base">↑</button>
           <button type="button" data-sec-down title="Descendre"
-            class="w-8 h-8 flex items-center justify-center rounded-lg text-gray-500 hover:text-gray-900 hover:bg-white transition-colors font-bold text-base">↓</button>
+            class="w-8 h-8 flex items-center justify-center rounded-md text-gray-500 hover:text-gray-900 hover:bg-white transition-colors font-bold text-base">↓</button>
           <button type="button" data-collapse
             class="text-[10px] text-gray-400 hover:text-gray-700 uppercase tracking-wider transition-colors py-2 px-2 ml-1">Réduire</button>
         </div>
@@ -844,14 +844,14 @@
           <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
         </svg>Recherche…</div>`;
       try {
-        const resp = await fetch(`https://api.unsplash.com/search/photos?query=${encodeURIComponent(q)}&per_page=18&orientation=landscape&client_id=${cfg.unsplashKey}`);
+        const resp = await fetch(`https://api.unsplash.com/search/photos?query=${encodeURIComponent(q)}&per_page=18&orientation=landscape`, { headers: { Authorization: `Client-ID ${cfg.unsplashKey}` } });
         if (!resp.ok) throw new Error('HTTP ' + resp.status);
         const data = await resp.json();
         if (!data.results?.length) { results.innerHTML = '<div class="col-span-3 text-center py-14 text-sm text-gray-400">Aucun résultat</div>'; return; }
         results.innerHTML = '';
         data.results.forEach(photo => {
           const btn = document.createElement('button'); btn.type = 'button';
-          btn.className = 'relative group rounded-xl overflow-hidden bg-gray-100 focus:outline-none';
+          btn.className = 'relative group rounded-md overflow-hidden bg-gray-100 focus:outline-none';
           btn.style.aspectRatio = '3/2';
           btn.innerHTML = `<img src="${photo.urls.small}" alt="" class="w-full h-full object-cover transition-transform duration-200 group-hover:scale-105" loading="lazy" />
             <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 px-2 py-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
