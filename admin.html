@@ -658,9 +658,9 @@
       body.dataset.body = '1';
       body.className = 'p-4 space-y-2';
       // Réduire par défaut sur mobile
-      if (window.innerWidth < 768) {
-        body.classList.add('hidden');
-      }
+      const startCollapsed = window.innerWidth < 768;
+      if (startCollapsed) body.style.display = 'none';
+
       (section.items || []).forEach(item => body.appendChild(createItemRow(item)));
       card.appendChild(body);
 
@@ -679,9 +679,11 @@
         });
       });
       const collapseBtn = header.querySelector('[data-collapse]');
-      if (body.classList.contains('hidden')) collapseBtn.textContent = 'Développer';
+      if (startCollapsed) collapseBtn.textContent = 'Développer';
       collapseBtn.addEventListener('click', function() {
-        const c = body.classList.toggle('hidden'); this.textContent = c ? 'Développer' : 'Réduire';
+        const collapsed = body.style.display === 'none';
+        body.style.display = collapsed ? '' : 'none';
+        this.textContent = collapsed ? 'Réduire' : 'Développer';
       });
       header.querySelector('[data-sec-up]').addEventListener('click', () => {
         const p = card.previousElementSibling; if (p) card.parentNode.insertBefore(card, p);
@@ -709,12 +711,12 @@
       });
       footer.querySelector('[data-add-item]').addEventListener('click', () => {
         const row = createItemRow({ text:'', url:'', photo:'', title:'' });
-        body.appendChild(row); body.classList.remove('hidden');
+        body.appendChild(row); body.style.display = '';
         header.querySelector('[data-collapse]').textContent = 'Réduire';
         row.querySelector('textarea').focus();
         row.scrollIntoView({ behavior:'smooth', block:'nearest' });
       });
-      if (body.classList.contains('hidden')) {
+      if (body.style.display === 'none') {
         header.querySelector('[data-collapse]').textContent = 'Développer';
       }
       return card;
@@ -808,10 +810,17 @@
 
     /* ── Login ───────────────────────────────────────────────────── */
     document.getElementById('login-btn').addEventListener('click', () => {
-      const pwd = document.getElementById('login-pwd').value;
+      const pwd = document.getElementById('login-pwd').value.trim();
       const err = document.getElementById('login-error');
       const cfg = loadConfig();
-      if (!cfg || cfg.password !== pwd) {
+      if (!cfg) {
+        // Config perdue (ex. déconnexion précédente) → setup
+        document.getElementById('login-screen').classList.add('hidden');
+        document.getElementById('setup-screen').classList.remove('hidden');
+        setTimeout(() => document.getElementById('setup-pwd').focus(), 80);
+        return;
+      }
+      if (cfg.password !== pwd) {
         err.textContent = 'Mot de passe incorrect.'; err.classList.remove('hidden');
         document.getElementById('login-pwd').select();
       } else {
@@ -1040,8 +1049,10 @@
         return;
       }
 
-      // Aucune config → écran de login (nouveau device — import QR ou code)
-      setTimeout(() => document.getElementById('login-pwd').focus(), 80);
+      // Aucune config → setup (avec option import QR dans la page)
+      document.getElementById('login-screen').classList.add('hidden');
+      document.getElementById('setup-screen').classList.remove('hidden');
+      setTimeout(() => document.getElementById('setup-pwd').focus(), 80);
     })();
   </script>
 </body>
