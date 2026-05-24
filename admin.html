@@ -348,9 +348,9 @@
     /* ── Config / Auth ──────────────────────────────────────────── */
     function loadConfig() { try { return JSON.parse(localStorage.getItem(CFG_KEY)) || null; } catch { return null; } }
     function saveConfig(c) { localStorage.setItem(CFG_KEY, JSON.stringify(c)); }
-    function isLoggedIn()  { return sessionStorage.getItem(SES_KEY) === '1'; }
-    function setLoggedIn() { sessionStorage.setItem(SES_KEY, '1'); }
-    function logout()      { sessionStorage.removeItem(SES_KEY); location.reload(); }
+    function isLoggedIn()  { return localStorage.getItem(SES_KEY) === '1'; }
+    function setLoggedIn() { localStorage.setItem(SES_KEY, '1'); }
+    function logout()      { localStorage.removeItem(SES_KEY); location.reload(); }
 
     /* ── base64 UTF-8 ───────────────────────────────────────────── */
     function toBase64(str) {
