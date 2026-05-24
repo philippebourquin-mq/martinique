@@ -44,7 +44,7 @@
           "url": "",
           "photo": "",
           "layout": "1x3",
-          "textStyle": "note",
+          "textStyle": "card",
           "objectPosition": "center"
         }
       ]
@@ -60,7 +60,7 @@
           "url": "",
           "photo": "",
           "layout": "1x1",
-          "textStyle": "rubrique",
+          "textStyle": "card",
           "objectPosition": "center"
         },
         {
@@ -69,7 +69,7 @@
           "url": "",
           "photo": "",
           "layout": "1x1",
-          "textStyle": "pullquote",
+          "textStyle": "card",
           "objectPosition": "center"
         },
         {
