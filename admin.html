@@ -601,15 +601,16 @@
     function createSectionCard(section) {
       const card = document.createElement('div');
       card.dataset.sectionId   = section.id;
-      card.dataset.sectionIcon = section.icon || 'generalites';
+      card.dataset.sectionIcon = section.icon || section.id || 'generalites';
       card.className = 'bg-white rounded-md border border-gray-200 overflow-hidden';
 
+      const iconKey = section.icon || section.id || 'generalites';
       const header = document.createElement('div');
       header.className = 'px-4 py-3.5 bg-gray-50 border-b border-gray-100 flex items-center gap-3';
       header.innerHTML = `
         <button type="button" data-icon-btn title="Changer l'icône"
           class="w-9 h-9 shrink-0 p-1 rounded-md text-gray-700 hover:text-gray-900 hover:bg-white transition-colors cursor-pointer">
-          ${illus(section.icon || 'generalites')}
+          ${illus(iconKey)}
         </button>
         <input data-field="section-title" type="text" value="${esc(section.title)}"
           class="flex-1 font-semibold text-sm text-gray-700 bg-transparent border-0 focus:outline-none min-h-[36px]" />
@@ -620,6 +621,8 @@
             class="w-8 h-8 flex items-center justify-center rounded-md text-gray-500 hover:text-gray-900 hover:bg-white transition-colors font-bold text-base">↓</button>
           <button type="button" data-collapse
             class="text-[10px] text-gray-400 hover:text-gray-700 uppercase tracking-wider transition-colors py-2 px-2 ml-1">Réduire</button>
+          <button type="button" data-sec-delete title="Supprimer la section"
+            class="w-8 h-8 flex items-center justify-center rounded-md text-gray-300 hover:text-red-500 hover:bg-red-50 transition-colors text-lg leading-none ml-1">×</button>
         </div>
       `;
       card.appendChild(header);
@@ -652,6 +655,29 @@
       });
       header.querySelector('[data-sec-down]').addEventListener('click', () => {
         const n = card.nextElementSibling; if (n) card.parentNode.insertBefore(n, card);
+      });
+      header.querySelector('[data-sec-delete]').addEventListener('click', function() {
+        const btn = this;
+        if (btn.dataset.confirm !== '1') {
+          // Premier clic : passe en mode confirmation
+          btn.dataset.confirm = '1';
+          btn.textContent = 'Supprimer ?';
+          btn.style.width = 'auto';
+          btn.className = 'flex items-center justify-center rounded-md text-red-500 bg-red-50 hover:bg-red-100 transition-colors text-[10px] font-semibold px-2 py-1 ml-1 whitespace-nowrap';
+          // Annulation automatique après 3 secondes
+          setTimeout(() => {
+            if (btn.dataset.confirm === '1') {
+              btn.dataset.confirm = '';
+              btn.textContent = '×';
+              btn.style.width = '';
+              btn.className = 'w-8 h-8 flex items-center justify-center rounded-md text-gray-300 hover:text-red-500 hover:bg-red-50 transition-colors text-lg leading-none ml-1';
+            }
+          }, 3000);
+        } else {
+          // Deuxième clic : suppression avec fondu
+          card.style.cssText = 'opacity:0;transform:translateY(-4px);transition:opacity .2s,transform .2s';
+          setTimeout(() => card.remove(), 200);
+        }
       });
       footer.querySelector('[data-add-item]').addEventListener('click', () => {
         const row = createItemRow({ text:'', url:'', photo:'', title:'' });

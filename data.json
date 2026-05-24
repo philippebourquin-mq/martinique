@@ -47,7 +47,7 @@
     },
     {
       "id": "mood",
-      "icon": "generalites",
+      "icon": "mood",
       "title": "Mood",
       "items": [
         {
@@ -86,7 +86,7 @@
     },
     {
       "id": "transports",
-      "icon": "generalites",
+      "icon": "transports",
       "title": "Transports",
       "items": [
         {
@@ -141,7 +141,7 @@
     },
     {
       "id": "manger",
-      "icon": "generalites",
+      "icon": "manger",
       "title": "Manger",
       "items": [
         {
@@ -228,7 +228,7 @@
     },
     {
       "id": "activites",
-      "icon": "generalites",
+      "icon": "activites",
       "title": "Activités",
       "items": [
         {
@@ -313,7 +313,7 @@
     },
     {
       "id": "nature",
-      "icon": "generalites",
+      "icon": "nature",
       "title": "Nature",
       "items": [
         {

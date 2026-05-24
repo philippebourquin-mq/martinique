@@ -260,15 +260,10 @@
       if (layout === 'highlight') {
         return `
           <article class="col-span-full py-10 md:py-14">
-            <div class="flex gap-6 md:gap-10 items-start">
-              <div class="shrink-0 w-1 self-stretch rounded-full" style="background:linear-gradient(180deg,#a8967a 0%,rgba(168,150,122,.15) 100%)"></div>
-              <div class="flex-1 min-w-0">
-                ${title ? `<h3 class="font-bold text-stone-900 leading-tight mb-3"
-                  style="font-size:clamp(22px,3vw,38px);letter-spacing:-0.02em">${esc(title)}</h3>` : ''}
-                <p class="text-[15px] md:text-[16px] text-stone-500 leading-relaxed font-light max-w-2xl">${esc(item.text)}</p>
-                ${mkLink(item, false) ? `<div class="mt-4">${mkLink(item, false)}</div>` : ''}
-              </div>
-            </div>
+            ${title ? `<h3 class="font-bold text-stone-900 leading-tight mb-3"
+              style="font-size:clamp(22px,3vw,38px);letter-spacing:-0.02em">${esc(title)}</h3>` : ''}
+            <p class="text-[15px] md:text-[16px] text-stone-500 leading-relaxed font-light max-w-2xl">${esc(item.text)}</p>
+            ${mkLink(item, false) ? `<div class="mt-4">${mkLink(item, false)}</div>` : ''}
           </article>`;
       }
 
