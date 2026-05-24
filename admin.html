@@ -523,16 +523,22 @@
       row.dataset.itemRow = '1';
       row.className = 'bg-gray-50 rounded-md p-3 space-y-2';
       row.innerHTML = `
-        <div class="flex gap-2 items-start">
-          <div class="flex-1 space-y-1.5">
+        <div class="flex gap-2 items-stretch">
+          <button type="button" data-drag-handle title="Déplacer"
+            style="cursor:grab;display:flex;align-items:center;padding:4px 5px;border:none;background:none;border-radius:4px;flex-shrink:0;touch-action:none;-webkit-user-select:none;user-select:none;align-self:stretch">
+            <svg viewBox="0 0 8 14" width="10" height="14" fill="#d1d5db">
+              <circle cx="2" cy="2" r="1.2"/><circle cx="6" cy="2" r="1.2"/>
+              <circle cx="2" cy="7" r="1.2"/><circle cx="6" cy="7" r="1.2"/>
+              <circle cx="2" cy="12" r="1.2"/><circle cx="6" cy="12" r="1.2"/>
+            </svg>
+          </button>
+          <div class="flex-1 space-y-1.5 min-w-0">
             <input data-field="title" type="text" placeholder="Titre du tip…"
               class="w-full border border-gray-200 rounded-md px-3 py-2 text-sm font-medium bg-white focus:outline-none focus:border-gray-400 transition-colors" />
             <textarea data-field="text" rows="2" placeholder="Texte du tip…"
               class="w-full border border-gray-200 rounded-md px-3 py-2.5 text-sm resize-none bg-white focus:outline-none focus:border-gray-400 transition-colors leading-relaxed min-h-[52px]"></textarea>
           </div>
           <div class="flex flex-col gap-1 shrink-0 pt-0.5">
-            <button type="button" data-action="up"     class="w-9 h-9 flex items-center justify-center rounded-md text-gray-400 hover:text-gray-800 hover:bg-white transition-colors font-bold" title="Monter">↑</button>
-            <button type="button" data-action="down"   class="w-9 h-9 flex items-center justify-center rounded-md text-gray-400 hover:text-gray-800 hover:bg-white transition-colors font-bold" title="Descendre">↓</button>
             <button type="button" data-action="delete" class="w-9 h-9 flex items-center justify-center rounded-md text-gray-400 hover:text-red-500 hover:bg-white transition-colors text-xl leading-none" title="Supprimer">×</button>
           </div>
         </div>
@@ -630,8 +636,6 @@
       row.addEventListener('click', e => {
         const a = e.target.closest('[data-action]')?.dataset.action;
         if (a === 'delete') { row.dataset.deleted='1'; row.style.cssText='opacity:0;transition:opacity .15s'; setTimeout(()=>row.remove(),150); }
-        if (a === 'up')   { const p = row.previousElementSibling; if (p) row.parentNode.insertBefore(row, p); }
-        if (a === 'down') { const n = row.nextElementSibling;     if (n) row.parentNode.insertBefore(n, row); }
       });
       return row;
     }
@@ -647,6 +651,14 @@
       const header = document.createElement('div');
       header.className = 'px-4 py-3.5 bg-gray-50 border-b border-gray-100 flex items-center gap-3';
       header.innerHTML = `
+        <button type="button" data-drag-handle title="Déplacer"
+          style="cursor:grab;display:flex;align-items:center;padding:6px 5px;border:none;background:none;border-radius:4px;flex-shrink:0;touch-action:none;-webkit-user-select:none;user-select:none">
+          <svg viewBox="0 0 8 14" width="10" height="14" fill="#d1d5db">
+            <circle cx="2" cy="2" r="1.2"/><circle cx="6" cy="2" r="1.2"/>
+            <circle cx="2" cy="7" r="1.2"/><circle cx="6" cy="7" r="1.2"/>
+            <circle cx="2" cy="12" r="1.2"/><circle cx="6" cy="12" r="1.2"/>
+          </svg>
+        </button>
         <button type="button" data-icon-btn title="Changer l'icône"
           class="w-9 h-9 shrink-0 p-1 rounded-md text-gray-700 hover:text-gray-900 hover:bg-white transition-colors cursor-pointer">
           ${illus(iconKey)}
@@ -654,12 +666,8 @@
         <input data-field="section-title" type="text" value="${esc(section.title)}"
           class="flex-1 font-semibold text-sm text-gray-700 bg-transparent border-0 focus:outline-none min-h-[36px]" />
         <div class="flex items-center gap-0.5 shrink-0">
-          <button type="button" data-sec-up title="Monter"
-            class="w-8 h-8 flex items-center justify-center rounded-md text-gray-500 hover:text-gray-900 hover:bg-white transition-colors font-bold text-base">↑</button>
-          <button type="button" data-sec-down title="Descendre"
-            class="w-8 h-8 flex items-center justify-center rounded-md text-gray-500 hover:text-gray-900 hover:bg-white transition-colors font-bold text-base">↓</button>
           <button type="button" data-collapse title="Développer / Réduire"
-            style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:6px;background:none;border:none;cursor:pointer;margin-left:4px;flex-shrink:0;touch-action:manipulation">
+            style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:6px;background:none;border:none;cursor:pointer;flex-shrink:0;touch-action:manipulation">
             <span data-chevron style="display:inline-block;width:8px;height:8px;border-right:2px solid #9ca3af;border-bottom:2px solid #9ca3af;transform:rotate(45deg);transition:transform .2s;margin-top:-4px"></span>
           </button>
           <button type="button" data-sec-delete title="Supprimer la section"
@@ -703,12 +711,6 @@
         e.stopPropagation();
         setCollapsed(body.style.display !== 'none');
       };
-      header.querySelector('[data-sec-up]').addEventListener('click', () => {
-        const p = card.previousElementSibling; if (p) card.parentNode.insertBefore(card, p);
-      });
-      header.querySelector('[data-sec-down]').addEventListener('click', () => {
-        const n = card.nextElementSibling; if (n) card.parentNode.insertBefore(n, card);
-      });
       let _deleteArmed = false, _deleteTimer = null;
       header.querySelector('[data-sec-delete]').addEventListener('click', function() {
         const btn = this;
@@ -736,6 +738,61 @@
       });
       return card;
     }
+
+    /* ── Drag & Drop (sections + tips) ──────────────────────────── */
+    (function () {
+      let d = null; // { el, parent, ghost, ox, oy }
+
+      document.addEventListener('pointerdown', function (e) {
+        if (!e.target.closest('[data-drag-handle]')) return;
+        const el = e.target.closest('[data-section-id], [data-item-row]');
+        if (!el) return;
+        const parent = el.parentElement;
+        e.preventDefault();
+
+        const r = el.getBoundingClientRect();
+        const ghost = el.cloneNode(true);
+        ghost.style.cssText =
+          'position:fixed;pointer-events:none;z-index:9999' +
+          ';width:' + r.width + 'px;top:' + r.top + 'px;left:' + r.left + 'px' +
+          ';opacity:.92;box-shadow:0 12px 32px rgba(0,0,0,.22);border-radius:8px' +
+          ';transform:rotate(.4deg) scale(1.012);transition:none';
+        document.body.appendChild(ghost);
+        el.style.opacity = '.2';
+        document.body.style.userSelect = 'none';
+        document.body.style.webkitUserSelect = 'none';
+        d = { el, parent, ghost, ox: e.clientX - r.left, oy: e.clientY - r.top };
+      });
+
+      document.addEventListener('pointermove', function (e) {
+        if (!d) return;
+        e.preventDefault();
+        d.ghost.style.top  = (e.clientY - d.oy) + 'px';
+        d.ghost.style.left = (e.clientX - d.ox) + 'px';
+
+        const isSec = d.el.dataset.sectionId !== undefined;
+        const sel   = isSec ? '[data-section-id]' : '[data-item-row]';
+        const siblings = [...d.parent.querySelectorAll(':scope > ' + sel)].filter(s => s !== d.el);
+
+        let before = null;
+        for (const s of siblings) {
+          const r = s.getBoundingClientRect();
+          if (e.clientY < r.top + r.height * 0.5) { before = s; break; }
+        }
+        before ? d.parent.insertBefore(d.el, before) : d.parent.appendChild(d.el);
+      }, { passive: false });
+
+      function endDrag() {
+        if (!d) return;
+        d.ghost.remove();
+        d.el.style.opacity = '';
+        document.body.style.userSelect = '';
+        document.body.style.webkitUserSelect = '';
+        d = null;
+      }
+      document.addEventListener('pointerup',     endDrag);
+      document.addEventListener('pointercancel', endDrag);
+    })();
 
     /* ── Cover image ─────────────────────────────────────────────── */
     window._coverPos = 'center';
