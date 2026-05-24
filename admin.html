@@ -31,6 +31,21 @@
         class="w-full py-4 bg-stone-900 text-white text-sm font-semibold rounded-md hover:bg-stone-700 active:bg-stone-800 transition-colors">
         Accéder
       </button>
+      <div class="mt-6 text-center">
+        <button type="button" id="show-import-btn" class="text-xs text-stone-400 hover:text-stone-600 transition-colors underline underline-offset-2">
+          Premier accès sur cet appareil
+        </button>
+      </div>
+      <div id="import-zone" class="hidden mt-4 border border-stone-200 rounded-lg p-4 bg-white">
+        <p class="text-[11px] text-stone-400 mb-3 leading-relaxed">Collez le code généré depuis l'appareil déjà configuré (Paramètres → Code d'accès).</p>
+        <textarea id="import-code" rows="3" placeholder="Coller le code ici…"
+          class="w-full border border-stone-200 rounded-md px-3 py-2.5 text-xs font-mono focus:outline-none focus:border-stone-400 bg-stone-50 resize-none mb-2"></textarea>
+        <button id="import-btn"
+          class="w-full py-3 border border-stone-300 text-stone-700 text-sm font-medium rounded-md hover:bg-stone-100 active:bg-stone-200 transition-colors">
+          Importer et accéder
+        </button>
+        <div id="import-error" class="hidden text-xs text-red-500 bg-red-50 rounded-md px-4 py-3 mt-2"></div>
+      </div>
     </div>
   </div>
 
@@ -120,6 +135,14 @@
             <input id="cfg-pwd2" type="password" placeholder="Confirmer"
               class="w-full border border-gray-200 rounded-md px-3.5 py-2.5 text-sm focus:outline-none focus:border-gray-400 bg-white" />
           </div>
+        </div>
+        <div class="border-t border-gray-100 pt-4">
+          <p class="text-[10px] font-semibold uppercase tracking-[0.15em] text-gray-400 mb-2">Autre appareil</p>
+          <p class="text-[11px] text-gray-400 mb-3 leading-relaxed">Générez un code à coller sur votre autre appareil — il suffit ensuite d'un clic.</p>
+          <button id="export-cfg-btn"
+            class="w-full py-2.5 border border-gray-200 text-gray-700 text-sm font-medium rounded-md hover:bg-gray-50 active:bg-gray-100 transition-colors">
+            Copier le code d'accès
+          </button>
         </div>
       </div>
       <div id="cfg-error" class="hidden mx-5 mb-2 text-xs text-red-500 bg-red-50 rounded-md px-4 py-3"></div>
@@ -285,7 +308,6 @@
     const CFG_KEY   = 'mtq-gh-config';
     const CACHE_KEY = 'mtq-guide-v1';
     const SES_KEY   = 'mtq-admin-session';
-    const EMBEDDED_CONFIG = null; // !cfg-embed — ne pas modifier manuellement
 
     /* ── Illustrations ─────────────────────────────────────────── */
     const ILLUSTRATIONS = {
@@ -336,25 +358,6 @@
       const bin = atob(b64); const bytes = new Uint8Array(bin.length);
       for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
       return new TextDecoder().decode(bytes);
-    }
-
-    /* ── Embed config dans admin.html sur GitHub ─────────────────── */
-    async function embedConfigInHtml(cfg) {
-      try {
-        const url = `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/admin.html`;
-        const headers = { Authorization: `Bearer ${cfg.token}`, Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28' };
-        const file = await (await fetch(url, { headers })).json();
-        if (!file.sha) return;
-        const html = fromBase64(file.content.replace(/\n/g, ''));
-        const serialized = JSON.stringify({ password: cfg.password, owner: cfg.owner, repo: cfg.repo, token: cfg.token, unsplashKey: cfg.unsplashKey || '' });
-        const updated = html.replace(
-          /const EMBEDDED_CONFIG = .*; \/\/ !cfg-embed.*$/m,
-          `const EMBEDDED_CONFIG = ${serialized}; // !cfg-embed — ne pas modifier manuellement`
-        );
-        if (updated === html) return; // rien à changer
-        await fetch(url, { method: 'PUT', headers: { ...headers, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message: 'chore: embed admin config', content: toBase64(updated), sha: file.sha }) });
-      } catch(e) { console.warn('embedConfigInHtml:', e); }
     }
 
     /* ── GitHub API ──────────────────────────────────────────────── */
@@ -794,16 +797,33 @@
     document.getElementById('login-btn').addEventListener('click', () => {
       const pwd = document.getElementById('login-pwd').value;
       const err = document.getElementById('login-error');
-      const cfg = loadConfig() || EMBEDDED_CONFIG;
+      const cfg = loadConfig();
       if (!cfg || cfg.password !== pwd) {
         err.textContent = 'Mot de passe incorrect.'; err.classList.remove('hidden');
         document.getElementById('login-pwd').select();
       } else {
         err.classList.add('hidden'); setLoggedIn();
-        // Si le device n'avait pas de config locale, on la sauve maintenant
-        if (!loadConfig()) saveConfig(cfg);
         document.getElementById('login-screen').classList.add('hidden');
         initAdmin();
+      }
+    });
+
+    document.getElementById('show-import-btn').addEventListener('click', () => {
+      document.getElementById('import-zone').classList.toggle('hidden');
+      if (!document.getElementById('import-zone').classList.contains('hidden'))
+        document.getElementById('import-code').focus();
+    });
+    document.getElementById('import-btn').addEventListener('click', () => {
+      const errEl = document.getElementById('import-error');
+      errEl.classList.add('hidden');
+      try {
+        const cfg = JSON.parse(atob(document.getElementById('import-code').value.trim()));
+        if (!cfg.password || !cfg.owner || !cfg.repo || !cfg.token) throw new Error();
+        saveConfig(cfg); setLoggedIn();
+        document.getElementById('login-screen').classList.add('hidden');
+        initAdmin();
+      } catch {
+        errEl.textContent = 'Code invalide ou corrompu.'; errEl.classList.remove('hidden');
       }
     });
     document.getElementById('login-pwd').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('login-btn').click(); });
@@ -825,7 +845,6 @@
       try {
         await loadFromGitHub(cfg);
         saveConfig(cfg); setLoggedIn();
-        embedConfigInHtml(cfg); // non-bloquant — met à jour admin.html sur GitHub
         document.getElementById('setup-screen').classList.add('hidden');
         initAdmin();
       } catch(e) {
@@ -849,6 +868,12 @@
     document.getElementById('settings-close').addEventListener('click', () => document.getElementById('settings-modal').classList.add('hidden'));
     document.getElementById('settings-backdrop').addEventListener('click', () => document.getElementById('settings-modal').classList.add('hidden'));
     document.getElementById('settings-logout').addEventListener('click', logout);
+    document.getElementById('export-cfg-btn').addEventListener('click', () => {
+      const cfg = loadConfig(); if (!cfg) return;
+      navigator.clipboard.writeText(btoa(JSON.stringify(cfg)))
+        .then(() => showToast('Code copié — collez-le sur l\'autre appareil', false))
+        .catch(() => showToast('Impossible de copier — essayez manuellement', true));
+    });
     document.getElementById('cfg-save-btn').addEventListener('click', () => {
       const owner = document.getElementById('cfg-owner').value.trim();
       const repo  = document.getElementById('cfg-repo').value.trim();
@@ -863,7 +888,6 @@
       if (owner) cfg.owner = owner; if (repo) cfg.repo = repo; if (token) cfg.token = token;
       cfg.unsplashKey = unsplash; if (pwd) cfg.password = pwd;
       saveConfig(cfg);
-      embedConfigInHtml(cfg); // non-bloquant — propage la config sur GitHub
       document.getElementById('settings-modal').classList.add('hidden');
       showToast('Paramètres enregistrés', false);
     });
@@ -955,34 +979,25 @@
     /* ── Boot ────────────────────────────────────────────────────── */
     (() => {
       const cfg = loadConfig();
-
-      // Config locale complète → login ou admin direct
-      if (cfg?.password) {
-        if (isLoggedIn()) {
-          document.getElementById('login-screen').classList.add('hidden');
-          initAdmin();
-          return;
+      if (!cfg || !cfg.password) {
+        // Aucune config locale → setup (ou import via le lien sur l'écran de login)
+        document.getElementById('login-screen').classList.add('hidden');
+        if (cfg) { // migration : config existante sans mot de passe, pré-remplir
+          document.getElementById('setup-owner').value    = cfg.owner       || '';
+          document.getElementById('setup-repo').value     = cfg.repo        || '';
+          document.getElementById('setup-token').value    = cfg.token       || '';
+          document.getElementById('setup-unsplash').value = cfg.unsplashKey || '';
         }
-        setTimeout(() => document.getElementById('login-pwd').focus(), 80);
+        document.getElementById('setup-screen').classList.remove('hidden');
+        setTimeout(() => document.getElementById('setup-pwd').focus(), 80);
         return;
       }
-
-      // Pas de config locale mais config embarquée → login seul suffit
-      if (EMBEDDED_CONFIG?.password) {
-        setTimeout(() => document.getElementById('login-pwd').focus(), 80);
+      if (isLoggedIn()) {
+        document.getElementById('login-screen').classList.add('hidden');
+        initAdmin();
         return;
       }
-
-      // Vraiment aucune config → premier lancement, setup complet
-      document.getElementById('login-screen').classList.add('hidden');
-      if (cfg) { // migration : config sans mot de passe, pré-remplir
-        document.getElementById('setup-owner').value    = cfg.owner       || '';
-        document.getElementById('setup-repo').value     = cfg.repo        || '';
-        document.getElementById('setup-token').value    = cfg.token       || '';
-        document.getElementById('setup-unsplash').value = cfg.unsplashKey || '';
-      }
-      document.getElementById('setup-screen').classList.remove('hidden');
-      setTimeout(() => document.getElementById('setup-pwd').focus(), 80);
+      setTimeout(() => document.getElementById('login-pwd').focus(), 80);
     })();
   </script>
 </body>
