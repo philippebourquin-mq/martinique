@@ -658,8 +658,10 @@
             class="w-8 h-8 flex items-center justify-center rounded-md text-gray-500 hover:text-gray-900 hover:bg-white transition-colors font-bold text-base">↑</button>
           <button type="button" data-sec-down title="Descendre"
             class="w-8 h-8 flex items-center justify-center rounded-md text-gray-500 hover:text-gray-900 hover:bg-white transition-colors font-bold text-base">↓</button>
-          <button type="button" data-collapse
-            class="text-[10px] text-gray-400 hover:text-gray-700 uppercase tracking-wider transition-colors min-h-[44px] px-3 ml-1">Réduire</button>
+          <button type="button" data-collapse title="Développer / Réduire"
+            style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:6px;background:none;border:none;cursor:pointer;color:#9ca3af;margin-left:4px;flex-shrink:0;touch-action:manipulation">
+            <svg data-chevron viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" style="width:16px;height:16px;transition:transform .2s"><path d="M5 8l5 5 5-5"/></svg>
+          </button>
           <button type="button" data-sec-delete title="Supprimer la section"
             class="w-8 h-8 flex items-center justify-center rounded-md text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors text-lg leading-none ml-2">×</button>
         </div>
@@ -691,12 +693,16 @@
         });
       });
       const collapseBtn = header.querySelector('[data-collapse]');
-      if (startCollapsed) collapseBtn.textContent = 'Développer';
-      collapseBtn.addEventListener('click', function() {
-        const collapsed = body.style.display === 'none';
-        body.style.display = collapsed ? '' : 'none';
-        this.textContent = collapsed ? 'Réduire' : 'Développer';
-      });
+      const chevron = collapseBtn.querySelector('[data-chevron]');
+      function setCollapsed(on) {
+        body.style.display = on ? 'none' : 'block';
+        if (chevron) chevron.style.transform = on ? 'rotate(-90deg)' : '';
+      }
+      setCollapsed(startCollapsed);
+      collapseBtn.onclick = function(e) {
+        e.stopPropagation();
+        setCollapsed(body.style.display !== 'none');
+      };
       header.querySelector('[data-sec-up]').addEventListener('click', () => {
         const p = card.previousElementSibling; if (p) card.parentNode.insertBefore(card, p);
       });
@@ -723,14 +729,11 @@
       });
       footer.querySelector('[data-add-item]').addEventListener('click', () => {
         const row = createItemRow({ text:'', url:'', photo:'', title:'' });
-        body.appendChild(row); body.style.display = '';
-        header.querySelector('[data-collapse]').textContent = 'Réduire';
+        body.appendChild(row);
+        setCollapsed(false);
         row.querySelector('textarea').focus();
         row.scrollIntoView({ behavior:'smooth', block:'nearest' });
       });
-      if (body.style.display === 'none') {
-        header.querySelector('[data-collapse]').textContent = 'Développer';
-      }
       return card;
     }
 
