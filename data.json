@@ -43,8 +43,8 @@
           "text": "L'esclavage, le rôle des « békés », le commerce du rhum, … indispensable pour comprendre l'île.",
           "url": "",
           "photo": "",
-          "layout": "1x3",
-          "textStyle": "card",
+          "layout": "1x2",
+          "textStyle": "stat",
           "objectPosition": "center"
         }
       ]
