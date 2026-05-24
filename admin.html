@@ -311,7 +311,6 @@
   <script>
     const CFG_KEY   = 'mtq-gh-config';
     const CACHE_KEY = 'mtq-guide-v1';
-    const SES_KEY   = 'mtq-admin-session';
 
     /* ── Illustrations ─────────────────────────────────────────── */
     const ILLUSTRATIONS = {
@@ -348,9 +347,7 @@
     /* ── Config / Auth ──────────────────────────────────────────── */
     function loadConfig() { try { return JSON.parse(localStorage.getItem(CFG_KEY)) || null; } catch { return null; } }
     function saveConfig(c) { localStorage.setItem(CFG_KEY, JSON.stringify(c)); }
-    function isLoggedIn()  { return localStorage.getItem(SES_KEY) === '1'; }
-    function setLoggedIn() { localStorage.setItem(SES_KEY, '1'); }
-    function logout()      { localStorage.removeItem(SES_KEY); location.reload(); }
+    function logout()      { localStorage.removeItem(CFG_KEY); location.reload(); }
 
     /* ── base64 UTF-8 ───────────────────────────────────────────── */
     function toBase64(str) {
@@ -657,6 +654,11 @@
       const body = document.createElement('div');
       body.dataset.body = '1';
       body.className = 'p-4 space-y-2';
+      // Réduire par défaut sur mobile
+      if (window.innerWidth < 768) {
+        body.classList.add('hidden');
+        // Le bouton collapse affichera 'Développer' une fois rendu dans le DOM
+      }
       (section.items || []).forEach(item => body.appendChild(createItemRow(item)));
       card.appendChild(body);
 
@@ -708,6 +710,9 @@
         row.querySelector('textarea').focus();
         row.scrollIntoView({ behavior:'smooth', block:'nearest' });
       });
+      if (body.classList.contains('hidden')) {
+        header.querySelector('[data-collapse]').textContent = 'Développer';
+      }
       return card;
     }
 
@@ -806,7 +811,7 @@
         err.textContent = 'Mot de passe incorrect.'; err.classList.remove('hidden');
         document.getElementById('login-pwd').select();
       } else {
-        err.classList.add('hidden'); setLoggedIn();
+        err.classList.add('hidden');
         document.getElementById('login-screen').classList.add('hidden');
         initAdmin();
       }
@@ -823,7 +828,7 @@
       try {
         const cfg = JSON.parse(atob(document.getElementById('import-code').value.trim()));
         if (!cfg.password || !cfg.owner || !cfg.repo || !cfg.token) throw new Error();
-        saveConfig(cfg); setLoggedIn();
+        saveConfig(cfg);
         document.getElementById('login-screen').classList.add('hidden');
         initAdmin();
       } catch {
@@ -848,7 +853,7 @@
       const cfg = { password: pwd, owner, repo, token, unsplashKey: unsplash };
       try {
         await loadFromGitHub(cfg);
-        saveConfig(cfg); setLoggedIn();
+        saveConfig(cfg);
         document.getElementById('setup-screen').classList.add('hidden');
         initAdmin();
       } catch(e) {
@@ -998,37 +1003,35 @@
         try {
           const cfg = JSON.parse(atob(urlCode));
           if (cfg.password && cfg.owner && cfg.repo && cfg.token) {
-            saveConfig(cfg); setLoggedIn();
-            history.replaceState(null, '', location.pathname); // nettoie l'URL
-            document.getElementById('login-screen').classList.add('hidden');
-            // initAdmin() sera appelé juste après le boot
-            window._bootFromQR = true;
+            saveConfig(cfg);
+            history.replaceState(null, '', location.pathname);
           }
         } catch {}
       }
-    })();
-    (() => {
-      const cfg = loadConfig();
-      if (window._bootFromQR) { initAdmin(); return; }
 
-      if (!cfg || !cfg.password) {
-        // Aucune config locale → setup (ou import via le lien sur l'écran de login)
-        document.getElementById('login-screen').classList.add('hidden');
-        if (cfg) { // migration : config existante sans mot de passe, pré-remplir
-          document.getElementById('setup-owner').value    = cfg.owner       || '';
-          document.getElementById('setup-repo').value     = cfg.repo        || '';
-          document.getElementById('setup-token').value    = cfg.token       || '';
-          document.getElementById('setup-unsplash').value = cfg.unsplashKey || '';
-        }
-        document.getElementById('setup-screen').classList.remove('hidden');
-        setTimeout(() => document.getElementById('setup-pwd').focus(), 80);
-        return;
-      }
-      if (isLoggedIn()) {
+      const cfg = loadConfig();
+
+      // Config présente → admin directement (session permanente sur ce device)
+      if (cfg?.password) {
         document.getElementById('login-screen').classList.add('hidden');
         initAdmin();
         return;
       }
+
+      // Pas de config → login (vérifie le mot de passe, puis sauve la config)
+      // Si c'est une migration (config sans mot de passe), afficher le setup
+      if (cfg) {
+        document.getElementById('login-screen').classList.add('hidden');
+        document.getElementById('setup-owner').value    = cfg.owner       || '';
+        document.getElementById('setup-repo').value     = cfg.repo        || '';
+        document.getElementById('setup-token').value    = cfg.token       || '';
+        document.getElementById('setup-unsplash').value = cfg.unsplashKey || '';
+        document.getElementById('setup-screen').classList.remove('hidden');
+        setTimeout(() => document.getElementById('setup-pwd').focus(), 80);
+        return;
+      }
+
+      // Aucune config → écran de login (nouveau device)
       setTimeout(() => document.getElementById('login-pwd').focus(), 80);
     })();
   </script>

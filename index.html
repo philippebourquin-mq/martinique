@@ -34,6 +34,10 @@
 
     /* Card shadow */
     .card { box-shadow: 0 1px 2px rgba(0,0,0,.05), 0 2px 8px rgba(0,0,0,.04); }
+
+    @media (max-width: 767px) {
+      .banner-full { aspect-ratio: auto !important; min-height: 280px; }
+    }
   </style>
 </head>
 <body class="text-stone-800 antialiased">
@@ -47,8 +51,20 @@
         Martinique
       </a>
       <nav id="nav-links" class="hidden md:flex gap-6 flex-1 overflow-x-auto"></nav>
+      <button id="menu-btn" class="md:hidden ml-auto w-8 h-8 flex flex-col items-center justify-center gap-1.5"
+        aria-label="Menu">
+        <span class="w-5 h-px bg-white block transition-all duration-200" id="mb1"></span>
+        <span class="w-5 h-px bg-white block transition-all duration-200" id="mb2"></span>
+        <span class="w-3 h-px bg-white block self-end transition-all duration-200" id="mb3"></span>
+      </button>
     </div>
   </header>
+
+  <!-- ── Menu mobile ──────────────────────────────────────────── -->
+  <div id="mobile-menu" class="hidden fixed inset-0 z-30 bg-stone-950/95 backdrop-blur-sm flex flex-col items-center justify-center gap-2">
+    <nav id="mobile-nav" class="flex flex-col items-center gap-6 text-center"></nav>
+    <button id="mobile-close" class="mt-10 text-white/30 text-xs tracking-widest uppercase">Fermer</button>
+  </div>
 
   <!-- ── Hero full-bleed ──────────────────────────────────────── -->
   <section id="hero" class="relative min-h-[95vh] flex flex-col justify-end overflow-hidden bg-stone-950">
@@ -184,10 +200,21 @@
         a.onmouseover = () => { a.style.color = on ? '#1c1917' : '#fff'; };
         a.onmouseout  = () => { a.style.color = on ? '#78716c' : 'rgba(255,255,255,.45)'; };
       });
+      ['mb1','mb2','mb3'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.background = on ? '#1c1917' : '#fff';
+      });
     }
     window.addEventListener('scroll', () => {
       applyHeader(window.scrollY > (document.getElementById('hero')?.offsetHeight || 600) * 0.5);
     }, { passive: true });
+
+    document.getElementById('menu-btn').addEventListener('click', () => {
+      document.getElementById('mobile-menu').classList.toggle('hidden');
+    });
+    document.getElementById('mobile-close').addEventListener('click', () => {
+      document.getElementById('mobile-menu').classList.add('hidden');
+    });
 
     /* ── Lien ───────────────────────────────────────────────────── */
     function mkLink(item, light) {
@@ -211,8 +238,7 @@
       /* BANNIÈRE — photo pleine largeur, texte superposé */
       if (hasPhoto && layout === 'highlight') {
         return `
-          <article class="col-span-full relative img-zoom rounded-xl overflow-hidden card cursor-default"
-            style="min-height:320px;aspect-ratio:21/9">
+          <article class="col-span-full relative img-zoom rounded-xl overflow-hidden card cursor-default banner-full" style="min-height:320px;aspect-ratio:21/9">
             <img src="${esc(item.photo)}" alt=""
               class="img-zoom-el absolute inset-0 w-full h-full object-cover"
               style="object-position:${esc(pos)}" loading="lazy" />
@@ -315,6 +341,14 @@
           class="text-[10px] tracking-[0.2em] uppercase transition-colors whitespace-nowrap"
           onmouseover="this.style.color='${_scrolled?'#1c1917':'#fff'}'"
           onmouseout="this.style.color='${_scrolled?'#78716c':'rgba(255,255,255,.45)'}'">
+          ${esc(s.title)}
+        </a>`
+      ).join('');
+
+      /* Nav mobile */
+      document.getElementById('mobile-nav').innerHTML = d.sections.map(s =>
+        `<a href="#${s.id}" onclick="document.getElementById('mobile-menu').classList.add('hidden')"
+          class="text-white/70 hover:text-white text-sm tracking-[0.2em] uppercase font-medium transition-colors">
           ${esc(s.title)}
         </a>`
       ).join('');
