@@ -306,6 +306,12 @@
       ]
     },
     {
+      "id": "section-1779580107362",
+      "icon": "generalites",
+      "title": "Météo",
+      "items": []
+    },
+    {
       "id": "nature",
       "icon": "generalites",
       "title": "Nature",
@@ -351,12 +357,6 @@
           "objectPosition": "center"
         }
       ]
-    },
-    {
-      "id": "section-1779580107362",
-      "icon": "generalites",
-      "title": "Météo",
-      "items": []
     }
   ]
 }
