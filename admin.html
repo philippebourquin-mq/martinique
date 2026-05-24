@@ -771,15 +771,43 @@
         d.ghost.style.left = (e.clientX - d.ox) + 'px';
 
         const isSec = d.el.dataset.sectionId !== undefined;
-        const sel   = isSec ? '[data-section-id]' : '[data-item-row]';
-        const siblings = [...d.parent.querySelectorAll(':scope > ' + sel)].filter(s => s !== d.el);
 
-        let before = null;
-        for (const s of siblings) {
-          const r = s.getBoundingClientRect();
-          if (e.clientY < r.top + r.height * 0.5) { before = s; break; }
+        if (isSec) {
+          /* ── Réordonner les sections ── */
+          const siblings = [...d.parent.querySelectorAll(':scope > [data-section-id]')].filter(s => s !== d.el);
+          let before = null;
+          for (const s of siblings) {
+            const r = s.getBoundingClientRect();
+            if (e.clientY < r.top + r.height * 0.5) { before = s; break; }
+          }
+          before ? d.parent.insertBefore(d.el, before) : d.parent.appendChild(d.el);
+
+        } else {
+          /* ── Réordonner les tips (inter-sections) ── */
+          // Trouver quelle section est sous le pointeur
+          let targetBody = null;
+          for (const card of document.querySelectorAll('[data-section-id]')) {
+            const r = card.getBoundingClientRect();
+            if (e.clientY >= r.top && e.clientY <= r.bottom) {
+              const body = card.querySelector('[data-body="1"]');
+              // N'accepter que les sections ouvertes (ou vides mais visibles)
+              if (body && body.style.display !== 'none') targetBody = body;
+              break;
+            }
+          }
+          if (!targetBody) return;
+
+          // Mettre à jour le parent courant si on change de section
+          if (d.parent !== targetBody) d.parent = targetBody;
+
+          const items = [...targetBody.querySelectorAll(':scope > [data-item-row]')].filter(s => s !== d.el);
+          let before = null;
+          for (const s of items) {
+            const r = s.getBoundingClientRect();
+            if (e.clientY < r.top + r.height * 0.5) { before = s; break; }
+          }
+          before ? targetBody.insertBefore(d.el, before) : targetBody.appendChild(d.el);
         }
-        before ? d.parent.insertBefore(d.el, before) : d.parent.appendChild(d.el);
       }, { passive: false });
 
       function endDrag() {
