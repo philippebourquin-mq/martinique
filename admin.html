@@ -345,9 +345,12 @@
     function illus(id) { return ILLUSTRATIONS[id] || ILLUSTRATIONS.boussole; }
 
     /* ── Config / Auth ──────────────────────────────────────────── */
+    const SES_KEY = 'mtq-admin-session';
     function loadConfig() { try { return JSON.parse(localStorage.getItem(CFG_KEY)) || null; } catch { return null; } }
     function saveConfig(c) { localStorage.setItem(CFG_KEY, JSON.stringify(c)); }
-    function logout()      { localStorage.removeItem(CFG_KEY); location.reload(); }
+    function isLoggedIn()  { return localStorage.getItem(SES_KEY) === '1'; }
+    function setLoggedIn() { localStorage.setItem(SES_KEY, '1'); }
+    function logout()      { localStorage.removeItem(SES_KEY); location.reload(); }
 
     /* ── base64 UTF-8 ───────────────────────────────────────────── */
     function toBase64(str) {
@@ -657,7 +660,6 @@
       // Réduire par défaut sur mobile
       if (window.innerWidth < 768) {
         body.classList.add('hidden');
-        // Le bouton collapse affichera 'Développer' une fois rendu dans le DOM
       }
       (section.items || []).forEach(item => body.appendChild(createItemRow(item)));
       card.appendChild(body);
@@ -676,7 +678,9 @@
           header.querySelector('[data-icon-btn]').innerHTML = illus(key);
         });
       });
-      header.querySelector('[data-collapse]').addEventListener('click', function() {
+      const collapseBtn = header.querySelector('[data-collapse]');
+      if (body.classList.contains('hidden')) collapseBtn.textContent = 'Développer';
+      collapseBtn.addEventListener('click', function() {
         const c = body.classList.toggle('hidden'); this.textContent = c ? 'Développer' : 'Réduire';
       });
       header.querySelector('[data-sec-up]').addEventListener('click', () => {
@@ -811,7 +815,7 @@
         err.textContent = 'Mot de passe incorrect.'; err.classList.remove('hidden');
         document.getElementById('login-pwd').select();
       } else {
-        err.classList.add('hidden');
+        err.classList.add('hidden'); setLoggedIn();
         document.getElementById('login-screen').classList.add('hidden');
         initAdmin();
       }
@@ -828,7 +832,7 @@
       try {
         const cfg = JSON.parse(atob(document.getElementById('import-code').value.trim()));
         if (!cfg.password || !cfg.owner || !cfg.repo || !cfg.token) throw new Error();
-        saveConfig(cfg);
+        saveConfig(cfg); setLoggedIn();
         document.getElementById('login-screen').classList.add('hidden');
         initAdmin();
       } catch {
@@ -853,7 +857,7 @@
       const cfg = { password: pwd, owner, repo, token, unsplashKey: unsplash };
       try {
         await loadFromGitHub(cfg);
-        saveConfig(cfg);
+        saveConfig(cfg); setLoggedIn();
         document.getElementById('setup-screen').classList.add('hidden');
         initAdmin();
       } catch(e) {
@@ -1003,7 +1007,7 @@
         try {
           const cfg = JSON.parse(atob(urlCode));
           if (cfg.password && cfg.owner && cfg.repo && cfg.token) {
-            saveConfig(cfg);
+            saveConfig(cfg); setLoggedIn();
             history.replaceState(null, '', location.pathname);
           }
         } catch {}
@@ -1011,15 +1015,20 @@
 
       const cfg = loadConfig();
 
-      // Config présente → admin directement (session permanente sur ce device)
-      if (cfg?.password) {
+      // Config + session → admin directement
+      if (cfg?.password && isLoggedIn()) {
         document.getElementById('login-screen').classList.add('hidden');
         initAdmin();
         return;
       }
 
-      // Pas de config → login (vérifie le mot de passe, puis sauve la config)
-      // Si c'est une migration (config sans mot de passe), afficher le setup
+      // Config présente mais pas de session → login (juste le mot de passe)
+      if (cfg?.password) {
+        setTimeout(() => document.getElementById('login-pwd').focus(), 80);
+        return;
+      }
+
+      // Config sans mot de passe (migration) → setup pré-rempli
       if (cfg) {
         document.getElementById('login-screen').classList.add('hidden');
         document.getElementById('setup-owner').value    = cfg.owner       || '';
@@ -1031,7 +1040,7 @@
         return;
       }
 
-      // Aucune config → écran de login (nouveau device)
+      // Aucune config → écran de login (nouveau device — import QR ou code)
       setTimeout(() => document.getElementById('login-pwd').focus(), 80);
     })();
   </script>
