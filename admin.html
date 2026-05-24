@@ -138,10 +138,14 @@
         </div>
         <div class="border-t border-gray-100 pt-4">
           <p class="text-[10px] font-semibold uppercase tracking-[0.15em] text-gray-400 mb-2">Autre appareil</p>
-          <p class="text-[11px] text-gray-400 mb-3 leading-relaxed">Générez un code à coller sur votre autre appareil — il suffit ensuite d'un clic.</p>
+          <p class="text-[11px] text-gray-400 mb-3 leading-relaxed">Scannez ce QR code depuis votre autre appareil pour y accéder sans ressaisir la configuration.</p>
+          <div id="qr-zone" class="hidden flex-col items-center gap-3 mb-3">
+            <img id="qr-img" src="" alt="QR code" class="w-44 h-44 rounded-lg border border-gray-100" />
+            <button id="copy-link-btn" class="text-[11px] text-gray-400 hover:text-gray-700 underline underline-offset-2 transition-colors">Copier le lien</button>
+          </div>
           <button id="export-cfg-btn"
             class="w-full py-2.5 border border-gray-200 text-gray-700 text-sm font-medium rounded-md hover:bg-gray-50 active:bg-gray-100 transition-colors">
-            Copier le code d'accès
+            Afficher le QR code
           </button>
         </div>
       </div>
@@ -870,9 +874,19 @@
     document.getElementById('settings-logout').addEventListener('click', logout);
     document.getElementById('export-cfg-btn').addEventListener('click', () => {
       const cfg = loadConfig(); if (!cfg) return;
-      navigator.clipboard.writeText(btoa(JSON.stringify(cfg)))
-        .then(() => showToast('Code copié — collez-le sur l\'autre appareil', false))
-        .catch(() => showToast('Impossible de copier — essayez manuellement', true));
+      const code = btoa(JSON.stringify(cfg));
+      const url  = location.origin + location.pathname + '?code=' + encodeURIComponent(code);
+      const qrZone = document.getElementById('qr-zone');
+      document.getElementById('qr-img').src =
+        'https://api.qrserver.com/v1/create-qr-code/?size=176x176&margin=8&data=' + encodeURIComponent(url);
+      qrZone.classList.remove('hidden');
+      qrZone.classList.add('flex');
+      document.getElementById('export-cfg-btn').textContent = 'Actualiser le QR code';
+      document.getElementById('copy-link-btn')._url = url;
+    });
+    document.getElementById('copy-link-btn').addEventListener('click', function() {
+      navigator.clipboard.writeText(this._url || '')
+        .then(() => showToast('Lien copié', false));
     });
     document.getElementById('cfg-save-btn').addEventListener('click', () => {
       const owner = document.getElementById('cfg-owner').value.trim();
@@ -978,7 +992,25 @@
 
     /* ── Boot ────────────────────────────────────────────────────── */
     (() => {
+      // Accès via QR code : ?code=BASE64
+      const urlCode = new URLSearchParams(location.search).get('code');
+      if (urlCode) {
+        try {
+          const cfg = JSON.parse(atob(urlCode));
+          if (cfg.password && cfg.owner && cfg.repo && cfg.token) {
+            saveConfig(cfg); setLoggedIn();
+            history.replaceState(null, '', location.pathname); // nettoie l'URL
+            document.getElementById('login-screen').classList.add('hidden');
+            // initAdmin() sera appelé juste après le boot
+            window._bootFromQR = true;
+          }
+        } catch {}
+      }
+    })();
+    (() => {
       const cfg = loadConfig();
+      if (window._bootFromQR) { initAdmin(); return; }
+
       if (!cfg || !cfg.password) {
         // Aucune config locale → setup (ou import via le lien sur l'écran de login)
         document.getElementById('login-screen').classList.add('hidden');
