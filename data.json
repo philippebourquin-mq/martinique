@@ -9,7 +9,7 @@
     {
       "id": "generalites",
       "icon": "generalites",
-      "title": "Généralités",
+      "title": "Pour se préparer",
       "items": [
         {
           "title": "Créole",
@@ -41,6 +41,14 @@
           "url": "",
           "photo": "",
           "layout": "highlight",
+          "objectPosition": "center"
+        },
+        {
+          "title": "Où dormir",
+          "text": "L’île n’est pas grande et tout est accessible sur une journée. Pour autant certains endroits restent à privilégier : Toure la presqu’île du Diamant,",
+          "url": "",
+          "photo": "",
+          "layout": "default",
           "objectPosition": "center"
         }
       ]
