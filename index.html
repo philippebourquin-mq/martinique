@@ -290,40 +290,57 @@
       </article>`;
       }
 
-      /* ── Carte texte — styles ── */
-      const textStyle = item.textStyle || 'card';
+      /* ── Texte plat — styles ── */
+      const rawStyle  = item.textStyle || 'editorial';
+      // compat anciens formats à fond → editorial
+      const textStyle = ['card','sombre','note'].includes(rawStyle) ? 'editorial' : rawStyle;
 
+      /* ÉDITO — titre fort + corps, typographie pure, aucun fond */
+      if (textStyle === 'editorial') {
+        return `
+    <article class="${sizeCls} flex flex-col justify-center gap-3 py-1">
+      ${title ? `<h3 class="text-stone-900 font-bold leading-tight"
+        style="font-size:${cols>=2?'clamp(22px,2.2vw,30px)':'clamp(17px,4vw,22px)'};letter-spacing:-0.025em">${esc(title)}</h3>` : ''}
+      <p class="text-stone-500 leading-relaxed font-light" style="font-size:${cols>=2?'15':'13'}px;max-width:52ch">${esc(item.text)}</p>
+      ${mkLink(item, false) ? `<div class="mt-1">${mkLink(item, false)}</div>` : ''}
+    </article>`; }
+
+      /* CITATION — pull-quote plat, grand guillemet décoratif, aucun fond */
       if (textStyle === 'citation') {
         return `
-    <article class="${sizeCls} flex flex-col justify-center p-7 md:p-9 rounded-xl card" style="background:#fdfcfb">
-      <div style="font-size:68px;line-height:.75;color:#e7e5e4;font-family:Georgia,serif;margin-bottom:10px">"</div>
-      ${title ? `<p class="text-stone-400 text-[10px] font-semibold uppercase tracking-[.14em] mb-2">${esc(title)}</p>` : ''}
-      <p class="text-stone-700 leading-relaxed font-light" style="font-size:${cols>=2?'16':'14'}px;font-style:italic">${esc(item.text)}</p>
-      ${mkLink(item, false) ? `<div class="mt-5">${mkLink(item, false)}</div>` : ''}
-    </article>`;}
+    <article class="${sizeCls} flex flex-col justify-center py-2 px-1">
+      <div aria-hidden="true" style="font-size:88px;line-height:.55;color:#d6d3d1;font-family:Georgia,'Times New Roman',serif;margin-bottom:14px;user-select:none">"</div>
+      <p class="text-stone-700 leading-relaxed" style="font-size:${cols>=2?'clamp(16px,1.6vw,20px)':'15px'};font-style:italic;font-weight:300;max-width:56ch">${esc(item.text)}</p>
+      ${title ? `<p class="text-stone-400 font-semibold uppercase tracking-[.14em] mt-5" style="font-size:10px">— ${esc(title)}</p>` : ''}
+      ${mkLink(item, false) ? `<div class="mt-3">${mkLink(item, false)}</div>` : ''}
+    </article>`; }
 
-      if (textStyle === 'sombre') {
+      /* STAT — titre = chiffre/fact XXL, corps = légende, typographie impact */
+      if (textStyle === 'stat') {
         return `
-    <article class="${sizeCls} bg-stone-900 rounded-xl p-5 md:p-6 flex flex-col gap-3 card">
-      ${title ? `<h3 class="text-white font-semibold leading-snug" style="font-size:${cols>=2?'18':'16'}px">${esc(title)}</h3>` : ''}
-      <p class="text-stone-400 text-[13px] leading-relaxed flex-1 font-light">${esc(item.text)}</p>
-      ${mkLink(item, true)}
-    </article>`;}
+    <article class="${sizeCls} flex flex-col justify-center gap-2 py-2">
+      ${title ? `<div class="text-stone-900 font-black leading-none"
+        style="font-size:${cols>=2?'clamp(52px,7vw,88px)':'clamp(40px,10vw,64px)'};letter-spacing:-0.04em;line-height:1">${esc(title)}</div>` : ''}
+      <p class="text-stone-500 font-light leading-relaxed" style="font-size:${cols>=2?'14':'13'}px;max-width:44ch">${esc(item.text)}</p>
+      ${mkLink(item, false) ? `<div class="mt-2">${mkLink(item, false)}</div>` : ''}
+    </article>`; }
 
-      if (textStyle === 'note') {
+      /* RUBRIQUE — étiquette supérieure en petites capitales + corps proéminent */
+      if (textStyle === 'rubrique') {
         return `
-    <article class="${sizeCls} rounded-xl p-5 md:p-6 flex flex-col gap-3 card" style="background:#fffbeb;border-left:3px solid #f59e0b">
-      ${title ? `<h3 class="text-stone-900 font-semibold leading-snug" style="font-size:${cols>=2?'18':'16'}px">${esc(title)}</h3>` : ''}
-      <p class="text-stone-600 text-[13px] leading-relaxed flex-1 font-light">${esc(item.text)}</p>
-      ${mkLink(item, false)}
-    </article>`;}
+    <article class="${sizeCls} flex flex-col justify-center gap-3 py-2">
+      ${title ? `<p class="text-stone-400 font-semibold uppercase tracking-[.2em]" style="font-size:9px;letter-spacing:.22em">${esc(title)}</p>` : ''}
+      <p class="text-stone-800 leading-relaxed font-light" style="font-size:${cols>=2?'clamp(15px,1.4vw,18px)':'14px'};max-width:54ch">${esc(item.text)}</p>
+      ${mkLink(item, false) ? `<div class="mt-1">${mkLink(item, false)}</div>` : ''}
+    </article>`; }
 
-      /* ── Carte standard (card) ── */
+      /* fallback → editorial */
       return `
-    <article class="${sizeCls} bg-white rounded-xl p-5 md:p-6 flex flex-col gap-3 card">
-      ${title ? `<h3 class="text-stone-900 font-semibold leading-snug" style="font-size:${cols>=2?'18':'16'}px">${esc(title)}</h3>` : ''}
-      <p class="text-[13px] text-stone-500 leading-relaxed flex-1 font-light">${esc(item.text)}</p>
-      ${mkLink(item, false)}
+    <article class="${sizeCls} flex flex-col justify-center gap-3 py-1">
+      ${title ? `<h3 class="text-stone-900 font-bold leading-tight"
+        style="font-size:${cols>=2?'clamp(22px,2.2vw,30px)':'clamp(17px,4vw,22px)'};letter-spacing:-0.025em">${esc(title)}</h3>` : ''}
+      <p class="text-stone-500 leading-relaxed font-light" style="font-size:${cols>=2?'15':'13'}px">${esc(item.text)}</p>
+      ${mkLink(item, false) ? `<div class="mt-1">${mkLink(item, false)}</div>` : ''}
     </article>`;
     }
 
