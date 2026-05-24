@@ -267,13 +267,13 @@
       </article>`;
       }
 
-      /* ── Normaliser les anciens formats ── */
-      const layoutKey = rawLayout === 'default' ? '1x1' : rawLayout === 'wide' ? '2x1' : rawLayout;
+      /* ── Normaliser les anciens formats (NxM = N rangées × M colonnes) ── */
+      const layoutKey = rawLayout === 'default' ? '1x1' : rawLayout === 'wide' ? '1x2' : rawLayout;
       const m    = layoutKey.match(/^(\d)x(\d)$/);
-      const cols = m ? +m[1] : 1;
-      const rows = m ? +m[2] : 1;
-      const colCls  = cols >= 2 ? 'block-col-2' : '';
-      const rowCls  = rows === 3 ? 'block-row-3' : rows === 2 ? 'block-row-2' : '';
+      const rows = m ? +m[1] : 1;   // premier chiffre = rangées
+      const cols = m ? +m[2] : 1;   // second chiffre  = colonnes
+      const colCls  = cols === 3 ? 'block-col-full' : cols === 2 ? 'block-col-2' : '';
+      const rowCls  = rows === 2 ? 'block-row-2' : '';
       const sizeCls = [colCls, rowCls].filter(Boolean).join(' ');
 
       /* ── Carte avec photo ── */
@@ -290,56 +290,86 @@
       </article>`;
       }
 
-      /* ── Texte plat — styles ── */
+      /* ── Texte — 8 styles (4 plats + 4 à fond) ── */
       const rawStyle  = item.textStyle || 'editorial';
-      // compat anciens formats à fond → editorial
-      const textStyle = ['card','sombre','note'].includes(rawStyle) ? 'editorial' : rawStyle;
+      // compat : ancien 'citation' (carte crème) → pullquote plat
+      const textStyle = rawStyle === 'citation' ? 'pullquote' : rawStyle;
+      const wide = cols >= 2;
 
-      /* ÉDITO — titre fort + corps, typographie pure, aucun fond */
-      if (textStyle === 'editorial') {
-        return `
-    <article class="${sizeCls} flex flex-col justify-center gap-3 py-1">
-      ${title ? `<h3 class="text-stone-900 font-bold leading-tight"
-        style="font-size:${cols>=2?'clamp(22px,2.2vw,30px)':'clamp(17px,4vw,22px)'};letter-spacing:-0.025em">${esc(title)}</h3>` : ''}
-      <p class="text-stone-500 leading-relaxed font-light" style="font-size:${cols>=2?'15':'13'}px;max-width:52ch">${esc(item.text)}</p>
+      /* ── PLAT ─────────────────────────────────────────────────── */
+
+      /* ÉDITO — titre bold + corps, pure typographie */
+      if (textStyle === 'editorial') { return `
+    <article class="${sizeCls} flex flex-col justify-center gap-3 py-2">
+      ${title ? `<h3 class="text-stone-900 font-bold leading-tight" style="font-size:${wide?'clamp(20px,2vw,28px)':'clamp(16px,4vw,20px)'};letter-spacing:-0.025em">${esc(title)}</h3>` : ''}
+      <p class="text-stone-500 leading-relaxed font-light" style="font-size:${wide?'15':'13'}px;max-width:52ch">${esc(item.text)}</p>
       ${mkLink(item, false) ? `<div class="mt-1">${mkLink(item, false)}</div>` : ''}
     </article>`; }
 
-      /* CITATION — pull-quote plat, grand guillemet décoratif, aucun fond */
-      if (textStyle === 'citation') {
-        return `
+      /* PULLQUOTE — guillemet décoratif géant, texte italique, auteur en dessous */
+      if (textStyle === 'pullquote') { return `
     <article class="${sizeCls} flex flex-col justify-center py-2 px-1">
-      <div aria-hidden="true" style="font-size:88px;line-height:.55;color:#d6d3d1;font-family:Georgia,'Times New Roman',serif;margin-bottom:14px;user-select:none">"</div>
-      <p class="text-stone-700 leading-relaxed" style="font-size:${cols>=2?'clamp(16px,1.6vw,20px)':'15px'};font-style:italic;font-weight:300;max-width:56ch">${esc(item.text)}</p>
+      <div aria-hidden="true" style="font-size:84px;line-height:.55;color:#d6d3d1;font-family:Georgia,serif;margin-bottom:14px;user-select:none">"</div>
+      <p class="text-stone-700 leading-relaxed" style="font-size:${wide?'clamp(15px,1.5vw,19px)':'14px'};font-style:italic;font-weight:300;max-width:56ch">${esc(item.text)}</p>
       ${title ? `<p class="text-stone-400 font-semibold uppercase tracking-[.14em] mt-5" style="font-size:10px">— ${esc(title)}</p>` : ''}
       ${mkLink(item, false) ? `<div class="mt-3">${mkLink(item, false)}</div>` : ''}
     </article>`; }
 
-      /* STAT — titre = chiffre/fact XXL, corps = légende, typographie impact */
-      if (textStyle === 'stat') {
-        return `
+      /* STAT — titre = chiffre/fait en XXL, corps = légende */
+      if (textStyle === 'stat') { return `
     <article class="${sizeCls} flex flex-col justify-center gap-2 py-2">
-      ${title ? `<div class="text-stone-900 font-black leading-none"
-        style="font-size:${cols>=2?'clamp(52px,7vw,88px)':'clamp(40px,10vw,64px)'};letter-spacing:-0.04em;line-height:1">${esc(title)}</div>` : ''}
-      <p class="text-stone-500 font-light leading-relaxed" style="font-size:${cols>=2?'14':'13'}px;max-width:44ch">${esc(item.text)}</p>
+      ${title ? `<div class="text-stone-900 font-black leading-none" style="font-size:${wide?'clamp(48px,6vw,80px)':'clamp(36px,9vw,56px)'};letter-spacing:-0.04em">${esc(title)}</div>` : ''}
+      <p class="text-stone-500 font-light leading-relaxed" style="font-size:${wide?'14':'13'}px;max-width:44ch">${esc(item.text)}</p>
       ${mkLink(item, false) ? `<div class="mt-2">${mkLink(item, false)}</div>` : ''}
     </article>`; }
 
-      /* RUBRIQUE — étiquette supérieure en petites capitales + corps proéminent */
-      if (textStyle === 'rubrique') {
-        return `
+      /* RUBRIQUE — label petites capitales + corps proéminent */
+      if (textStyle === 'rubrique') { return `
     <article class="${sizeCls} flex flex-col justify-center gap-3 py-2">
-      ${title ? `<p class="text-stone-400 font-semibold uppercase tracking-[.2em]" style="font-size:9px;letter-spacing:.22em">${esc(title)}</p>` : ''}
-      <p class="text-stone-800 leading-relaxed font-light" style="font-size:${cols>=2?'clamp(15px,1.4vw,18px)':'14px'};max-width:54ch">${esc(item.text)}</p>
+      ${title ? `<p class="text-stone-400 font-semibold uppercase" style="font-size:9px;letter-spacing:.22em">${esc(title)}</p>` : ''}
+      <p class="text-stone-800 leading-relaxed font-light" style="font-size:${wide?'clamp(14px,1.3vw,17px)':'14px'};max-width:54ch">${esc(item.text)}</p>
       ${mkLink(item, false) ? `<div class="mt-1">${mkLink(item, false)}</div>` : ''}
     </article>`; }
 
-      /* fallback → editorial */
+      /* ── FOND ─────────────────────────────────────────────────── */
+
+      /* CARTE — fond blanc, ombre légère */
+      if (textStyle === 'card') { return `
+    <article class="${sizeCls} bg-white rounded-xl p-5 md:p-6 flex flex-col gap-3 card">
+      ${title ? `<h3 class="text-stone-900 font-semibold leading-snug" style="font-size:${wide?'18':'16'}px">${esc(title)}</h3>` : ''}
+      <p class="text-[13px] text-stone-500 leading-relaxed flex-1 font-light">${esc(item.text)}</p>
+      ${mkLink(item, false)}
+    </article>`; }
+
+      /* SOMBRE — fond stone-900 */
+      if (textStyle === 'sombre') { return `
+    <article class="${sizeCls} bg-stone-900 rounded-xl p-5 md:p-6 flex flex-col gap-3 card">
+      ${title ? `<h3 class="text-white font-semibold leading-snug" style="font-size:${wide?'18':'16'}px">${esc(title)}</h3>` : ''}
+      <p class="text-stone-400 text-[13px] leading-relaxed flex-1 font-light">${esc(item.text)}</p>
+      ${mkLink(item, true)}
+    </article>`; }
+
+      /* NOTE — fond amber, bordure gauche */
+      if (textStyle === 'note') { return `
+    <article class="${sizeCls} rounded-xl p-5 md:p-6 flex flex-col gap-3 card" style="background:#fffbeb;border-left:3px solid #f59e0b">
+      ${title ? `<h3 class="text-stone-900 font-semibold leading-snug" style="font-size:${wide?'18':'16'}px">${esc(title)}</h3>` : ''}
+      <p class="text-stone-600 text-[13px] leading-relaxed flex-1 font-light">${esc(item.text)}</p>
+      ${mkLink(item, false)}
+    </article>`; }
+
+      /* ENCADRÉ — fond stone-50, bordure stone-200 */
+      if (textStyle === 'encadre') { return `
+    <article class="${sizeCls} rounded-xl p-5 md:p-6 flex flex-col gap-3 card" style="background:#fafaf9;border:1.5px solid #e7e5e4">
+      ${title ? `<h3 class="text-stone-900 font-semibold leading-snug" style="font-size:${wide?'18':'16'}px">${esc(title)}</h3>` : ''}
+      <p class="text-stone-500 text-[13px] leading-relaxed flex-1 font-light">${esc(item.text)}</p>
+      ${mkLink(item, false)}
+    </article>`; }
+
+      /* fallback → édito */
       return `
-    <article class="${sizeCls} flex flex-col justify-center gap-3 py-1">
-      ${title ? `<h3 class="text-stone-900 font-bold leading-tight"
-        style="font-size:${cols>=2?'clamp(22px,2.2vw,30px)':'clamp(17px,4vw,22px)'};letter-spacing:-0.025em">${esc(title)}</h3>` : ''}
-      <p class="text-stone-500 leading-relaxed font-light" style="font-size:${cols>=2?'15':'13'}px">${esc(item.text)}</p>
+    <article class="${sizeCls} flex flex-col justify-center gap-3 py-2">
+      ${title ? `<h3 class="text-stone-900 font-bold leading-tight" style="font-size:${wide?'clamp(20px,2vw,28px)':'clamp(16px,4vw,20px)'};letter-spacing:-0.025em">${esc(title)}</h3>` : ''}
+      <p class="text-stone-500 leading-relaxed font-light" style="font-size:${wide?'15':'13'}px">${esc(item.text)}</p>
       ${mkLink(item, false) ? `<div class="mt-1">${mkLink(item, false)}</div>` : ''}
     </article>`;
     }

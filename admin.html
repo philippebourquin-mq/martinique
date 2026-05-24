@@ -591,40 +591,55 @@
         </div>
         <div class="flex items-center gap-2 pl-1" data-layout-row>
           <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider w-10 shrink-0">Format</span>
+          <!-- Grille 3×2 : ligne = rangées (1 ou 2), colonne = colonnes (1, 2, 3) -->
           <div style="display:grid;grid-template-columns:repeat(3,44px);gap:3px;background:#f3f4f6;border-radius:7px;padding:3px">
-            <button type="button" data-layout-opt="1x1" title="1 col · 1 rangée"
+            <button type="button" data-layout-opt="1x1" title="1 rangée · 1 colonne"
               style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:none;border-radius:5px;cursor:pointer;transition:background .12s,color .12s">
               <span style="display:block;width:12px;height:12px;background:currentColor;border-radius:2px"></span>
             </button>
-            <button type="button" data-layout-opt="1x2" title="1 col · 2 rangées"
+            <button type="button" data-layout-opt="1x2" title="1 rangée · 2 colonnes"
               style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:none;border-radius:5px;cursor:pointer;transition:background .12s,color .12s">
-              <span style="display:block;width:12px;height:22px;background:currentColor;border-radius:2px"></span>
+              <span style="display:block;width:24px;height:12px;background:currentColor;border-radius:2px"></span>
             </button>
-            <button type="button" data-layout-opt="1x3" title="1 col · 3 rangées"
+            <button type="button" data-layout-opt="1x3" title="1 rangée · pleine largeur"
               style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:none;border-radius:5px;cursor:pointer;transition:background .12s,color .12s">
-              <span style="display:block;width:12px;height:32px;background:currentColor;border-radius:2px"></span>
+              <span style="display:block;width:34px;height:12px;background:currentColor;border-radius:2px"></span>
             </button>
-            <button type="button" data-layout-opt="2x1" title="2 cols · 1 rangée"
+            <button type="button" data-layout-opt="2x1" title="2 rangées · 1 colonne"
               style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:none;border-radius:5px;cursor:pointer;transition:background .12s,color .12s">
-              <span style="display:block;width:26px;height:12px;background:currentColor;border-radius:2px"></span>
+              <span style="display:block;width:12px;height:24px;background:currentColor;border-radius:2px"></span>
             </button>
-            <button type="button" data-layout-opt="2x2" title="2 cols · 2 rangées"
+            <button type="button" data-layout-opt="2x2" title="2 rangées · 2 colonnes"
               style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:none;border-radius:5px;cursor:pointer;transition:background .12s,color .12s">
-              <span style="display:block;width:26px;height:22px;background:currentColor;border-radius:2px"></span>
+              <span style="display:block;width:24px;height:24px;background:currentColor;border-radius:2px"></span>
             </button>
-            <button type="button" data-layout-opt="2x3" title="2 cols · 3 rangées"
+            <button type="button" data-layout-opt="2x3" title="2 rangées · pleine largeur"
               style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:none;border-radius:5px;cursor:pointer;transition:background .12s,color .12s">
-              <span style="display:block;width:26px;height:32px;background:currentColor;border-radius:2px"></span>
+              <span style="display:block;width:34px;height:24px;background:currentColor;border-radius:2px"></span>
             </button>
           </div>
         </div>
-        <div class="flex items-center gap-2 pl-1 hidden" data-text-style-row>
-          <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider w-10 shrink-0">Style</span>
-          <div class="flex gap-1 flex-wrap">
-            <button type="button" data-text-style-opt="editorial" style="font-size:10px;padding:5px 9px;border-radius:5px;border:none;cursor:pointer;font-weight:600;transition:background .12s,color .12s">Édito</button>
-            <button type="button" data-text-style-opt="citation"  style="font-size:10px;padding:5px 9px;border-radius:5px;border:none;cursor:pointer;font-weight:600;transition:background .12s,color .12s">Citation</button>
-            <button type="button" data-text-style-opt="stat"      style="font-size:10px;padding:5px 9px;border-radius:5px;border:none;cursor:pointer;font-weight:600;transition:background .12s,color .12s">Stat</button>
-            <button type="button" data-text-style-opt="rubrique"  style="font-size:10px;padding:5px 9px;border-radius:5px;border:none;cursor:pointer;font-weight:600;transition:background .12s,color .12s">Rubrique</button>
+        <div class="flex items-start gap-2 pl-1 hidden" data-text-style-row>
+          <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider w-10 shrink-0 pt-1">Style</span>
+          <div class="flex flex-col gap-1.5">
+            <div class="flex items-center gap-1.5">
+              <span style="font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#d1d5db;width:24px;flex-shrink:0">Plat</span>
+              <div class="flex gap-1 flex-wrap">
+                <button type="button" data-text-style-opt="editorial" style="font-size:10px;padding:5px 9px;border-radius:5px;border:none;cursor:pointer;font-weight:600;transition:background .12s,color .12s">Édito</button>
+                <button type="button" data-text-style-opt="pullquote" style="font-size:10px;padding:5px 9px;border-radius:5px;border:none;cursor:pointer;font-weight:600;transition:background .12s,color .12s">Citation</button>
+                <button type="button" data-text-style-opt="stat"      style="font-size:10px;padding:5px 9px;border-radius:5px;border:none;cursor:pointer;font-weight:600;transition:background .12s,color .12s">Stat</button>
+                <button type="button" data-text-style-opt="rubrique"  style="font-size:10px;padding:5px 9px;border-radius:5px;border:none;cursor:pointer;font-weight:600;transition:background .12s,color .12s">Rubrique</button>
+              </div>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span style="font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#d1d5db;width:24px;flex-shrink:0">Fond</span>
+              <div class="flex gap-1 flex-wrap">
+                <button type="button" data-text-style-opt="card"    style="font-size:10px;padding:5px 9px;border-radius:5px;border:none;cursor:pointer;font-weight:600;transition:background .12s,color .12s">Carte</button>
+                <button type="button" data-text-style-opt="sombre"  style="font-size:10px;padding:5px 9px;border-radius:5px;border:none;cursor:pointer;font-weight:600;transition:background .12s,color .12s">Sombre</button>
+                <button type="button" data-text-style-opt="note"    style="font-size:10px;padding:5px 9px;border-radius:5px;border:none;cursor:pointer;font-weight:600;transition:background .12s,color .12s">Note</button>
+                <button type="button" data-text-style-opt="encadre" style="font-size:10px;padding:5px 9px;border-radius:5px;border:none;cursor:pointer;font-weight:600;transition:background .12s,color .12s">Encadré</button>
+              </div>
+            </div>
           </div>
         </div>
         <div class="flex items-center gap-2 pl-1 hidden" data-position-row>
