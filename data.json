@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "Martinique",
-    "subtitle": "Quelques plans et tips pour ton voyage en Martinique",
+    "subtitle": "Bons plans et tips de Phil",
     "coverImage": "https://images.unsplash.com/photo-1586094332115-680788e0182f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w5NTkzMTh8MHwxfHNlYXJjaHwyfHxtYXJ0aW5pcXVlfGVufDB8MHx8fDE3Nzk1ODYyODZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
     "coverObjectPosition": "top center"
   },
@@ -185,7 +185,7 @@
           "objectPosition": "center"
         },
         {
-          "title": "Restaurant",
+          "title": "La Terrasse",
           "text": "La Terrasse au rond-point du Diamant.",
           "url": "https://maps.app.goo.gl/kY8sKMjxQefgL8iz7",
           "photo": "",
@@ -193,7 +193,7 @@
           "objectPosition": "center"
         },
         {
-          "title": "Restaurant",
+          "title": "Le M",
           "text": "Le M à Sainte-Anne.",
           "url": "https://maps.app.goo.gl/7av7AvQXTnNL7Rbi6",
           "photo": "",
@@ -201,7 +201,7 @@
           "objectPosition": "center"
         },
         {
-          "title": "Restaurant",
+          "title": "Le Petibonom",
           "text": "Le Petibonom sur la plage du Carbet.",
           "url": "https://maps.app.goo.gl/Hmau3YVa19dj4zmF9",
           "photo": "",
@@ -252,7 +252,7 @@
           "text": "Sortie dauphins avec Markus — la demi-journée est canon !",
           "url": "tel:+596696411803",
           "photo": "https://images.pexels.com/photos/12661194/pexels-photo-12661194.jpeg?auto=compress&cs=tinysrgb&w=800",
-          "layout": "highlight",
+          "layout": "default",
           "objectPosition": "center"
         },
         {
@@ -291,7 +291,7 @@
           "title": "Tour des yoles",
           "text": "Connu comme le second carnaval, c'est l'événement de l'été.  \nUne course de voile très impressionnante avec les équipes qui se pendent \"aux bois penchés\". Toute l'île se déplace sur les plages de départ et d'arrivée, mais aussi sur l'eau (plus de 400 bateaux et jet-skis suivent chaque étape). une expérience unique.",
           "url": "",
-          "photo": "",
+          "photo": "https://images.unsplash.com/photo-1660066532474-097dcdb4017b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w5NTkzMTh8MHwxfHNlYXJjaHw2fHx5b2xlc3xlbnwwfDB8fHwxNzc5NTg2ODQzfDA&ixlib=rb-4.1.0&q=80&w=1080",
           "layout": "default",
           "objectPosition": "center"
         },
@@ -322,7 +322,7 @@
           "title": "Cascades",
           "text": "pas spectaculaires, mais les balades pour y accéder sont sympas. Cascade Didier en particulier.",
           "url": "",
-          "photo": "",
+          "photo": "https://images.unsplash.com/photo-1506017669510-0bcbe8003d70?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w5NTkzMTh8MHwxfHNlYXJjaHw3fHxjYXNjYWRlfGVufDB8MHx8fDE3Nzk1ODYyNTF8MA&ixlib=rb-4.1.0&q=80&w=1080",
           "layout": "default",
           "objectPosition": "center"
         },
@@ -346,7 +346,7 @@
           "title": "ien ien",
           "text": "Gare aux moustiques à l'approche du coucher de soleil.",
           "url": "",
-          "photo": "",
+          "photo": "https://images.unsplash.com/photo-1707943768467-84fe5c76a40c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w5NTkzMTh8MHwxfHNlYXJjaHwzfHxtb3VzdGlxdWV8ZW58MHwwfHx8MTc3OTU4Njk0M3ww&ixlib=rb-4.1.0&q=80&w=1080",
           "layout": "default",
           "objectPosition": "center"
         }
