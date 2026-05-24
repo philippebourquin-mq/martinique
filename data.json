@@ -17,7 +17,7 @@
           "url": "",
           "photo": "",
           "layout": "1x1",
-          "textStyle": "editorial",
+          "textStyle": "note",
           "objectPosition": "center"
         },
         {
@@ -35,7 +35,7 @@
           "url": "",
           "photo": "",
           "layout": "1x1",
-          "textStyle": "editorial",
+          "textStyle": "encadre",
           "objectPosition": "center"
         },
         {
