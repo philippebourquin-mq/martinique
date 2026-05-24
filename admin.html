@@ -910,9 +910,18 @@
     /* ── Boot ────────────────────────────────────────────────────── */
     (() => {
       const cfg = loadConfig();
-      if (!cfg) {
+      // Pas de config, ou config sans mot de passe (migration) → setup
+      if (!cfg || !cfg.password) {
         document.getElementById('login-screen').classList.add('hidden');
+        // Pré-remplir les champs si une config GitHub existe déjà
+        if (cfg) {
+          document.getElementById('setup-owner').value    = cfg.owner       || '';
+          document.getElementById('setup-repo').value     = cfg.repo        || '';
+          document.getElementById('setup-token').value    = cfg.token       || '';
+          document.getElementById('setup-unsplash').value = cfg.unsplashKey || '';
+        }
         document.getElementById('setup-screen').classList.remove('hidden');
+        setTimeout(() => document.getElementById('setup-pwd').focus(), 80);
         return;
       }
       if (isLoggedIn()) {
