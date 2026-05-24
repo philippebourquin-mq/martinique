@@ -290,7 +290,35 @@
       </article>`;
       }
 
-      /* ── Carte texte ── */
+      /* ── Carte texte — styles ── */
+      const textStyle = item.textStyle || 'card';
+
+      if (textStyle === 'citation') {
+        return `
+    <article class="${sizeCls} flex flex-col justify-center p-7 md:p-9 rounded-xl card" style="background:#fdfcfb">
+      <div style="font-size:68px;line-height:.75;color:#e7e5e4;font-family:Georgia,serif;margin-bottom:10px">"</div>
+      ${title ? `<p class="text-stone-400 text-[10px] font-semibold uppercase tracking-[.14em] mb-2">${esc(title)}</p>` : ''}
+      <p class="text-stone-700 leading-relaxed font-light" style="font-size:${cols>=2?'16':'14'}px;font-style:italic">${esc(item.text)}</p>
+      ${mkLink(item, false) ? `<div class="mt-5">${mkLink(item, false)}</div>` : ''}
+    </article>`;}
+
+      if (textStyle === 'sombre') {
+        return `
+    <article class="${sizeCls} bg-stone-900 rounded-xl p-5 md:p-6 flex flex-col gap-3 card">
+      ${title ? `<h3 class="text-white font-semibold leading-snug" style="font-size:${cols>=2?'18':'16'}px">${esc(title)}</h3>` : ''}
+      <p class="text-stone-400 text-[13px] leading-relaxed flex-1 font-light">${esc(item.text)}</p>
+      ${mkLink(item, true)}
+    </article>`;}
+
+      if (textStyle === 'note') {
+        return `
+    <article class="${sizeCls} rounded-xl p-5 md:p-6 flex flex-col gap-3 card" style="background:#fffbeb;border-left:3px solid #f59e0b">
+      ${title ? `<h3 class="text-stone-900 font-semibold leading-snug" style="font-size:${cols>=2?'18':'16'}px">${esc(title)}</h3>` : ''}
+      <p class="text-stone-600 text-[13px] leading-relaxed flex-1 font-light">${esc(item.text)}</p>
+      ${mkLink(item, false)}
+    </article>`;}
+
+      /* ── Carte standard (card) ── */
       return `
     <article class="${sizeCls} bg-white rounded-xl p-5 md:p-6 flex flex-col gap-3 card">
       ${title ? `<h3 class="text-stone-900 font-semibold leading-snug" style="font-size:${cols>=2?'18':'16'}px">${esc(title)}</h3>` : ''}

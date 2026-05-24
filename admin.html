@@ -500,15 +500,18 @@
       const img      = row.querySelector('[data-photo-img]');
       const label    = row.querySelector('[data-photo-label]');
       const removeBtn = row.querySelector('[data-remove-photo]');
-      const posRow   = row.querySelector('[data-position-row]');
+      const posRow      = row.querySelector('[data-position-row]');
+      const textStyleRow = row.querySelector('[data-text-style-row]');
       if (photoData) {
         preview.classList.remove('hidden'); img.src = photoData; label.textContent = 'Changer';
         removeBtn.classList.remove('hidden');
         posRow?.classList.remove('hidden');
+        textStyleRow?.classList.add('hidden');
       } else {
         preview.classList.add('hidden'); img.src = ''; label.textContent = '+ Photo';
         removeBtn.classList.add('hidden');
         posRow?.classList.add('hidden');
+        textStyleRow?.classList.remove('hidden');
         row._objectPosition = 'center'; setPosActive(row, 'center');
       }
     }
@@ -519,7 +522,15 @@
         const active = btn.dataset.layoutOpt === norm;
         btn.style.background = active ? '#111827' : '#f9fafb';
         btn.style.color      = active ? '#ffffff' : '#9ca3af';
-        btn.style.boxShadow  = active ? '0 1px 3px rgba(0,0,0,.2)' : 'none';
+      });
+    }
+
+    function setTextStyleActive(row, style) {
+      const norm = style || 'card';
+      row.querySelectorAll('[data-text-style-opt]').forEach(btn => {
+        const active = btn.dataset.textStyleOpt === norm;
+        btn.style.background = active ? '#111827' : '#f3f4f6';
+        btn.style.color      = active ? '#ffffff' : '#6b7280';
       });
     }
 
@@ -578,15 +589,42 @@
             <button type="button" data-remove-photo class="hidden text-xs text-gray-400 hover:text-red-500 transition-colors py-2 px-1 min-h-[36px] whitespace-nowrap">Retirer</button>
           </div>
         </div>
-        <div class="flex items-start gap-2 pl-1" data-layout-row>
-          <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider w-10 shrink-0 pt-1.5">Format</span>
-          <div style="display:grid;grid-template-columns:1fr 2fr;gap:2px;background:#f3f4f6;border-radius:6px;padding:3px">
-            <button type="button" data-layout-opt="1x1" style="height:28px;border:none;border-radius:4px;font-size:9px;font-weight:700;cursor:pointer;letter-spacing:.05em;transition:background .15s,color .15s">1×1</button>
-            <button type="button" data-layout-opt="2x1" style="height:28px;border:none;border-radius:4px;font-size:9px;font-weight:700;cursor:pointer;letter-spacing:.05em;transition:background .15s,color .15s">2×1</button>
-            <button type="button" data-layout-opt="1x2" style="height:52px;border:none;border-radius:4px;font-size:9px;font-weight:700;cursor:pointer;letter-spacing:.05em;transition:background .15s,color .15s">1×2</button>
-            <button type="button" data-layout-opt="2x2" style="height:52px;border:none;border-radius:4px;font-size:9px;font-weight:700;cursor:pointer;letter-spacing:.05em;transition:background .15s,color .15s">2×2</button>
-            <button type="button" data-layout-opt="1x3" style="height:76px;border:none;border-radius:4px;font-size:9px;font-weight:700;cursor:pointer;letter-spacing:.05em;transition:background .15s,color .15s">1×3</button>
-            <button type="button" data-layout-opt="2x3" style="height:76px;border:none;border-radius:4px;font-size:9px;font-weight:700;cursor:pointer;letter-spacing:.05em;transition:background .15s,color .15s">2×3</button>
+        <div class="flex items-center gap-2 pl-1" data-layout-row>
+          <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider w-10 shrink-0">Format</span>
+          <div style="display:grid;grid-template-columns:repeat(3,44px);gap:3px;background:#f3f4f6;border-radius:7px;padding:3px">
+            <button type="button" data-layout-opt="1x1" title="1 col · 1 rangée"
+              style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:none;border-radius:5px;cursor:pointer;transition:background .12s,color .12s">
+              <span style="display:block;width:12px;height:12px;background:currentColor;border-radius:2px"></span>
+            </button>
+            <button type="button" data-layout-opt="1x2" title="1 col · 2 rangées"
+              style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:none;border-radius:5px;cursor:pointer;transition:background .12s,color .12s">
+              <span style="display:block;width:12px;height:22px;background:currentColor;border-radius:2px"></span>
+            </button>
+            <button type="button" data-layout-opt="1x3" title="1 col · 3 rangées"
+              style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:none;border-radius:5px;cursor:pointer;transition:background .12s,color .12s">
+              <span style="display:block;width:12px;height:32px;background:currentColor;border-radius:2px"></span>
+            </button>
+            <button type="button" data-layout-opt="2x1" title="2 cols · 1 rangée"
+              style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:none;border-radius:5px;cursor:pointer;transition:background .12s,color .12s">
+              <span style="display:block;width:26px;height:12px;background:currentColor;border-radius:2px"></span>
+            </button>
+            <button type="button" data-layout-opt="2x2" title="2 cols · 2 rangées"
+              style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:none;border-radius:5px;cursor:pointer;transition:background .12s,color .12s">
+              <span style="display:block;width:26px;height:22px;background:currentColor;border-radius:2px"></span>
+            </button>
+            <button type="button" data-layout-opt="2x3" title="2 cols · 3 rangées"
+              style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:none;border-radius:5px;cursor:pointer;transition:background .12s,color .12s">
+              <span style="display:block;width:26px;height:32px;background:currentColor;border-radius:2px"></span>
+            </button>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 pl-1 hidden" data-text-style-row>
+          <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider w-10 shrink-0">Style</span>
+          <div class="flex gap-1 flex-wrap">
+            <button type="button" data-text-style-opt="card"     style="font-size:10px;padding:5px 9px;border-radius:5px;border:none;cursor:pointer;font-weight:600;transition:background .12s,color .12s">Carte</button>
+            <button type="button" data-text-style-opt="citation" style="font-size:10px;padding:5px 9px;border-radius:5px;border:none;cursor:pointer;font-weight:600;transition:background .12s,color .12s">Citation</button>
+            <button type="button" data-text-style-opt="sombre"   style="font-size:10px;padding:5px 9px;border-radius:5px;border:none;cursor:pointer;font-weight:600;transition:background .12s,color .12s">Sombre</button>
+            <button type="button" data-text-style-opt="note"     style="font-size:10px;padding:5px 9px;border-radius:5px;border:none;cursor:pointer;font-weight:600;transition:background .12s,color .12s">Note</button>
           </div>
         </div>
         <div class="flex items-center gap-2 pl-1 hidden" data-position-row>
@@ -616,17 +654,18 @@
       row._photo          = item.photo          || '';
       row._layout = (function(l){ return l==='default'?'1x1':l==='wide'?'2x1':l||'1x1'; })(item.layout);
       row._objectPosition = item.objectPosition || 'center';
+      row._textStyle      = item.textStyle      || 'card';
 
       setLayoutActive(row, row._layout);
+      setTextStyleActive(row, row._textStyle);
       setPosActive(row, row._objectPosition);
-      if (row._photo) {
-        updatePhotoUI(row, row._photo);
-      } else {
-        setLayoutActive(row, row._layout);
-      }
+      updatePhotoUI(row, row._photo);
 
       row.querySelectorAll('[data-layout-opt]').forEach(btn => btn.addEventListener('click', () => {
         row._layout = btn.dataset.layoutOpt; setLayoutActive(row, row._layout);
+      }));
+      row.querySelectorAll('[data-text-style-opt]').forEach(btn => btn.addEventListener('click', () => {
+        row._textStyle = btn.dataset.textStyleOpt; setTextStyleActive(row, row._textStyle);
       }));
       row.querySelectorAll('[data-pos-opt]').forEach(btn => btn.addEventListener('click', () => {
         row._objectPosition = btn.dataset.posOpt; setPosActive(row, row._objectPosition);
@@ -894,7 +933,8 @@
               text:           row.querySelector('[data-field="text"]').value.trim(),
               url:            row.querySelector('[data-field="url"]').value.trim(),
               photo:          row._photo          || '',
-              layout:         row._layout         || 'default',
+              layout:         row._layout         || '1x1',
+              textStyle:      row._textStyle      || 'card',
               objectPosition: row._objectPosition || 'center',
             })).filter(item => item.text),
         })),
