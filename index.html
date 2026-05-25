@@ -488,7 +488,7 @@
     // Convertit photo.layout en catégorie pour l'algorithme de groupement
     function _albSz(p) {
       const l = p.layout;
-      if (!l || l === '1x1') return null;             // auto
+      if (!l || l === '1x1' || l === 'default') return null; // auto
       if (l === '1x3' || l === '2x3') return 'solo';
       if (l === '2x1') return 'tall';
       return 'large'; // 1x2, 2x2
