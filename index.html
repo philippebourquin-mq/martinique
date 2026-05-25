@@ -47,23 +47,24 @@
       .block-col-2 { grid-column: span 1; }
     }
 
-    /* ── Album — layout Cheerz (groupes alternants) ────────── */
+    /* ── Album — groupes alternants ────────────────────────── */
     .album-section {
-      --alb-h1: 360px;   /* solo panorama */
-      --alb-h2: 290px;   /* duo / big-left / big-right */
-      --alb-h3: 240px;   /* triptyque */
-      --alb-h4: 583px;   /* quad 2×2  (290×2 + 3) */
+      --alb-gap: 12px;
+      --alb-h1: 380px;   /* solo panorama */
+      --alb-h2: 280px;   /* duo / big-left / big-right */
+      --alb-h3: 220px;   /* triptyque  (= grid-auto-rows base) */
+      --alb-h4: 572px;   /* quad 2×2   (280×2 + 12) */
     }
+    @media (min-width: 768px) { .album-section { --alb-gap: 16px; } }
     @media (max-width: 639px) {
-      .album-section { --alb-h1:200px; --alb-h2:160px; --alb-h3:130px; --alb-h4:323px; }
+      .album-section { --alb-h1:220px; --alb-h2:160px; --alb-h3:130px; --alb-h4:332px; }
     }
     .album-cell {
       overflow: hidden;
-      border-radius: 7px;
+      border-radius: 12px;
       cursor: pointer;
       position: relative;
     }
-    @media (max-width: 639px) { .album-cell { border-radius: 3px; } }
     .album-cell img {
       width: 100%; height: 100%;
       object-fit: cover; display: block;
@@ -479,17 +480,18 @@
           </div>`;
         }).join('');
 
+        const g = 'var(--alb-gap)';
         const style = p.rows === 2
-          ? `display:grid;grid-template-columns:${p.grid};grid-template-rows:1fr 1fr;gap:3px;height:${p.h}`
+          ? `display:grid;grid-template-columns:${p.grid};grid-template-rows:1fr 1fr;gap:${g};height:${p.h}`
           : p.grid
-            ? `display:grid;grid-template-columns:${p.grid};gap:3px;height:${p.h}`
-            : `height:${p.h}`;   // solo : pas de grid, juste la hauteur
+            ? `display:grid;grid-template-columns:${p.grid};gap:${g};height:${p.h}`
+            : `height:${p.h}`;
 
         return `<div style="${style}">${cells}</div>`;
       }).join('');
 
       return `<div class="album-section" data-album-photos="${esc(pData)}"
-        style="display:flex;flex-direction:column;gap:4px">${groupsHtml}</div>`;
+        style="display:flex;flex-direction:column;gap:var(--alb-gap)">${groupsHtml}</div>`;
     }
 
     /* ── Lightbox ────────────────────────────────────────────────── */
