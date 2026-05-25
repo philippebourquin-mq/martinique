@@ -71,6 +71,11 @@
       transition: transform .65s cubic-bezier(.25,.46,.45,.94);
     }
     .album-cell:hover img { transform: scale(1.05); }
+    .album-star {
+      position: absolute; bottom: 8px; right: 10px;
+      font-size: 15px; line-height: 1; pointer-events: none;
+      color: #fbbf24; text-shadow: 0 1px 4px rgba(0,0,0,.55);
+    }
   </style>
 </head>
 <body class="text-stone-800 antialiased">
@@ -468,7 +473,7 @@
       if (!photos.length) {
         return `<div style="padding:52px 0;text-align:center;color:#a8a29e;font-size:13px;font-style:italic">Album vide</div>`;
       }
-      const pData = JSON.stringify(photos.map((p, i) => ({ i, src:p.src, caption:p.caption||'' })));
+      const pData = JSON.stringify(photos.map((p, i) => ({ i, src:p.src, caption:p.caption||'', favorite:!!p.favorite })));
       const groups = _albumGroups(photos);
       let idx = 0;
 
@@ -477,6 +482,7 @@
           const i = idx++;
           return `<div class="album-cell" data-idx="${i}" onclick="openLightbox(this)">
             <img src="${esc(photo.src)}" alt="${esc(photo.caption||'')}" loading="lazy" />
+            ${photo.favorite ? '<span class="album-star">★</span>' : ''}
           </div>`;
         }).join('');
 
