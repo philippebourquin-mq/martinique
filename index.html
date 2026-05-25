@@ -47,9 +47,12 @@
       .block-col-2 { grid-column: span 1; }
     }
 
+    :root { --sec-gap: 12px; }
+    @media (min-width: 768px) { :root { --sec-gap: 16px; } }
+
     /* ── Album — groupes alternants ────────────────────────── */
     .album-section {
-      --alb-gap: 12px;
+      --alb-gap: var(--sec-gap);
       --alb-h1: 380px;   /* solo panorama */
       --alb-h2: 280px;   /* duo / big-left / big-right */
       --alb-h3: 220px;   /* triptyque  (= grid-auto-rows base) */
@@ -476,15 +479,33 @@
     function _albumGroups(photos) {
       const groups = []; let i = 0, pi = 0;
       while (i < photos.length) {
-        const rem = photos.length - i;
-        let p = _ALB_PAT[pi % _ALB_PAT.length];
-        // Adapter si fin d'album
-        if (rem < p.n) {
-          if (rem === 1) p = _ALB_PAT[1];       // solo
-          else if (rem === 2) p = _ALB_PAT[0];  // duo
-          else if (rem === 3) p = _ALB_PAT[3];  // triptyque
+        const photo = photos[i];
+        // Solo forcé
+        if (photo.size === 'solo') {
+          groups.push({ p: _ALB_PAT[1], slice: [photo] });
+          i++; continue;
         }
-        const n = Math.min(p.n, rem);
+        // Large forcé → big-left duo avec la photo suivante (si non-forcée)
+        if (photo.size === 'large') {
+          const next = photos[i + 1];
+          if (next && next.size !== 'solo' && next.size !== 'large') {
+            groups.push({ p: { n:2, grid:'5fr 3fr', h:'var(--alb-h2)', rows:1 }, slice: [photo, next] });
+            i += 2; pi++; continue;
+          }
+          groups.push({ p: _ALB_PAT[1], slice: [photo] });
+          i++; continue;
+        }
+        // Auto : trouver la fin du run avant le prochain forcé
+        let autoEnd = i;
+        while (autoEnd < photos.length && !photos[autoEnd].size) autoEnd++;
+        const remAuto = autoEnd - i;
+        let p = _ALB_PAT[pi % _ALB_PAT.length];
+        if (remAuto < p.n) {
+          if (remAuto === 1) p = _ALB_PAT[1];
+          else if (remAuto === 2) p = _ALB_PAT[0];
+          else if (remAuto === 3) p = _ALB_PAT[3];
+        }
+        const n = Math.min(p.n, remAuto);
         groups.push({ p, slice: photos.slice(i, i + n) });
         i += n; pi++;
       }
@@ -621,6 +642,37 @@
       if (e.target === this) closeLightbox();
     });
 
+    /* ── Section classique — layout album-style ─────────────────── */
+    function renderClassicSection(section) {
+      const items = (section.items || []).filter(i => i.text?.trim() || i.photo?.trim());
+      if (!items.length) return '';
+      const g = 'var(--sec-gap)';
+      const rows = []; let autoRun = [];
+
+      function flushAuto() {
+        if (!autoRun.length) return;
+        _albumGroups(autoRun).forEach(({ p, slice }) => {
+          const cols = p.grid ? `grid-template-columns:${p.grid}` : 'grid-template-columns:1fr';
+          rows.push(`<div style="display:grid;${cols};grid-auto-rows:minmax(220px,auto);gap:${g}">
+            ${slice.map(it => renderItem({...it, layout:'1x1'})).join('')}
+          </div>`);
+        });
+        autoRun = [];
+      }
+
+      for (const item of items) {
+        const ly = item.layout || '1x1';
+        const isAuto = !ly || ly === '1x1' || ly === 'default';
+        if (isAuto) { autoRun.push(item); }
+        else {
+          flushAuto();
+          rows.push(`<div style="display:grid;grid-template-columns:1fr;grid-auto-rows:minmax(220px,auto);gap:${g}">${renderItem(item)}</div>`);
+        }
+      }
+      flushAuto();
+      return `<div style="display:flex;flex-direction:column;gap:${g}">${rows.join('')}</div>`;
+    }
+
     /* ── Section ─────────────────────────────────────────────────── */
     function render(d) {
       document.title = 'Guide ' + d.meta.title;
@@ -672,12 +724,7 @@
             </div>
             <div class="w-8 h-8 shrink-0 text-stone-700">${illus(s.icon || s.id)}</div>
           </div>
-          ${s.type === 'album'
-            ? renderAlbumSection(s)
-            : `<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4" style="grid-auto-rows:minmax(220px,auto)">
-                ${(s.items||[]).map(item => renderItem(item)).join('')}
-              </div>`
-          }
+          ${s.type === 'album' ? renderAlbumSection(s) : renderClassicSection(s)}
         </section>
       `).join('');
 

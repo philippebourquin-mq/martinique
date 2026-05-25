@@ -958,8 +958,36 @@
         // Lié directement à l'objet photo (pas à idx) → stable après ajout/suppression
         cap.addEventListener('input', () => { photo.caption = cap.value; });
 
+        // Sélecteur de taille
+        const sizeRow = document.createElement('div');
+        sizeRow.style.cssText = 'display:grid;grid-template-columns:repeat(3,1fr);gap:3px';
+        const sizeOpts = [
+          { key:'auto',  label:'Auto',  title:'Disposition automatique' },
+          { key:'large', label:'Large', title:'Grande photo dans un duo' },
+          { key:'solo',  label:'Solo',  title:'Pleine largeur, seule' },
+        ];
+        function refreshSize() {
+          sizeRow.querySelectorAll('[data-so]').forEach(b => {
+            const on = (photo.size || 'auto') === b.dataset.so;
+            b.style.background = on ? '#1c1917' : '#f3f4f6';
+            b.style.color = on ? '#fff' : '#9ca3af';
+          });
+        }
+        sizeOpts.forEach(({ key, label, title }) => {
+          const b = document.createElement('button');
+          b.type = 'button'; b.dataset.so = key; b.title = title; b.textContent = label;
+          b.style.cssText = 'font-size:10px;font-weight:500;padding:4px 2px;border-radius:5px;border:none;cursor:pointer;transition:background .12s,color .12s;font-family:inherit';
+          b.addEventListener('click', () => {
+            if (key === 'auto') delete photo.size; else photo.size = key;
+            refreshSize();
+          });
+          sizeRow.appendChild(b);
+        });
+        refreshSize();
+
         item.appendChild(imgWrap);
         item.appendChild(cap);
+        item.appendChild(sizeRow);
         return item;
       }
 
