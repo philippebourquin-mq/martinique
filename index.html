@@ -46,6 +46,32 @@
     @media (max-width: 639px) {
       .block-col-2 { grid-column: span 1; }
     }
+
+    /* ── Album justified grid ───────────────────────────────── */
+    .album-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 3px;
+      --album-h: 240px;
+    }
+    @media (max-width: 639px) {
+      .album-grid { --album-h: 140px; gap: 2px; }
+    }
+    .album-item {
+      height: var(--album-h);
+      overflow: hidden;
+      border-radius: 7px;
+      cursor: pointer;
+      position: relative;
+      flex-shrink: 0;
+    }
+    @media (max-width: 639px) { .album-item { border-radius: 3px; } }
+    .album-item img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      transition: transform .6s cubic-bezier(.25,.46,.45,.94);
+    }
+    .album-item:hover img { transform: scale(1.05); }
+    .album-spacer { flex: 9999 0 0; height: 0; overflow: hidden; }
   </style>
 </head>
 <body class="text-stone-800 antialiased">
@@ -98,6 +124,38 @@
   <footer class="py-16 text-center" style="background:#e8e4df;border-top:1px solid rgba(180,170,158,.4)">
     <p class="text-[9px] tracking-[0.45em] uppercase text-stone-400">Guide personnel · Martinique</p>
   </footer>
+
+  <!-- ── Lightbox ────────────────────────────────────────────── -->
+  <div id="lightbox" role="dialog" aria-modal="true"
+    style="display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.97);align-items:center;justify-content:center">
+
+    <!-- Fermer -->
+    <button onclick="closeLightbox()" aria-label="Fermer"
+      style="position:absolute;top:18px;right:18px;width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.1);border:none;cursor:pointer;color:#fff;font-size:22px;display:flex;align-items:center;justify-content:center;z-index:1;transition:background .15s;font-family:inherit"
+      onmouseover="this.style.background='rgba(255,255,255,.22)'" onmouseout="this.style.background='rgba(255,255,255,.1)'">×</button>
+
+    <!-- Précédent -->
+    <button id="lb-prev" onclick="lbNav(-1)" aria-label="Précédente"
+      style="position:absolute;left:14px;top:50%;transform:translateY(-50%);width:48px;height:72px;border-radius:10px;background:rgba(255,255,255,.07);border:none;cursor:pointer;color:#fff;font-size:30px;display:flex;align-items:center;justify-content:center;transition:background .15s;font-family:inherit"
+      onmouseover="this.style.background='rgba(255,255,255,.18)'" onmouseout="this.style.background='rgba(255,255,255,.07)'">‹</button>
+
+    <!-- Suivant -->
+    <button id="lb-next" onclick="lbNav(1)" aria-label="Suivante"
+      style="position:absolute;right:14px;top:50%;transform:translateY(-50%);width:48px;height:72px;border-radius:10px;background:rgba(255,255,255,.07);border:none;cursor:pointer;color:#fff;font-size:30px;display:flex;align-items:center;justify-content:center;transition:background .15s;font-family:inherit"
+      onmouseover="this.style.background='rgba(255,255,255,.18)'" onmouseout="this.style.background='rgba(255,255,255,.07)'">›</button>
+
+    <!-- Image + légende -->
+    <div style="max-width:min(90vw,1300px);max-height:92vh;display:flex;flex-direction:column;align-items:center;gap:14px;padding:0 72px">
+      <img id="lb-img" src="" alt=""
+        style="max-width:100%;max-height:78vh;object-fit:contain;border-radius:5px;transition:opacity .22s" />
+      <div style="text-align:center;min-height:34px">
+        <p id="lb-caption"
+          style="color:rgba(255,255,255,.5);font-size:13px;font-weight:300;font-family:'Poppins',sans-serif;letter-spacing:.01em"></p>
+        <p id="lb-counter"
+          style="color:rgba(255,255,255,.2);font-size:10px;margin-top:5px;letter-spacing:.18em;font-family:'Poppins',sans-serif"></p>
+      </div>
+    </div>
+  </div>
 
   <script>
     const KEY = 'mtq-guide-v1';
@@ -374,6 +432,92 @@
     </article>`;
     }
 
+    /* ── Album ───────────────────────────────────────────────────── */
+    function renderAlbumSection(section) {
+      const photos = section.photos || [];
+      if (!photos.length) {
+        return `<div style="padding:52px 0;text-align:center;color:#a8a29e;font-size:13px;font-style:italic">Album vide</div>`;
+      }
+      // Sérialise les données pour le lightbox (attribut data-*)
+      const pData = JSON.stringify(photos.map((p, i) => ({
+        i, src: p.src, aspect: +(+(p.aspect||1.5)).toFixed(3), caption: p.caption||''
+      })));
+      return `<div class="album-grid" data-album-photos="${esc(pData)}">
+        ${photos.map((p, i) => {
+          const a = +(+(p.aspect||1.5)).toFixed(3);
+          // flex: grow shrink basis  — grow = aspect = proportionnel à la largeur
+          return `<div class="album-item" data-idx="${i}"
+            style="flex:${a} 0 calc(${a} * var(--album-h))"
+            onclick="openLightbox(this)">
+            <img src="${esc(p.src)}" alt="${esc(p.caption||'')}" loading="lazy" />
+          </div>`;
+        }).join('')}
+        <div class="album-spacer"></div>
+      </div>`;
+    }
+
+    /* ── Lightbox ────────────────────────────────────────────────── */
+    const _lb = { photos: [], idx: 0 };
+
+    function openLightbox(el) {
+      const idx = +el.dataset.idx;
+      const container = el.closest('[data-album-photos]');
+      try { _lb.photos = JSON.parse(container.dataset.albumPhotos); } catch { return; }
+      _lb.idx = idx;
+      _lbShow();
+      const lb = document.getElementById('lightbox');
+      lb.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      document.getElementById('lightbox').style.display = 'none';
+      document.body.style.overflow = '';
+    }
+
+    function lbNav(dir) {
+      if (_lb.photos.length < 2) return;
+      _lb.idx = (_lb.idx + dir + _lb.photos.length) % _lb.photos.length;
+      _lbShow();
+    }
+
+    function _lbShow() {
+      const p = _lb.photos[_lb.idx];
+      const img = document.getElementById('lb-img');
+      img.style.opacity = '0';
+      img.src = p.src;
+      img.onload = () => { img.style.opacity = '1'; };
+      img.alt = p.caption || '';
+      document.getElementById('lb-caption').textContent = p.caption || '';
+      document.getElementById('lb-counter').textContent = (_lb.idx + 1) + ' / ' + _lb.photos.length;
+      const multi = _lb.photos.length > 1;
+      document.getElementById('lb-prev').style.display = multi ? 'flex' : 'none';
+      document.getElementById('lb-next').style.display = multi ? 'flex' : 'none';
+    }
+
+    document.addEventListener('keydown', function(e) {
+      if (document.getElementById('lightbox').style.display === 'none') return;
+      if (e.key === 'Escape')       closeLightbox();
+      if (e.key === 'ArrowLeft')    lbNav(-1);
+      if (e.key === 'ArrowRight')   lbNav(1);
+    });
+
+    // Swipe touch
+    let _lbTouch = null;
+    document.getElementById('lightbox').addEventListener('touchstart', function(e) {
+      _lbTouch = { x: e.touches[0].clientX };
+    }, { passive: true });
+    document.getElementById('lightbox').addEventListener('touchend', function(e) {
+      if (!_lbTouch) return;
+      const dx = e.changedTouches[0].clientX - _lbTouch.x;
+      _lbTouch = null;
+      if (Math.abs(dx) > 50) lbNav(dx > 0 ? -1 : 1);
+    });
+    // Clic sur fond = fermer
+    document.getElementById('lightbox').addEventListener('click', function(e) {
+      if (e.target === this) closeLightbox();
+    });
+
     /* ── Section ─────────────────────────────────────────────────── */
     function render(d) {
       document.title = 'Guide ' + d.meta.title;
@@ -425,9 +569,12 @@
             </div>
             <div class="w-8 h-8 shrink-0 text-stone-700">${illus(s.icon || s.id)}</div>
           </div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4" style="grid-auto-rows:minmax(220px,auto)">
-            ${s.items.map(item => renderItem(item)).join('')}
-          </div>
+          ${s.type === 'album'
+            ? renderAlbumSection(s)
+            : `<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4" style="grid-auto-rows:minmax(220px,auto)">
+                ${(s.items||[]).map(item => renderItem(item)).join('')}
+              </div>`
+          }
         </section>
       `).join('');
 

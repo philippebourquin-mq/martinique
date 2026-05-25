@@ -181,6 +181,45 @@
     </div>
   </div>
 
+  <!-- ── Sélecteur type de section ──────────────────────────────── -->
+  <div id="section-type-picker" class="hidden fixed inset-0 z-50 flex items-end md:items-center justify-center">
+    <div id="section-type-backdrop" class="absolute inset-0 bg-black/40"></div>
+    <div class="relative bg-white rounded-t-xl md:rounded-lg w-full md:max-w-sm p-5 shadow-2xl">
+      <p class="text-[10px] font-semibold uppercase tracking-[0.15em] text-gray-400 mb-4">Type de section</p>
+      <div class="grid grid-cols-2 gap-3">
+        <button id="pick-classic" type="button"
+          class="flex flex-col items-center gap-3 p-4 bg-gray-50 hover:bg-gray-100 active:bg-gray-200 rounded-xl transition-colors border-2 border-transparent">
+          <div class="w-10 h-10 text-gray-500">
+            <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-linecap="round">
+              <rect x="6" y="10" width="28" height="5" rx="2" stroke-width="1.6"/>
+              <rect x="6" y="19" width="28" height="5" rx="2" stroke-width="1.6"/>
+              <rect x="6" y="28" width="18" height="5" rx="2" stroke-width="1.6"/>
+            </svg>
+          </div>
+          <div class="text-center">
+            <p class="text-sm font-semibold text-gray-800">Classique</p>
+            <p class="text-[10px] text-gray-400 mt-0.5">Tips &amp; blocs</p>
+          </div>
+        </button>
+        <button id="pick-album" type="button"
+          class="flex flex-col items-center gap-3 p-4 bg-gray-50 hover:bg-gray-100 active:bg-gray-200 rounded-xl transition-colors border-2 border-transparent">
+          <div class="w-10 h-10 text-gray-500">
+            <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="4" y="10" width="14" height="20" rx="2" stroke-width="1.6"/>
+              <rect x="22" y="10" width="14" height="9" rx="2" stroke-width="1.6"/>
+              <rect x="22" y="22" width="6" height="8" rx="1.5" stroke-width="1.6"/>
+              <rect x="30" y="22" width="6" height="8" rx="1.5" stroke-width="1.6"/>
+            </svg>
+          </div>
+          <div class="text-center">
+            <p class="text-sm font-semibold text-gray-800">Album</p>
+            <p class="text-[10px] text-gray-400 mt-0.5">Photos &amp; lightbox</p>
+          </div>
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- ── Header ─────────────────────────────────────────────────── -->
   <header class="sticky top-0 z-40 bg-white border-b border-gray-200 shadow-sm">
     <div class="max-w-3xl mx-auto px-5 py-3 flex items-center gap-3">
@@ -468,6 +507,24 @@
     }
 
     function autoResize(el) { el.style.height = 'auto'; el.style.height = Math.max(52, el.scrollHeight) + 'px'; }
+
+    function resizeImageForAlbum(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader(); reader.onerror = reject;
+        reader.onload = e => {
+          const img = new Image(); img.onerror = reject;
+          img.onload = () => {
+            const MAX = 1600, scale = Math.min(1, MAX / Math.max(img.width, img.height));
+            const w = Math.round(img.width * scale), h = Math.round(img.height * scale);
+            const canvas = document.createElement('canvas'); canvas.width = w; canvas.height = h;
+            canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+            resolve({ src: canvas.toDataURL('image/jpeg', 0.82), aspect: +(img.width / img.height).toFixed(3), caption: '' });
+          };
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
+    }
 
     /* ── Sélecteur d'icône ───────────────────────────────────────── */
     let _iconCb = null;
@@ -800,6 +857,182 @@
       return card;
     }
 
+    /* ── Carte album ─────────────────────────────────────────────── */
+    function createAlbumSectionCard(section) {
+      const card = document.createElement('div');
+      card.dataset.sectionId   = section.id;
+      card.dataset.sectionIcon = section.icon || 'camera';
+      card.dataset.sectionType = 'album';
+      card.className = 'bg-white rounded-md border border-gray-200 overflow-hidden';
+      card._albumPhotos = (section.photos || []).map(p => Object.assign({}, p));
+
+      /* ── En-tête ── */
+      const iconKey = section.icon || 'camera';
+      const header = document.createElement('div');
+      header.className = 'px-4 py-3.5 bg-gray-50 border-b border-gray-100 flex items-center gap-3';
+      header.innerHTML = `
+        <button type="button" data-drag-handle title="Déplacer"
+          style="cursor:grab;display:flex;align-items:center;padding:6px 5px;border:none;background:none;border-radius:4px;flex-shrink:0;touch-action:none;-webkit-user-select:none;user-select:none">
+          <svg viewBox="0 0 8 14" width="10" height="14" fill="#d1d5db">
+            <circle cx="2" cy="2" r="1.2"/><circle cx="6" cy="2" r="1.2"/>
+            <circle cx="2" cy="7" r="1.2"/><circle cx="6" cy="7" r="1.2"/>
+            <circle cx="2" cy="12" r="1.2"/><circle cx="6" cy="12" r="1.2"/>
+          </svg>
+        </button>
+        <button type="button" data-icon-btn title="Changer l'icône"
+          class="w-9 h-9 shrink-0 p-1 rounded-md text-gray-700 hover:text-gray-900 hover:bg-white transition-colors cursor-pointer">
+          ${illus(iconKey)}
+        </button>
+        <input data-field="section-title" type="text" value="${esc(section.title)}"
+          class="flex-1 font-semibold text-sm text-gray-700 bg-transparent border-0 focus:outline-none min-h-[36px]" />
+        <span style="font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:#d1d5db;flex-shrink:0">Album</span>
+        <div class="flex items-center gap-0.5 shrink-0">
+          <button type="button" data-collapse title="Développer / Réduire"
+            style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:6px;background:none;border:none;cursor:pointer;flex-shrink:0;touch-action:manipulation">
+            <span data-chevron style="display:inline-block;width:8px;height:8px;border-right:2px solid #9ca3af;border-bottom:2px solid #9ca3af;transform:rotate(45deg);transition:transform .2s;margin-top:-4px"></span>
+          </button>
+          <button type="button" data-sec-delete title="Supprimer la section"
+            class="w-8 h-8 flex items-center justify-center rounded-md text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors text-lg leading-none ml-2">×</button>
+        </div>`;
+      card.appendChild(header);
+
+      /* ── Corps : grille de thumbnails ── */
+      const body = document.createElement('div');
+      body.dataset.body = '1';
+      body.className = 'p-4';
+      const startCollapsed = window.innerWidth < 768;
+      if (startCollapsed) body.style.display = 'none';
+
+      function renderThumbs() {
+        body.innerHTML = '';
+        if (card._albumPhotos.length === 0) {
+          const empty = document.createElement('div');
+          empty.style.cssText = 'text-align:center;padding:28px 16px;color:#d1d5db;font-size:12px;font-style:italic';
+          empty.textContent = 'Aucune photo — ajoutez des images ci-dessous';
+          body.appendChild(empty);
+          return;
+        }
+        const grid = document.createElement('div');
+        grid.style.cssText = 'display:flex;flex-wrap:wrap;gap:6px';
+        card._albumPhotos.forEach((photo, idx) => {
+          const item = document.createElement('div');
+          const a = +(photo.aspect || 1.5).toFixed(3);
+          item.style.cssText = `flex:${a} 0 calc(${a} * 60px);max-width:calc(${a} * 100px);display:flex;flex-direction:column;gap:3px`;
+
+          const imgWrap = document.createElement('div');
+          imgWrap.style.cssText = `height:60px;border-radius:5px;overflow:hidden;position:relative;background:#f3f4f6;cursor:default`;
+
+          const img = document.createElement('img');
+          img.src = photo.src;
+          img.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block';
+          imgWrap.appendChild(img);
+
+          const del = document.createElement('button');
+          del.type = 'button'; del.textContent = '×';
+          del.style.cssText = 'position:absolute;top:3px;right:3px;width:18px;height:18px;border-radius:50%;background:rgba(0,0,0,.55);color:#fff;border:none;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .15s;padding:0;line-height:1';
+          imgWrap.addEventListener('mouseenter', () => del.style.opacity = '1');
+          imgWrap.addEventListener('mouseleave', () => del.style.opacity = '0');
+          del.addEventListener('click', e => {
+            e.stopPropagation();
+            card._albumPhotos.splice(idx, 1);
+            updateCount(); renderThumbs();
+          });
+          imgWrap.appendChild(del);
+
+          const cap = document.createElement('input');
+          cap.type = 'text'; cap.placeholder = 'Légende…'; cap.value = photo.caption || '';
+          cap.style.cssText = 'border:none;background:transparent;font-size:9px;color:#9ca3af;width:100%;padding:0 2px;outline:none;font-family:inherit';
+          cap.addEventListener('input', () => { card._albumPhotos[idx].caption = cap.value; });
+
+          item.appendChild(imgWrap);
+          item.appendChild(cap);
+          grid.appendChild(item);
+        });
+        body.appendChild(grid);
+      }
+      renderThumbs();
+      card.appendChild(body);
+
+      /* ── Pied de page : ajouter des photos ── */
+      const footer = document.createElement('div');
+      footer.className = 'px-4 py-3 border-t border-gray-100 bg-gray-50/50 flex items-center gap-4';
+      const countEl = document.createElement('span');
+      countEl.style.cssText = 'font-size:10px;color:#d1d5db;margin-left:auto';
+      function updateCount() {
+        const n = card._albumPhotos.length;
+        countEl.textContent = n + ' photo' + (n !== 1 ? 's' : '');
+      }
+      updateCount();
+
+      const addLabel = document.createElement('label');
+      addLabel.style.cssText = 'cursor:pointer';
+      addLabel.innerHTML = `
+        <span class="text-xs text-gray-500 hover:text-gray-900 transition-colors flex items-center gap-1.5 py-2 min-h-[44px]">
+          <span style="font-size:16px;font-weight:300;line-height:1">+</span> Ajouter des photos
+        </span>`;
+      const fileInput = document.createElement('input');
+      fileInput.type = 'file'; fileInput.accept = 'image/*'; fileInput.multiple = true;
+      fileInput.style.display = 'none';
+      fileInput.addEventListener('change', async e => {
+        const files = [...e.target.files]; if (!files.length) return;
+        const addBtn = addLabel.querySelector('span');
+        addBtn.textContent = 'Importation…';
+        for (const file of files) {
+          try { card._albumPhotos.push(await resizeImageForAlbum(file)); } catch {}
+        }
+        addBtn.innerHTML = `<span style="font-size:16px;font-weight:300;line-height:1">+</span> Ajouter des photos`;
+        updateCount(); renderThumbs();
+        e.target.value = '';
+      });
+      addLabel.appendChild(fileInput);
+      footer.appendChild(addLabel);
+      footer.appendChild(countEl);
+      card.appendChild(footer);
+
+      /* ── Collapse ── */
+      const collapseBtn = header.querySelector('[data-collapse]');
+      const chevron = collapseBtn.querySelector('[data-chevron]');
+      function setCollapsed(on) {
+        body.style.display = on ? 'none' : 'block';
+        footer.style.display = on ? 'none' : '';
+        if (chevron) chevron.style.transform = on ? 'rotate(-45deg)' : 'rotate(45deg)';
+      }
+      setCollapsed(startCollapsed);
+      collapseBtn.onclick = function(e) {
+        e.stopPropagation();
+        setCollapsed(body.style.display !== 'none');
+      };
+
+      /* ── Icône ── */
+      header.querySelector('[data-icon-btn]').addEventListener('click', () => {
+        openIconPicker(card.dataset.sectionIcon, key => {
+          card.dataset.sectionIcon = key;
+          header.querySelector('[data-icon-btn]').innerHTML = illus(key);
+        });
+      });
+
+      /* ── Suppression ── */
+      let _deleteArmed = false, _deleteTimer = null;
+      header.querySelector('[data-sec-delete]').addEventListener('click', function() {
+        const btn = this;
+        if (!_deleteArmed) {
+          _deleteArmed = true;
+          btn.textContent = 'Supprimer ?';
+          btn.className = 'text-[10px] font-semibold px-2.5 py-1 rounded-md bg-red-100 text-red-600 hover:bg-red-200 transition-colors ml-2 whitespace-nowrap';
+          _deleteTimer = setTimeout(() => {
+            _deleteArmed = false; btn.textContent = '×';
+            btn.className = 'w-8 h-8 flex items-center justify-center rounded-md text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors text-lg leading-none ml-2';
+          }, 3000);
+        } else {
+          clearTimeout(_deleteTimer);
+          card.style.cssText = 'opacity:0;transform:translateY(-4px);transition:opacity .2s,transform .2s';
+          setTimeout(() => card.remove(), 200);
+        }
+      });
+
+      return card;
+    }
+
     /* ── Drag & Drop (sections + tips) ──────────────────────────── */
     (function () {
       let d = null; // { el, parent, ghost, ox, oy }
@@ -938,21 +1171,29 @@
           coverImage:          document.getElementById('meta-cover-url').value.trim(),
           coverObjectPosition: window._coverPos || 'center',
         },
-        sections: Array.from(document.querySelectorAll('[data-section-id]')).map(card => ({
-          id:    card.dataset.sectionId,
-          icon:  card.dataset.sectionIcon || 'generalites',
-          title: card.querySelector('[data-field="section-title"]').value.trim(),
-          items: Array.from(card.querySelectorAll('[data-item-row]:not([data-deleted])'))
-            .map(row => ({
-              title:          row.querySelector('[data-field="title"]').value.trim(),
-              text:           row.querySelector('[data-field="text"]').value.trim(),
-              url:            row.querySelector('[data-field="url"]').value.trim(),
-              photo:          row._photo          || '',
-              layout:         row._layout         || '1x1',
-              textStyle:      row._textStyle      || 'editorial',
-              objectPosition: row._objectPosition || 'center',
-            })).filter(item => item.text),
-        })),
+        sections: Array.from(document.querySelectorAll('[data-section-id]')).map(card => {
+          const base = {
+            id:    card.dataset.sectionId,
+            icon:  card.dataset.sectionIcon || 'generalites',
+            title: card.querySelector('[data-field="section-title"]').value.trim(),
+          };
+          if (card.dataset.sectionType === 'album') {
+            return { ...base, type: 'album', photos: card._albumPhotos || [] };
+          }
+          return {
+            ...base,
+            items: Array.from(card.querySelectorAll('[data-item-row]:not([data-deleted])'))
+              .map(row => ({
+                title:          row.querySelector('[data-field="title"]').value.trim(),
+                text:           row.querySelector('[data-field="text"]').value.trim(),
+                url:            row.querySelector('[data-field="url"]').value.trim(),
+                photo:          row._photo          || '',
+                layout:         row._layout         || '1x1',
+                textStyle:      row._textStyle      || 'editorial',
+                objectPosition: row._objectPosition || 'center',
+              })).filter(item => item.text),
+          };
+        }),
       };
     }
 
@@ -965,7 +1206,9 @@
       updateCoverPreview();
       const container = document.getElementById('sections-container');
       container.innerHTML = '';
-      (data.sections || []).forEach(s => container.appendChild(createSectionCard(s)));
+      (data.sections || []).forEach(s => container.appendChild(
+        s.type === 'album' ? createAlbumSectionCard(s) : createSectionCard(s)
+      ));
       document.getElementById('main').classList.remove('hidden');
       setStatus(null);
     }
@@ -1159,10 +1402,32 @@
     document.getElementById('preview-btn').addEventListener('click', () => { window.location.href = 'index.html'; });
 
     /* ── Nouvelle section ────────────────────────────────────────── */
+    function closeSectionTypePicker() {
+      document.getElementById('section-type-picker').classList.add('hidden');
+    }
+
     document.getElementById('add-section-btn').addEventListener('click', () => {
+      document.getElementById('section-type-picker').classList.remove('hidden');
+    });
+
+    document.getElementById('section-type-backdrop').addEventListener('click', closeSectionTypePicker);
+
+    document.getElementById('pick-classic').addEventListener('click', () => {
+      closeSectionTypePicker();
       const id = 'section-' + Date.now();
       openIconPicker('generalites', key => {
         const card = createSectionCard({ id, icon: key, title: 'Nouvelle section', items: [] });
+        document.getElementById('sections-container').appendChild(card);
+        card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        const ti = card.querySelector('[data-field="section-title"]'); ti.focus(); ti.select();
+      });
+    });
+
+    document.getElementById('pick-album').addEventListener('click', () => {
+      closeSectionTypePicker();
+      const id = 'section-' + Date.now();
+      openIconPicker('camera', key => {
+        const card = createAlbumSectionCard({ id, icon: key, title: 'Album', photos: [] });
         document.getElementById('sections-container').appendChild(card);
         card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         const ti = card.querySelector('[data-field="section-title"]'); ti.focus(); ti.select();
