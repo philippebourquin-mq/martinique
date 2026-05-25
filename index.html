@@ -480,23 +480,28 @@
       { n:2, grid:'5fr 3fr',       h:'var(--alb-h2)', rows:1 }, // 12. grand gauche bis
     ];
 
+    // Fallbacks indépendants du tableau _ALB_PAT (indices stables)
+    const _PAT_SOLO = { n:1, grid:null,           h:'var(--alb-h1)', rows:1 };
+    const _PAT_DUO  = { n:2, grid:'1fr 1fr',      h:'var(--alb-h2)', rows:1 };
+    const _PAT_TRIO = { n:3, grid:'1fr 1fr 1fr',  h:'var(--alb-h3)', rows:1 };
+
     function _albumGroups(photos) {
       const groups = []; let i = 0, pi = 0;
       while (i < photos.length) {
         const photo = photos[i];
         // Solo forcé
         if (photo.size === 'solo') {
-          groups.push({ p: _ALB_PAT[1], slice: [photo] });
+          groups.push({ p: _PAT_SOLO, slice: [photo] });
           i++; continue;
         }
         // Large forcé → big-left duo avec la photo suivante (si non-forcée)
         if (photo.size === 'large') {
           const next = photos[i + 1];
-          if (next && next.size !== 'solo' && next.size !== 'large') {
+          if (next && !next.size) {
             groups.push({ p: { n:2, grid:'5fr 3fr', h:'var(--alb-h2)', rows:1 }, slice: [photo, next] });
             i += 2; pi++; continue;
           }
-          groups.push({ p: _ALB_PAT[1], slice: [photo] });
+          groups.push({ p: _PAT_SOLO, slice: [photo] });
           i++; continue;
         }
         // Auto : trouver la fin du run avant le prochain forcé
@@ -505,9 +510,9 @@
         const remAuto = autoEnd - i;
         let p = _ALB_PAT[pi % _ALB_PAT.length];
         if (remAuto < p.n) {
-          if (remAuto === 1) p = _ALB_PAT[1];
-          else if (remAuto === 2) p = _ALB_PAT[0];
-          else if (remAuto === 3) p = _ALB_PAT[3];
+          if      (remAuto === 1) p = _PAT_SOLO;
+          else if (remAuto === 2) p = _PAT_DUO;
+          else if (remAuto === 3) p = _PAT_TRIO;
         }
         const n = Math.min(p.n, remAuto);
         groups.push({ p, slice: photos.slice(i, i + n) });

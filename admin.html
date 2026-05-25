@@ -963,29 +963,33 @@
         sizeBadge.style.cssText = 'position:absolute;bottom:5px;left:5px;padding:2px 6px;border-radius:4px;font-size:9px;font-weight:700;letter-spacing:.07em;background:rgba(0,0,0,.72);color:#fff;display:none;pointer-events:none;z-index:2;font-family:inherit';
         imgWrap.appendChild(sizeBadge);
 
-        // Sélecteur de taille
+        // Sélecteur de format (icônes identiques aux blocs classiques)
+        // 1x1 → auto · 1x2 → large (grand dans un duo) · 1x3 → solo (pleine largeur)
         const sizeRow = document.createElement('div');
-        sizeRow.style.cssText = 'display:grid;grid-template-columns:repeat(3,1fr);gap:3px';
+        sizeRow.style.cssText = 'display:grid;grid-template-columns:repeat(3,1fr);gap:3px;background:#f3f4f6;border-radius:7px;padding:3px';
         const sizeOpts = [
-          { key:'auto',  label:'Auto',  title:'Disposition automatique' },
-          { key:'large', label:'Large', title:'Grande photo dans un duo' },
-          { key:'solo',  label:'Solo',  title:'Pleine largeur, seule' },
+          { key:'auto',  title:'Normal — disposition automatique',
+            icon:'<span style="display:block;width:10px;height:10px;background:currentColor;border-radius:2px"></span>' },
+          { key:'large', title:'Large — grand côté dans un duo',
+            icon:'<span style="display:block;width:20px;height:10px;background:currentColor;border-radius:2px"></span>' },
+          { key:'solo',  title:'Solo — pleine largeur seul',
+            icon:'<span style="display:block;width:28px;height:10px;background:currentColor;border-radius:2px"></span>' },
         ];
         function refreshSize() {
           const cur = photo.size || 'auto';
           sizeRow.querySelectorAll('[data-so]').forEach(b => {
             const on = cur === b.dataset.so;
-            b.style.background = on ? '#1c1917' : '#f3f4f6';
+            b.style.background = on ? '#1c1917' : 'transparent';
             b.style.color = on ? '#fff' : '#9ca3af';
           });
           if (cur === 'large') { sizeBadge.style.display='block'; sizeBadge.textContent='LARGE'; }
           else if (cur === 'solo') { sizeBadge.style.display='block'; sizeBadge.textContent='SOLO'; }
           else { sizeBadge.style.display='none'; }
         }
-        sizeOpts.forEach(({ key, label, title }) => {
+        sizeOpts.forEach(({ key, title, icon }) => {
           const b = document.createElement('button');
-          b.type = 'button'; b.dataset.so = key; b.title = title; b.textContent = label;
-          b.style.cssText = 'font-size:10px;font-weight:500;padding:4px 2px;border-radius:5px;border:none;cursor:pointer;transition:background .12s,color .12s;font-family:inherit';
+          b.type = 'button'; b.dataset.so = key; b.title = title; b.innerHTML = icon;
+          b.style.cssText = 'height:30px;display:flex;align-items:center;justify-content:center;border:none;border-radius:5px;cursor:pointer;transition:background .12s,color .12s';
           b.addEventListener('click', () => {
             if (key === 'auto') delete photo.size; else photo.size = key;
             refreshSize();
