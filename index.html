@@ -485,7 +485,7 @@
           ? `display:grid;grid-template-columns:${p.grid};grid-template-rows:1fr 1fr;gap:${g};height:${p.h}`
           : p.grid
             ? `display:grid;grid-template-columns:${p.grid};gap:${g};height:${p.h}`
-            : `height:${p.h}`;
+            : `display:grid;grid-template-columns:1fr;height:${p.h}`; /* solo : grid 1col = album-cell hérite bien de la hauteur */
 
         return `<div style="${style}">${cells}</div>`;
       }).join('');
