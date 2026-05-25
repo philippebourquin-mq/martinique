@@ -494,7 +494,12 @@
       return 'large'; // 1x2, 2x2
     }
 
-    function _albumGroups(photos) {
+    // Patterns sans tall pour sections classiques (bigFirst/bigLast = 2 colonnes avec 3 items → cassé)
+    const _CLS_PAT = _ALB_PAT.filter(p => !p.bigFirst && !p.bigLast);
+
+    // pats : tableau de patterns à utiliser (défaut = _ALB_PAT)
+    function _albumGroups(photos, pats) {
+      pats = pats || _ALB_PAT;
       const groups = []; let i = 0, pi = 0;
       while (i < photos.length) {
         const photo = photos[i];
@@ -530,14 +535,22 @@
         let autoEnd = i;
         while (autoEnd < photos.length && !_albSz(photos[autoEnd])) autoEnd++;
         const remAuto = autoEnd - i;
-        let p = _ALB_PAT[pi % _ALB_PAT.length];
-        // Adapter le pattern si pas assez de photos pour le remplir
+        let p = pats[pi % pats.length];
+        // Adapter si pas assez de photos pour le pattern courant
         if (remAuto < p.n) {
           if      (remAuto === 1) p = _PAT_SOLO;
           else if (remAuto === 2) p = _PAT_DUO;
           else if (remAuto === 3) p = _PAT_TRIO;
         }
-        const n = Math.min(p.n, remAuto);
+        let n = Math.min(p.n, remAuto);
+        // Look-ahead : si prendre n laisserait exactement 1 orphelin → ajuster
+        if (remAuto - n === 1) {
+          if (n + 1 <= 3) { // Élargir : prendre 1 de plus
+            n++; p = n === 2 ? _PAT_DUO : _PAT_TRIO;
+          } else {           // Rétrécir : prendre 1 de moins → laisse 2 (duo)
+            n--; p = n === 3 ? _PAT_TRIO : n === 2 ? _PAT_DUO : _PAT_SOLO;
+          }
+        }
         groups.push({ p, slice: photos.slice(i, i + n) });
         i += n; pi++;
       }
@@ -685,7 +698,7 @@
 
       function flushAuto() {
         if (!autoRun.length) return;
-        _albumGroups(autoRun).forEach(({ p, slice }) => {
+        _albumGroups(autoRun, _CLS_PAT).forEach(({ p, slice }) => {
           const cols = p.grid ? `grid-template-columns:${p.grid}` : 'grid-template-columns:1fr';
           rows.push(`<div style="display:grid;${cols};grid-auto-rows:minmax(220px,auto);gap:${g}">
             ${slice.map(it => renderItem({...it, layout:'1x1'})).join('')}
