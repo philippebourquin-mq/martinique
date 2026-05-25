@@ -466,14 +466,18 @@
 
     // Patterns : { n=nb photos, grid=colonnes CSS, h=var hauteur, rows=nb rangées }
     const _ALB_PAT = [
-      { n:2, grid:'1fr 1fr',       h:'var(--alb-h2)', rows:1 }, // duo égal
-      { n:1, grid:null,             h:'var(--alb-h1)', rows:1 }, // solo panorama
-      { n:2, grid:'5fr 3fr',        h:'var(--alb-h2)', rows:1 }, // grand gauche
-      { n:3, grid:'1fr 1fr 1fr',    h:'var(--alb-h3)', rows:1 }, // triptyque
-      { n:2, grid:'3fr 5fr',        h:'var(--alb-h2)', rows:1 }, // grand droite
-      { n:4, grid:'1fr 1fr',        h:'var(--alb-h4)', rows:2 }, // quad 2×2
-      { n:2, grid:'3fr 2fr',        h:'var(--alb-h2)', rows:1 }, // duo légèrement inégal
-      { n:2, grid:'5fr 3fr',        h:'var(--alb-h2)', rows:1 }, // grand gauche bis
+      { n:2, grid:'1fr 1fr',       h:'var(--alb-h2)', rows:1 }, //  1. duo égal
+      { n:3, grid:'1fr 1fr 1fr',   h:'var(--alb-h3)', rows:1 }, //  2. triptyque
+      { n:2, grid:'5fr 3fr',       h:'var(--alb-h2)', rows:1 }, //  3. grand gauche
+      { n:3, grid:'2fr 1fr 1fr',   h:'var(--alb-h3)', rows:1 }, //  4. trio gauche large
+      { n:4, grid:'1fr 1fr',       h:'var(--alb-h4)', rows:2 }, //  5. quad 2×2
+      { n:2, grid:'3fr 5fr',       h:'var(--alb-h2)', rows:1 }, //  6. grand droite
+      { n:3, grid:'1fr 1fr 2fr',   h:'var(--alb-h3)', rows:1 }, //  7. trio droite large
+      { n:2, grid:'3fr 2fr',       h:'var(--alb-h2)', rows:1 }, //  8. duo inégal
+      { n:3, grid:'1fr 2fr 1fr',   h:'var(--alb-h3)', rows:1 }, //  9. trio centre large
+      { n:2, grid:'1fr 1fr',       h:'var(--alb-h2)', rows:1 }, // 10. duo égal bis
+      { n:4, grid:'1fr 1fr',       h:'var(--alb-h4)', rows:2 }, // 11. quad 2×2 bis
+      { n:2, grid:'5fr 3fr',       h:'var(--alb-h2)', rows:1 }, // 12. grand gauche bis
     ];
 
     function _albumGroups(photos) {
