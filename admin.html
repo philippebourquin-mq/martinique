@@ -937,25 +937,8 @@
         const del = document.createElement('button');
         del.type = 'button'; del.textContent = '×';
         del.style.cssText = 'position:absolute;top:5px;right:5px;width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,.6);color:#fff;border:none;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .15s;padding:0;line-height:1;z-index:1';
-
-        const star = document.createElement('button');
-        star.type = 'button';
-        star.style.cssText = 'position:absolute;bottom:5px;right:5px;width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,.45);border:none;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;padding:0;line-height:1;z-index:1;transition:opacity .15s,color .15s';
-        function refreshStar() {
-          star.textContent = '★';
-          star.style.color = photo.favorite ? '#fbbf24' : 'rgba(255,255,255,.55)';
-          star.style.opacity = photo.favorite ? '1' : '0';
-        }
-        refreshStar();
-        star.addEventListener('click', e => {
-          e.stopPropagation();
-          photo.favorite = !photo.favorite;
-          refreshStar();
-        });
-
-        imgWrap.addEventListener('mouseenter', () => { del.style.opacity='1'; img.style.transform='scale(1.04)'; if (!photo.favorite) star.style.opacity='0.7'; });
-        imgWrap.addEventListener('mouseleave', () => { del.style.opacity='0'; img.style.transform=''; if (!photo.favorite) star.style.opacity='0'; });
-        imgWrap.appendChild(star);
+        imgWrap.addEventListener('mouseenter', () => { del.style.opacity='1'; img.style.transform='scale(1.04)'; });
+        imgWrap.addEventListener('mouseleave', () => { del.style.opacity='0'; img.style.transform=''; });
 
         del.addEventListener('click', e => {
           e.stopPropagation();
