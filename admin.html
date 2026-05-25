@@ -958,40 +958,39 @@
         // Lié directement à l'objet photo (pas à idx) → stable après ajout/suppression
         cap.addEventListener('input', () => { photo.caption = cap.value; });
 
-        // Badge taille forcée (visible sur la vignette)
+        // Badge format forcé (visible sur la vignette)
         const sizeBadge = document.createElement('div');
         sizeBadge.style.cssText = 'position:absolute;bottom:5px;left:5px;padding:2px 6px;border-radius:4px;font-size:9px;font-weight:700;letter-spacing:.07em;background:rgba(0,0,0,.72);color:#fff;display:none;pointer-events:none;z-index:2;font-family:inherit';
         imgWrap.appendChild(sizeBadge);
 
-        // Sélecteur de format (icônes identiques aux blocs classiques)
-        // 1x1 → auto · 1x2 → large (grand dans un duo) · 1x3 → solo (pleine largeur)
+        // Sélecteur de format — même grille 3×2 que les blocs classiques
+        // 1x1=auto · 1x2=large · 1x3=solo · 2x1=tall (portrait) · 2x2=large · 2x3=solo
+        const fmtOpts = [
+          { v:'1x1', title:'1 rangée · 1 colonne',     icon:'<span style="display:block;width:12px;height:12px;background:currentColor;border-radius:2px"></span>' },
+          { v:'1x2', title:'1 rangée · 2 colonnes',    icon:'<span style="display:block;width:24px;height:12px;background:currentColor;border-radius:2px"></span>' },
+          { v:'1x3', title:'1 rangée · pleine largeur',icon:'<span style="display:block;width:34px;height:12px;background:currentColor;border-radius:2px"></span>' },
+          { v:'2x1', title:'2 rangées · 1 colonne',    icon:'<span style="display:block;width:12px;height:24px;background:currentColor;border-radius:2px"></span>' },
+          { v:'2x2', title:'2 rangées · 2 colonnes',   icon:'<span style="display:block;width:24px;height:24px;background:currentColor;border-radius:2px"></span>' },
+          { v:'2x3', title:'2 rangées · pleine largeur',icon:'<span style="display:block;width:34px;height:24px;background:currentColor;border-radius:2px"></span>' },
+        ];
         const sizeRow = document.createElement('div');
         sizeRow.style.cssText = 'display:grid;grid-template-columns:repeat(3,1fr);gap:3px;background:#f3f4f6;border-radius:7px;padding:3px';
-        const sizeOpts = [
-          { key:'auto',  title:'Normal — disposition automatique',
-            icon:'<span style="display:block;width:10px;height:10px;background:currentColor;border-radius:2px"></span>' },
-          { key:'large', title:'Large — grand côté dans un duo',
-            icon:'<span style="display:block;width:20px;height:10px;background:currentColor;border-radius:2px"></span>' },
-          { key:'solo',  title:'Solo — pleine largeur seul',
-            icon:'<span style="display:block;width:28px;height:10px;background:currentColor;border-radius:2px"></span>' },
-        ];
         function refreshSize() {
-          const cur = photo.size || 'auto';
-          sizeRow.querySelectorAll('[data-so]').forEach(b => {
-            const on = cur === b.dataset.so;
+          const cur = photo.layout || '1x1';
+          sizeRow.querySelectorAll('[data-fv]').forEach(b => {
+            const on = cur === b.dataset.fv;
             b.style.background = on ? '#1c1917' : 'transparent';
             b.style.color = on ? '#fff' : '#9ca3af';
           });
-          if (cur === 'large') { sizeBadge.style.display='block'; sizeBadge.textContent='LARGE'; }
-          else if (cur === 'solo') { sizeBadge.style.display='block'; sizeBadge.textContent='SOLO'; }
-          else { sizeBadge.style.display='none'; }
+          sizeBadge.style.display = (cur && cur !== '1x1') ? 'block' : 'none';
+          if (cur && cur !== '1x1') sizeBadge.textContent = cur.toUpperCase();
         }
-        sizeOpts.forEach(({ key, title, icon }) => {
+        fmtOpts.forEach(({ v, title, icon }) => {
           const b = document.createElement('button');
-          b.type = 'button'; b.dataset.so = key; b.title = title; b.innerHTML = icon;
-          b.style.cssText = 'height:30px;display:flex;align-items:center;justify-content:center;border:none;border-radius:5px;cursor:pointer;transition:background .12s,color .12s';
+          b.type = 'button'; b.dataset.fv = v; b.title = title; b.innerHTML = icon;
+          b.style.cssText = 'height:36px;display:flex;align-items:center;justify-content:center;border:none;border-radius:5px;cursor:pointer;transition:background .12s,color .12s';
           b.addEventListener('click', () => {
-            if (key === 'auto') delete photo.size; else photo.size = key;
+            if (v === '1x1') delete photo.layout; else photo.layout = v;
             refreshSize();
           });
           sizeRow.appendChild(b);
