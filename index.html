@@ -47,31 +47,29 @@
       .block-col-2 { grid-column: span 1; }
     }
 
-    /* ── Album justified grid ───────────────────────────────── */
-    .album-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 3px;
-      --album-h: 240px;
+    /* ── Album — layout Cheerz (groupes alternants) ────────── */
+    .album-section {
+      --alb-h1: 360px;   /* solo panorama */
+      --alb-h2: 290px;   /* duo / big-left / big-right */
+      --alb-h3: 240px;   /* triptyque */
+      --alb-h4: 583px;   /* quad 2×2  (290×2 + 3) */
     }
     @media (max-width: 639px) {
-      .album-grid { --album-h: 140px; gap: 2px; }
+      .album-section { --alb-h1:200px; --alb-h2:160px; --alb-h3:130px; --alb-h4:323px; }
     }
-    .album-item {
-      height: var(--album-h);
+    .album-cell {
       overflow: hidden;
       border-radius: 7px;
       cursor: pointer;
       position: relative;
-      flex-shrink: 0;
     }
-    @media (max-width: 639px) { .album-item { border-radius: 3px; } }
-    .album-item img {
-      width: 100%; height: 100%; object-fit: cover; display: block;
-      transition: transform .6s cubic-bezier(.25,.46,.45,.94);
+    @media (max-width: 639px) { .album-cell { border-radius: 3px; } }
+    .album-cell img {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+      transition: transform .65s cubic-bezier(.25,.46,.45,.94);
     }
-    .album-item:hover img { transform: scale(1.05); }
-    .album-spacer { flex: 9999 0 0; height: 0; overflow: hidden; }
+    .album-cell:hover img { transform: scale(1.05); }
   </style>
 </head>
 <body class="text-stone-800 antialiased">
@@ -432,28 +430,66 @@
     </article>`;
     }
 
-    /* ── Album ───────────────────────────────────────────────────── */
+    /* ── Album — groupes alternants (style Cheerz / Lalalab) ────── */
+
+    // Patterns : { n=nb photos, grid=colonnes CSS, h=var hauteur, rows=nb rangées }
+    const _ALB_PAT = [
+      { n:2, grid:'1fr 1fr',       h:'var(--alb-h2)', rows:1 }, // duo égal
+      { n:1, grid:null,             h:'var(--alb-h1)', rows:1 }, // solo panorama
+      { n:2, grid:'5fr 3fr',        h:'var(--alb-h2)', rows:1 }, // grand gauche
+      { n:3, grid:'1fr 1fr 1fr',    h:'var(--alb-h3)', rows:1 }, // triptyque
+      { n:2, grid:'3fr 5fr',        h:'var(--alb-h2)', rows:1 }, // grand droite
+      { n:4, grid:'1fr 1fr',        h:'var(--alb-h4)', rows:2 }, // quad 2×2
+      { n:2, grid:'3fr 2fr',        h:'var(--alb-h2)', rows:1 }, // duo légèrement inégal
+      { n:2, grid:'5fr 3fr',        h:'var(--alb-h2)', rows:1 }, // grand gauche bis
+    ];
+
+    function _albumGroups(photos) {
+      const groups = []; let i = 0, pi = 0;
+      while (i < photos.length) {
+        const rem = photos.length - i;
+        let p = _ALB_PAT[pi % _ALB_PAT.length];
+        // Adapter si fin d'album
+        if (rem < p.n) {
+          if (rem === 1) p = _ALB_PAT[1];       // solo
+          else if (rem === 2) p = _ALB_PAT[0];  // duo
+          else if (rem === 3) p = _ALB_PAT[3];  // triptyque
+        }
+        const n = Math.min(p.n, rem);
+        groups.push({ p, slice: photos.slice(i, i + n) });
+        i += n; pi++;
+      }
+      return groups;
+    }
+
     function renderAlbumSection(section) {
       const photos = section.photos || [];
       if (!photos.length) {
         return `<div style="padding:52px 0;text-align:center;color:#a8a29e;font-size:13px;font-style:italic">Album vide</div>`;
       }
-      // Sérialise les données pour le lightbox (attribut data-*)
-      const pData = JSON.stringify(photos.map((p, i) => ({
-        i, src: p.src, aspect: +(+(p.aspect||1.5)).toFixed(3), caption: p.caption||''
-      })));
-      return `<div class="album-grid" data-album-photos="${esc(pData)}">
-        ${photos.map((p, i) => {
-          const a = +(+(p.aspect||1.5)).toFixed(3);
-          // flex: grow shrink basis  — grow = aspect = proportionnel à la largeur
-          return `<div class="album-item" data-idx="${i}"
-            style="flex:${a} 0 calc(${a} * var(--album-h))"
-            onclick="openLightbox(this)">
-            <img src="${esc(p.src)}" alt="${esc(p.caption||'')}" loading="lazy" />
+      const pData = JSON.stringify(photos.map((p, i) => ({ i, src:p.src, caption:p.caption||'' })));
+      const groups = _albumGroups(photos);
+      let idx = 0;
+
+      const groupsHtml = groups.map(({ p, slice }) => {
+        const cells = slice.map(photo => {
+          const i = idx++;
+          return `<div class="album-cell" data-idx="${i}" onclick="openLightbox(this)">
+            <img src="${esc(photo.src)}" alt="${esc(photo.caption||'')}" loading="lazy" />
           </div>`;
-        }).join('')}
-        <div class="album-spacer"></div>
-      </div>`;
+        }).join('');
+
+        const style = p.rows === 2
+          ? `display:grid;grid-template-columns:${p.grid};grid-template-rows:1fr 1fr;gap:3px;height:${p.h}`
+          : p.grid
+            ? `display:grid;grid-template-columns:${p.grid};gap:3px;height:${p.h}`
+            : `height:${p.h}`;   // solo : pas de grid, juste la hauteur
+
+        return `<div style="${style}">${cells}</div>`;
+      }).join('');
+
+      return `<div class="album-section" data-album-photos="${esc(pData)}"
+        style="display:flex;flex-direction:column;gap:4px">${groupsHtml}</div>`;
     }
 
     /* ── Lightbox ────────────────────────────────────────────────── */

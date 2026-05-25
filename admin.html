@@ -907,31 +907,32 @@
         body.innerHTML = '';
         if (card._albumPhotos.length === 0) {
           const empty = document.createElement('div');
-          empty.style.cssText = 'text-align:center;padding:28px 16px;color:#d1d5db;font-size:12px;font-style:italic';
+          empty.style.cssText = 'text-align:center;padding:32px 16px;color:#d1d5db;font-size:12px;font-style:italic';
           empty.textContent = 'Aucune photo — ajoutez des images ci-dessous';
           body.appendChild(empty);
           return;
         }
         const grid = document.createElement('div');
-        grid.style.cssText = 'display:flex;flex-wrap:wrap;gap:6px';
+        grid.style.cssText = 'display:grid;grid-template-columns:repeat(3,1fr);gap:8px';
         card._albumPhotos.forEach((photo, idx) => {
           const item = document.createElement('div');
-          const a = +(photo.aspect || 1.5).toFixed(3);
-          item.style.cssText = `flex:${a} 0 calc(${a} * 60px);max-width:calc(${a} * 100px);display:flex;flex-direction:column;gap:3px`;
+          item.style.cssText = 'display:flex;flex-direction:column;gap:5px';
 
+          /* Thumbnail — même look que les blocs images */
           const imgWrap = document.createElement('div');
-          imgWrap.style.cssText = `height:60px;border-radius:5px;overflow:hidden;position:relative;background:#f3f4f6;cursor:default`;
+          imgWrap.style.cssText = 'border-radius:10px;overflow:hidden;position:relative;background:#f3f4f6;aspect-ratio:4/3';
 
           const img = document.createElement('img');
           img.src = photo.src;
-          img.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block';
+          img.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s ease';
           imgWrap.appendChild(img);
 
+          /* Bouton supprimer (overlay hover) */
           const del = document.createElement('button');
           del.type = 'button'; del.textContent = '×';
-          del.style.cssText = 'position:absolute;top:3px;right:3px;width:18px;height:18px;border-radius:50%;background:rgba(0,0,0,.55);color:#fff;border:none;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .15s;padding:0;line-height:1';
-          imgWrap.addEventListener('mouseenter', () => del.style.opacity = '1');
-          imgWrap.addEventListener('mouseleave', () => del.style.opacity = '0');
+          del.style.cssText = 'position:absolute;top:5px;right:5px;width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,.6);color:#fff;border:none;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .15s;padding:0;line-height:1;z-index:1';
+          imgWrap.addEventListener('mouseenter', () => { del.style.opacity='1'; img.style.transform='scale(1.04)'; });
+          imgWrap.addEventListener('mouseleave', () => { del.style.opacity='0'; img.style.transform=''; });
           del.addEventListener('click', e => {
             e.stopPropagation();
             card._albumPhotos.splice(idx, 1);
@@ -939,10 +940,15 @@
           });
           imgWrap.appendChild(del);
 
+          /* Champ légende — lisible, stylé comme les autres inputs */
           const cap = document.createElement('input');
-          cap.type = 'text'; cap.placeholder = 'Légende…'; cap.value = photo.caption || '';
-          cap.style.cssText = 'border:none;background:transparent;font-size:9px;color:#9ca3af;width:100%;padding:0 2px;outline:none;font-family:inherit';
-          cap.addEventListener('input', () => { card._albumPhotos[idx].caption = cap.value; });
+          cap.type = 'text';
+          cap.placeholder = 'Légende…';
+          cap.value = photo.caption || '';
+          cap.style.cssText = 'width:100%;border:1px solid #e5e7eb;border-radius:6px;padding:5px 8px;font-size:11px;color:#374151;background:#fff;outline:none;font-family:inherit;box-sizing:border-box;transition:border-color .15s';
+          cap.addEventListener('focus',  () => { cap.style.borderColor = '#9ca3af'; });
+          cap.addEventListener('blur',   () => { cap.style.borderColor = '#e5e7eb'; });
+          cap.addEventListener('input',  () => { card._albumPhotos[idx].caption = cap.value; });
 
           item.appendChild(imgWrap);
           item.appendChild(cap);
