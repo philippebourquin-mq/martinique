@@ -443,6 +443,7 @@
       return JSON.parse(text);
     }
     async function saveToGitHub(cfg, data) {
+      data._ts = Date.now(); // horodatage pour éviter que index.html écrase avec l'ancien data.json
       const payload = { message: 'Mise à jour du guide (' + new Date().toLocaleDateString('fr-FR') + ')', content: toBase64(JSON.stringify(data, null, 2)), sha: window._fileSha };
       let r;
       try {

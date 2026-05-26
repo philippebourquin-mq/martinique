@@ -694,30 +694,28 @@
       const items = (section.items || []).filter(i => i.text?.trim() || i.photo?.trim());
       if (!items.length) return '';
       const g = 'var(--sec-gap)';
-      const rows = []; let autoRun = [];
 
-      function flushAuto() {
-        if (!autoRun.length) return;
-        _albumGroups(autoRun, _CLS_PAT).forEach(({ p, slice }) => {
-          const cols = p.grid ? `grid-template-columns:${p.grid}` : 'grid-template-columns:1fr';
-          rows.push(`<div style="display:grid;${cols};grid-auto-rows:minmax(220px,auto);gap:${g}">
-            ${slice.map(it => renderItem({...it, layout:'1x1'})).join('')}
-          </div>`);
+      function lyAuto(it) { const l = it.layout || '1x1'; return !l || l === '1x1' || l === 'default'; }
+
+      // Sections 100% auto → cycling album (duos/trios/quads variés)
+      // Sections avec items forcés → grille 3-col CSS native (block-col-2, block-row-2 fonctionnent)
+      const allAuto = items.every(lyAuto);
+
+      if (allAuto) {
+        const rows = [];
+        _albumGroups(items, _CLS_PAT).forEach(({ p, slice }) => {
+          const cols = p.grid || '1fr';
+          rows.push(`<div style="display:grid;grid-template-columns:${cols};grid-auto-rows:minmax(220px,auto);gap:${g}">${
+            slice.map(it => renderItem({...it, layout:'1x1'})).join('')
+          }</div>`);
         });
-        autoRun = [];
+        return `<div style="display:flex;flex-direction:column;gap:${g}">${rows.join('')}</div>`;
       }
 
-      for (const item of items) {
-        const ly = item.layout || '1x1';
-        const isAuto = !ly || ly === '1x1' || ly === 'default';
-        if (isAuto) { autoRun.push(item); }
-        else {
-          flushAuto();
-          rows.push(`<div style="display:grid;grid-template-columns:1fr;grid-auto-rows:minmax(220px,auto);gap:${g}">${renderItem(item)}</div>`);
-        }
-      }
-      flushAuto();
-      return `<div style="display:flex;flex-direction:column;gap:${g}">${rows.join('')}</div>`;
+      // Grille 3-col : block-col-2 = 2/3 larg, block-col-full = pleine larg, block-row-2 = tall
+      return `<div style="display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:minmax(220px,auto);gap:${g}">${
+        items.map(it => renderItem(it)).join('')
+      }</div>`;
     }
 
     /* ── Section ─────────────────────────────────────────────────── */
@@ -784,7 +782,14 @@
 
     fetch('./data.json?' + Date.now())
       .then(r => r.ok ? r.json() : null)
-      .then(data => { if (!data) return; try { localStorage.setItem(KEY, JSON.stringify(data)); } catch {} render(data); })
+      .then(fetched => {
+        if (!fetched) return;
+        // Ne pas écraser le localStorage si l'admin a publié plus récemment que data.json
+        const stored = (() => { try { return JSON.parse(localStorage.getItem(KEY)); } catch {} return null; })();
+        if (stored && stored._ts && (!fetched._ts || fetched._ts < stored._ts)) return;
+        try { localStorage.setItem(KEY, JSON.stringify(fetched)); } catch {}
+        render(fetched);
+      })
       .catch(() => {});
 
     window.addEventListener('storage', () => {
