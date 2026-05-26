@@ -59,7 +59,7 @@
           "text": "Se lever tôt (7h max), se coucher tôt — calé sur la vie locale, décalage horaire (2h) atténué.",
           "url": "",
           "photo": "",
-          "layout": "1x1",
+          "layout": "2x1",
           "textStyle": "card",
           "objectPosition": "center"
         },
@@ -68,7 +68,7 @@
           "text": "Les gens sont ultra cool et aiment qu'on leur parle. Certaines discussions peuvent dériver vers la politique (souvent juste) ou le complotisme (souvent vertigineux).",
           "url": "",
           "photo": "",
-          "layout": "1x1",
+          "layout": "2x1",
           "textStyle": "card",
           "objectPosition": "center"
         },
