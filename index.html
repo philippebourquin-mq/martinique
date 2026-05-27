@@ -784,9 +784,10 @@
       .then(r => r.ok ? r.json() : null)
       .then(fetched => {
         if (!fetched) return;
-        // Ne pas écraser le localStorage si l'admin a publié plus récemment que data.json
+        // localStorage admin toujours prioritaire sur data.json local (potentiellement périmé)
+        // Règle : si localStorage existe et est aussi récent ou plus récent → ignorer le fetch
         const stored = (() => { try { return JSON.parse(localStorage.getItem(KEY)); } catch {} return null; })();
-        if (stored && stored._ts && (!fetched._ts || fetched._ts < stored._ts)) return;
+        if (stored && (stored._ts || 0) >= (fetched._ts || 0)) return;
         try { localStorage.setItem(KEY, JSON.stringify(fetched)); } catch {}
         render(fetched);
       })
