@@ -68,7 +68,7 @@
           "text": "Se lever tôt (7h max), se coucher tôt — calé sur la vie locale, décalage horaire (2h) atténué.",
           "url": "",
           "photo": "",
-          "layout": "1x2",
+          "layout": "1x1",
           "textStyle": "card",
           "objectPosition": "center"
         },
@@ -442,5 +442,5 @@
       ]
     }
   ],
-  "_ts": 1784277502253
+  "_ts": 1784277547038
 }
