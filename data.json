@@ -59,7 +59,7 @@
           "text": "Les martiniquais sont ultra cools et aiment qu'on leur parle. Certaines discussions peuvent dériver vers la politique (souvent juste) ou le complotisme (souvent vertigineux).",
           "url": "",
           "photo": "",
-          "layout": "1x3",
+          "layout": "1x1",
           "textStyle": "card",
           "objectPosition": "center"
         },
@@ -442,5 +442,5 @@
       ]
     }
   ],
-  "_ts": 1784277456185
+  "_ts": 1784277470012
 }
