@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "martinique",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "4244"],
+      "port": 4244,
+    "autoPort": false
+    }
+  ]
+}

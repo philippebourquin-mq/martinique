@@ -1,30 +1,32 @@
-# Guide Martinique
+# Guide Martinique (destination)
 
-Guide de voyage statique + panel admin → GitHub Pages.
+Ce repo est une **destination** du système multi-guides. Il ne contient que la coquille HTML statique et son contenu — le moteur de rendu (JS/CSS) et l'admin vivent dans [guide-engine](https://github.com/philippebourquin-mq/guide-engine).
+
+Voir `guide-engine/CLAUDE.md` pour l'architecture complète (patterns album, format des sections, protection localStorage, etc.) — ce document ne couvre que ce qui est spécifique à Martinique.
 
 ## Fichiers
 
-- `index.html` — viewer public (tout le JS inline, ~47k chars)
-- `admin.html` — panel admin (publie via GitHub API)
-- `data.json` — données (servi localement par Python http.server)
+- `index.html` — coquille statique (header/hero/footer/lightbox), charge `engine.js`/`engine.css` depuis `guide-engine` et appelle `GuideEngine.init(...)`
+- `data.json` — contenu du guide (sections, textes, photos)
 - GitHub repo : `https://github.com/philippebourquin-mq/martinique.git`
+
+Il n'y a **plus d'admin.html ici** — toute édition se fait depuis l'admin central de `guide-engine` (sélectionner « Martinique » dans le sélecteur de destination).
 
 ## Dev local
 
 ```bash
 python3 -m http.server 4244
-# http://localhost:4244/index.html
-# http://localhost:4244/admin.html
+# http://localhost:4244/
 ```
 
 `data.json` local est périmé par rapport à GitHub — ne pas `git pull` sans anticiper l'impact sur les tests.
 
+Note : `index.html` charge le moteur depuis `https://philippebourquin-mq.github.io/guide-engine/engine.js` — même en dev local, c'est la version **publiée** du moteur qui est utilisée (pas de rechargement à chaud si on modifie `guide-engine` en local). Pour tester une modif du moteur avant publication, éditer temporairement l'URL du `<script src>` vers `http://localhost:<port-guide-engine>/engine.js`, tester, puis revenir à l'URL de production avant de commiter.
+
 ## Déploiement
 
 ```bash
-git add index.html admin.html && git commit -m "..." && git push
-# Si rejeté (admin a publié entre-temps) :
-git pull --rebase && git push
+git add index.html data.json && git commit -m "..." && git push
 ```
 
 GitHub Pages déploie en 2–5 min après le push.
@@ -33,65 +35,9 @@ GitHub Pages déploie en 2–5 min après le push.
 
 | Clé | Contenu |
 |-----|---------|
-| `mtq-guide-v1` | Données du guide (partagée entre index et admin) |
-| `mtq-admin-session` | Session admin (connecté/déconnecté) |
-| `mtq-gh-config` | Config GitHub (owner, repo, token) |
+| `guide-site-v1` | Données du guide affichées par `index.html` (propre à ce site, cette origine — même clé utilisée par toutes les destinations, sans risque de collision car localStorage est scopé par origine) |
 | `mq_alb_favs` | Favoris utilisateur (photos ★) |
 
 ### Protection contre data.json périmé
 
-`admin.saveToGitHub()` injecte `data._ts = Date.now()` avant chaque publication.
-
-`index.html` ignore le résultat du fetch si :
-```javascript
-stored && (stored._ts || 0) >= (fetched._ts || 0)
-```
-**Ne jamais supprimer cette protection.** Le `data.json` local n'est jamais mis à jour par l'admin (Python http.server sert le fichier local statique). Sans cette règle, Cmd+Shift+R écrase les formats publiés.
-
-## Patterns album
-
-`_ALB_PAT` : 12 patterns cyclés (duo / trio / quad / portrait vertical).
-`_CLS_PAT` : `_ALB_PAT` filtré sans `bigFirst`/`bigLast` (sections classiques — CSS incompatible).
-
-Fallbacks indépendants du tableau (résistants aux réordres) :
-- `_PAT_SOLO` — 1 photo pleine largeur
-- `_PAT_DUO`  — 2 photos égales
-- `_PAT_TRIO` — 3 photos égales
-
-**Ne jamais référencer `_ALB_PAT[i]` par indice hardcodé** — utiliser ces constantes.
-
-### `_albSz(photo)` — catégories de layout forcé
-
-| `photo.layout` | Catégorie | Comportement |
-|----------------|-----------|--------------|
-| `null`, `'1x1'`, `'default'` | `null` (auto) | Intégré dans le cycle |
-| `'1x3'`, `'2x3'` | `'solo'` | Pleine largeur isolé |
-| `'2x1'` | `'tall'` | Portrait vertical, groupé avec 1–2 autos suivantes |
-| `'1x2'`, `'2x2'` | `'large'` | Grand format, groupé avec 1 auto suivante |
-
-### Anti-orphelin (look-ahead)
-
-Si prendre `n` photos laisserait exactement 1 orphelin : ajuster `n` (élargir si ≤3, rétrécir sinon).
-
-## Sections
-
-### Types
-
-- `classic` — blocs texte/photo avec layout CSS grid (`block-col-2`, `block-row-2`)
-- `album`   — galerie photo avec patterns Cheerz/Lalalab
-
-### Rendu classique hybride (`renderClassicSection`)
-
-- Section **tout auto** (`layout` absent ou `1x1`) → cycling album avec `_CLS_PAT`
-- Section **mixte** (au moins un layout forcé) → CSS grid `repeat(3,1fr)` natif
-
-Les classes `block-col-2` (span 2 colonnes) et `block-row-2` (span 2 rangées) ne fonctionnent qu'en mode mixte (grid natif).
-
-## Admin — picker de format
-
-6 formats disponibles pour les photos album ET les blocs classiques :
-`1x1` / `1x2` / `1x3` / `2x1` / `2x2` / `2x3`
-
-Icônes rectangles SVG proportionnels (pas de texte) — identiques dans les deux contextes.
-
-`1x1` = pas de `layout` sur l'objet (supprimé). Les autres = `photo.layout = 'Nx...'`.
+Le moteur (`guide-engine/engine.js`) ignore le fetch de `data.json` si `stored._ts >= fetched._ts` — logique interne au moteur, rien à faire ici. Voir `guide-engine/CLAUDE.md`.
