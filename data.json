@@ -16,7 +16,7 @@
           "text": "Tout le monde parle français, mais comprendre quelques mots de créole aide vraiment — pour la culture, les paroles des sons et… les insultes !",
           "url": "",
           "photo": "",
-          "layout": "1x2",
+          "layout": "",
           "textStyle": "card",
           "objectPosition": "center"
         },
@@ -25,7 +25,7 @@
           "text": "Le fléau des sargasses : ces algues brunes venues du large sont toxiques et sentent très fort. La côte atlantique est particulièrement touchée.",
           "url": "https://meteofrance.mq/fr/sargasses",
           "photo": "https://images.unsplash.com/photo-1617813815451-190de34be122?w=800&q=80",
-          "layout": "1x1",
+          "layout": "1x2",
           "textStyle": "card",
           "objectPosition": "center"
         },
@@ -442,5 +442,5 @@
       ]
     }
   ],
-  "_ts": 1785588291714
+  "_ts": 1785588307395
 }
