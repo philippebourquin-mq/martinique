@@ -16,7 +16,7 @@
           "text": "Tout le monde parle français, mais comprendre quelques mots de créole aide vraiment — pour la culture, les paroles des sons et… les insultes !",
           "url": "",
           "photo": "",
-          "layout": "1x1",
+          "layout": "1x2",
           "textStyle": "editorial",
           "objectPosition": "center"
         },
@@ -33,8 +33,8 @@
           "title": "Téléphonie",
           "text": "Vérifier sa couverture téléphonique — souvent incluse dans les forfaits, sinon une SIM disponible à l'aéroport.",
           "url": "",
-          "photo": "",
-          "layout": "1x1",
+          "photo": "https://images.unsplash.com/photo-1630248749219-ce192daddbd6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w5NTkzMTh8MHwxfHNlYXJjaHwxfHxwaG9uZSUyMG1hcnRpbmlxdWV8ZW58MHwwfHx8MTc4NTU4ODE4NHww&ixlib=rb-4.1.0&q=80&w=1080",
+          "layout": "1x2",
           "textStyle": "card",
           "objectPosition": "center"
         },
@@ -43,7 +43,7 @@
           "text": "L'esclavage, le rôle des « békés », le commerce du rhum, … indispensable pour comprendre l'île.",
           "url": "",
           "photo": "",
-          "layout": "1x2",
+          "layout": "",
           "textStyle": "rubrique",
           "objectPosition": "center"
         }
@@ -55,8 +55,8 @@
       "title": "Mood",
       "items": [
         {
-          "title": "Pas de timidité",
-          "text": "Les martiniquais sont ultra cools et aiment qu'on leur parle. Certaines discussions peuvent dériver vers la politique (souvent juste) ou le complotisme (souvent vertigineux).",
+          "title": "Rythme",
+          "text": "Se lever tôt (7h max), se coucher tôt — calé sur la vie locale, décalage horaire (2h) atténué.",
           "url": "",
           "photo": "",
           "layout": "1x1",
@@ -64,8 +64,8 @@
           "objectPosition": "center"
         },
         {
-          "title": "Rythme",
-          "text": "Se lever tôt (7h max), se coucher tôt — calé sur la vie locale, décalage horaire (2h) atténué.",
+          "title": "Pas de timidité",
+          "text": "Les martiniquais sont ultra cools et aiment qu'on leur parle. Certaines discussions peuvent dériver vers la politique (souvent juste) ou le complotisme (souvent vertigineux).",
           "url": "",
           "photo": "",
           "layout": "1x1",
@@ -442,5 +442,5 @@
       ]
     }
   ],
-  "_ts": 1785550320046
+  "_ts": 1785588279244
 }
