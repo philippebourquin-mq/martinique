@@ -349,7 +349,7 @@
           "url": "",
           "photo": "",
           "layout": "highlight",
-          "textStyle": "card",
+          "textStyle": "sombre",
           "objectPosition": "center"
         },
         {
@@ -442,5 +442,5 @@
       ]
     }
   ],
-  "_ts": 1784277547038
+  "_ts": 1785550320046
 }
