@@ -64,7 +64,7 @@
 
   <!-- ── Lightbox ────────────────────────────────────────────── -->
   <div id="lightbox" role="dialog" aria-modal="true"
-    style="display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.97);align-items:center;justify-content:center">
+    style="display:none;position:fixed;inset:0;z-index:200;background:#000;align-items:center;justify-content:center">
 
     <!-- Fermer -->
     <button onclick="closeLightbox()" aria-label="Fermer"
@@ -82,7 +82,7 @@
       onmouseover="this.style.background='rgba(255,255,255,.18)'" onmouseout="this.style.background='rgba(255,255,255,.07)'">›</button>
 
     <!-- Image + légende -->
-    <div style="max-width:min(90vw,1300px);max-height:92vh;display:flex;flex-direction:column;align-items:center;gap:14px;padding:0 72px">
+    <div style="max-width:min(90vw,1300px);max-height:92vh;display:flex;flex-direction:column;align-items:center;gap:14px;padding:0 64px">
       <div style="position:relative;display:inline-block;line-height:0">
         <img id="lb-img" src="" alt=""
           style="max-width:100%;max-height:78vh;object-fit:contain;border-radius:5px;transition:opacity .22s;display:block" />
